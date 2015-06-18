@@ -25,21 +25,43 @@ public class AConnect {
         }
     }
 
-    public static void insert(String lname, String fname, String email, String phone, Statement stmt) {
+    public static void dbInfo(Connection connection) throws SQLException{
+	DatabaseMetaData databaseMetaData = connection.getMetaData();
+
+	int    majorVersion   = databaseMetaData.getDatabaseMajorVersion();
+	int    minorVersion   = databaseMetaData.getDatabaseMinorVersion();
+
+	String productName    = databaseMetaData.getDatabaseProductName();
+	String productVersion = databaseMetaData.getDatabaseProductVersion();
+	System.out.println(majorVersion+"."+minorVersion+" "+productName+" "+productVersion);
+    }
+
+    public static int insert(String sql, Statement stmt) {
 	try {
-	    int rs = stmt.executeUpdate("INSERT INTO Persons (LastName, FirstName, email, phone) VALUES ('"+lname+"', '"+fname+"', '"+email+"', '"+phone+"');");	}
-	catch (SQLException e){
+	    return stmt.executeUpdate(sql);
+	} catch (SQLException e){
 	    System.out.println("Insert err: "+e.getMessage());
+	    return 0;
 	}
     }
     
     public static void main(String[] args){
 	Connection conn = link("db.properties");
 
-		    int i = 0;
+	int i = 0;
+	String lname = "Biggins";
+	String fname= "Martha";
+	String email= "mama@large.com";
+	String phone= "4235552323";
+	String cmd = "INSERT INTO Persons (LastName, FirstName, email, phone) VALUES ('"+lname+"', '"+fname+"', '"+email+"', '"+phone+"');";
 	try {
+	    dbInfo(conn);
 	    Statement stmt = conn.createStatement();
-	    insert("Biggins", "Martha", "mama@large.com", "4235552323", stmt);
+	    insert(cmd, stmt);
+
+	    BackForm bf = new BackForm("Persons", conn);
+
+	    
 	    
 	    ResultSet rs = stmt.executeQuery("SELECT * FROM Persons");
 	    ResultSetMetaData rsmd = rs.getMetaData();
