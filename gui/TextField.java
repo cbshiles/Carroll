@@ -4,13 +4,28 @@ import java.awt.*;
 public class TextField extends Field{
 
     JTextField tf = new JTextField();
+    boolean mand;
 
-    public TextField (String n, Container c) {
+    public TextField (String n, Container c, boolean m) {
 	super(n, c);
-	c.add(new JLabel(name));
+	mand = m;
+
+	c.add(new JLabel(name, SwingConstants.CENTER));
+
+	if (mand) tf.setBackground(new Color(255, 215, 215));
 	c.add(tf);
     }
 
-    public String text()
-    {return tf.getText();}
+    public TextField (String n, Container c) {
+	this(n, c, false);
+    }
+
+    
+    public String text() throws InputXcpt
+    {
+	String s = tf.getText();
+	if (s.equals("") && mand)
+	    throw new InputXcpt(name, "Empty mandatory field");
+	return s;
+    }
 }

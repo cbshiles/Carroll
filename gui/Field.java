@@ -11,5 +11,5 @@ public abstract class Field extends JPanel {
     public Field (String n, Container c)
 	{name = n; ctnr = c;}
 
-    public abstract String text();
+    public abstract String text() throws InputXcpt;
 }

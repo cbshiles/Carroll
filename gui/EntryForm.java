@@ -15,12 +15,16 @@ public class EntryForm extends JFrame {
 	setLayout(new GridLayout(0, 1));
 
 	JPanel textBoxPanel = new JPanel();
-	textBoxPanel.setLayout(new GridLayout(0, 2));
-	String[] fields = new String[] {"First Name", "Last Name", "Address", "Phone Number", "Total Worth"};
-	for (String s : fields)
-	    map.put(new TextField(s, textBoxPanel));
+	textBoxPanel.setLayout(new GridLayout(0, 2, 30, 20));
+
+	map.put(new TextField("First Name", textBoxPanel, false));
+	map.put(new TextField("Last Name", textBoxPanel, true));
+	map.put(new TextField("Address", textBoxPanel, false));
+	map.put(new TextField("Phone Number", textBoxPanel, true));
+	map.put(new TextField("Total Worth", textBoxPanel, true));
+
 	map.put(new OptionalText("Balloon payment?", textBoxPanel, "0"));
-	textBoxPanel.setBackground(Color.BLUE);
+//	textBoxPanel.setBackground(Color.BLUE);
 
 //	JButton cancel = new JButton("Cancel");
 	JButton submit = new JButton("Submit");
@@ -40,10 +44,11 @@ public class EntryForm extends JFrame {
 
 //	submit.addActionListener(new SubmitAction());
 //	textBoxPanel.add(cancel);
-	textBoxPanel.add(submit);
 
+	textBoxPanel.add(submit);
 	add(textBoxPanel);
 
+	
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	//will actually want DISPOSE_ON_CLOSE, i believe
 	
