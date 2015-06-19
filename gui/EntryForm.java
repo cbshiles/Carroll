@@ -6,9 +6,16 @@ import java.util.*;
 public class EntryForm extends JFrame {
 
     DataMap map = new DataMap();
+    static int r = 218;
+	public static Color bkgd = new Color(r, r, r);
+
+    public void addF(Field f) {
+	map.put(f);
+	f.attach(this);
+    }
     
     public EntryForm() {
-	super("Entry Form");
+	super("Transaction");
 	setSize(400, 600);
 	setLocation(200, 100);
 
@@ -17,41 +24,65 @@ public class EntryForm extends JFrame {
 	JPanel textBoxPanel = new JPanel();
 	textBoxPanel.setLayout(new GridLayout(0, 2, 30, 20));
 
-	map.put(new TextField("First Name", textBoxPanel, false));
-	map.put(new TextField("Last Name", textBoxPanel, true));
-	map.put(new TextField("Address", textBoxPanel, false));
-	map.put(new TextField("Phone Number", textBoxPanel, true));
-	map.put(new TextField("Total Worth", textBoxPanel, true));
+	getContentPane().setBackground(bkgd);
 
-	map.put(new OptionalText("Balloon payment?", textBoxPanel, "0"));
-//	textBoxPanel.setBackground(Color.BLUE);
+	addF(new TextField("First Name"));
+	addF(new TextField("Last Name"));
+	addF(new TextField("Address"));
+	addF(new TextField("Phone Number"));
+	addF(new TextField("Total of Payments"));
 
+
+
+	addF(new TextField("Number of Payments"));
+	addF(new TextField("Amount of Payments"));
+
+	addF(new RadioField("Payment Frequency",
+			       new String[]{"Weekly", "Biweekly", "Monthly"}));
+
+	addF(new OptionField("Final payment?", "0", true));
 //	JButton cancel = new JButton("Cancel");
-	JButton submit = new JButton("Submit");
+
 //	cancel.setMargin(new Insets(50, 25, 50, 25));
 //	cancel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+
+//	submit.addActionListener(new SubmitAction());
+//	textBoxPanel.add(cancel);
+
+
+	//add(textBoxPanel);
+
+	// JPanel carPanel = new JPanel();
+	// carPanel.setLayout(new GridLayout(0, 2, 30, 20));
+	// map.put(new TextField("Make", carPanel));
+	// map.put(new TextField("Model", carPanel));
+	// map.put(new TextField("VIN", carPanel));
+
+	
+	// add(carPanel);
+
+	
+	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//will actually want DISPOSE_ON_CLOSE, i believe
+
+
+	JButton submit = new JButton("Submit");
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    try {
-		    String fName = map.getStr("First Name");
-		    int worth = map.getInt("Total Worth");
+			String freq = map.getStr("Payment Frequency");
+			System.out.println(freq);
+			
+			String fName = map.getStr("First Name");
+			int worth = map.getInt("Total Worth");
 		    } catch(InputXcpt ix) {
 			System.out.println(ix.getMessage());
 		    }
 		}
 	    });
-
-//	submit.addActionListener(new SubmitAction());
-//	textBoxPanel.add(cancel);
-
-	textBoxPanel.add(submit);
-	add(textBoxPanel);
-
-	
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//will actually want DISPOSE_ON_CLOSE, i believe
-	
+	add(submit);
+	pack();
 	setVisible(true);	
 
     }

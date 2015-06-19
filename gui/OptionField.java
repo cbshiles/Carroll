@@ -2,18 +2,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class OptionalText extends Field{
+public class OptionField extends Field{
 
     JTextField tf = new JTextField();
     JCheckBox cb;
-    boolean textOn = false;
+    boolean textOn;
     String empty;
     
-    public OptionalText (String n, Container c, String e) {
-	super(n, c);
+    public OptionField (String n, String e, boolean to) {
+	super(n);
 	empty = e;
+	textOn = to;
 
-	c.add(cb = new JCheckBox(name));
+	jp.setLayout(new GridLayout(0, 2));
+	
+	jp.add(cb = new JCheckBox(name));
+	cb.setSelected(to);
+	cb.setOpaque(false);
+	
 	cb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    tf.setEnabled(textOn = cb.isSelected());
@@ -21,8 +27,8 @@ public class OptionalText extends Field{
 		}
 	    });
 
-	tf.setEnabled(false);	
-	c.add(tf);
+	tf.setEnabled(to);	
+	jp.add(tf);
 	
     }
 
