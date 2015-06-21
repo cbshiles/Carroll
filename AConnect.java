@@ -25,8 +25,8 @@ public class AConnect {
         }
     }
 
-    public static void dbInfo(Connection connection) throws SQLException{
-	DatabaseMetaData databaseMetaData = connection.getMetaData();
+    public static void dbInfo() throws SQLException{
+	DatabaseMetaData databaseMetaData = conn.getMetaData();
 
 	int    majorVersion   = databaseMetaData.getDatabaseMajorVersion();
 	int    minorVersion   = databaseMetaData.getDatabaseMinorVersion();

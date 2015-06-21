@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 public class OptionField extends Field{
 
-    JTextField tf = new JTextField();
+    JTextField tf = newText();
     JCheckBox cb;
     boolean textOn;
     String empty;
@@ -16,9 +16,9 @@ public class OptionField extends Field{
 
 	jp.setLayout(new GridLayout(0, 2));
 	
-	jp.add(cb = new JCheckBox(name));
-	cb.setSelected(to);
+	jp.add(cb = new JCheckBox(name, to));
 	cb.setOpaque(false);
+	cb.setHorizontalAlignment(SwingConstants.CENTER);
 	
 	cb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){

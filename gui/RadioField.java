@@ -9,14 +9,39 @@ public class RadioField extends Field implements ActionListener{
 
     public RadioField (String n, String[] butts){
 	super(n);
-	
-	for (String s : butts)
-	    addButton(s);
+	init();	
+	addButtons(butts);
     }
 
-    public void addButton(String n){
-	JRadioButton jrb = new JRadioButton(n);
-	jrb.setActionCommand(n);
+    public RadioField (String n, String[] front, String[] back){
+	super(n);
+	init();
+	addButtons(front, back);
+    }
+
+    public void init(){
+//	jp.setLayout(new GridLayout(0, 4));//new FlowLayout(FlowLayout.CENTER));
+	JLabel jl = newLabel(name);
+	jl.setPreferredSize(new Dimension(200, 30));
+	jp.add(jl);
+
+    }
+
+    private void addButtons(String[] butts){
+	for (String s : butts)
+	    addButton(s, s);
+    }
+
+    private void addButtons(String[] front, String[] back){
+	int m = front.length<back.length?front.length:back.length;
+	for (int i=0; i<m; i++){
+	    addButton(front[i], back[i]);
+	}
+    }
+    
+    public void addButton(String f, String b){
+	JRadioButton jrb = new JRadioButton(f);
+	jrb.setActionCommand(b);
 	//jrb.setSelected(true);
 	group.add(jrb);
 	jrb.addActionListener(this);
@@ -27,7 +52,7 @@ public class RadioField extends Field implements ActionListener{
 	rtVal = e.getActionCommand();
     }
 
-        public String text() throws InputXcpt
+    public String text() throws InputXcpt
     {
 	if (rtVal.equals(""))
 	    throw new InputXcpt(name, "Must make a selection");
