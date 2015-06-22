@@ -9,5 +9,9 @@ public class InputXcpt extends Exception {
 	this(k, "For input string: \""+val+"\"\n"+msg);
     }
 
+    public InputXcpt(String msg){
+	super(msg+"\n");
+    }
+
 
 }

@@ -57,6 +57,10 @@ public class SQLBot {
 	values += v;
     }
 
+    void insertToday(String s){
+	insertAdd(s, "CURDATE()");
+    }
+
     int insertSend()throws SQLException{
 	String s = "INSERT INTO "+table+" ("+names+") VALUES ("+values+");";
 	System.err.println(s);

@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.time.*;
+import java.time.format.*;
 
 public class DataMap {
 
@@ -42,4 +44,12 @@ public class DataMap {
 	return x;
     }
 
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yy");
+
+    public LocalDate getDate(String s) throws Exception{
+	String dStr = getStr(s);
+	dStr = dStr.replaceAll("/", "-");
+	System.out.println(dStr);
+	return LocalDate.parse(dStr, dtf);
+    }
 }
