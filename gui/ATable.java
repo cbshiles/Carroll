@@ -53,12 +53,6 @@ public class ATable {
 	    array[i] = row.toArray(new Object[row.size()]);
 	}
 
-	Object[][] arr = new Object[][] {
-	    {"booty", 7, "grapes", 17},
-	    {"booty", 7, "grapes", 17},
-	    {"booty", 7, "grapes", 17},
-	};
-
 	jt = new JTable(array, heads);
     }
 

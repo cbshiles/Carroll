@@ -12,10 +12,10 @@ public class FloorForm extends Form{
 
 	setLayout(new GridLayout(0, 1));
 
-	addF(new TextField("Date bought"));
-	addF(new TextField("Item ID"));
+	addF(new TextField("Purchase Date"));
 	addF(new TextField("Vehicle"));
-	addF(new TextField("Item Cost"));
+	addF(new TextField("VIN"));
+	addF(new TextField("Cost"));
 
 	JButton submit = new JButton("Submit");
 	submit.addActionListener(new ActionListener(){
