@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.util.*;
 import java.time.*;
-//import java.awt.*;
 
 public class ContractTable extends Table{
 

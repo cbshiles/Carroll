@@ -60,7 +60,8 @@ public class Table {
     }
 
     LocalDate dater(java.sql.Date d){
-	return LocalDate.ofEpochDay(d.getTime()/86400000); //millis in day
+	if (d == null) return null;
+	else return LocalDate.ofEpochDay(d.getTime()/86400000); //millis in day
     }
 
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");

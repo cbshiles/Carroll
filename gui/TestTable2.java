@@ -3,24 +3,27 @@ import java.awt.*;
 
 public class TestTable2 {
 
+    public static void run(JTable jt){
+	JFrame jf = new JFrame("Testooooo");
+	jf.setSize(1000, 600);
+	JPanel jp = new JPanel();
+
+//	jp.add(new JScrollPane(jt));
+//	jf.setContentPane(jp);
+	jf.setContentPane(new JScrollPane(jt));
+	//jf.pack();
+	jf.setVisible(true);
+    }
+
     public static void main(String[] args){
-	SQLBot bot;
-	try {
+	try{
+	    SQLBot bot;
 	    bot = new SQLBot("../../db.properties");
+	    //JTable x = new ContractTable(bot).makePayTable();
+	    JTable x = new FloorTable(bot).makeFloorTable();
+	    run(x);
+	} catch (Exception e)
+	{System.err.println("YO: "+e.getCause()+e.getClass().getName());}
 
-	    ContractTable tbl = new ContractTable(bot);
-
-	    JFrame jf = new JFrame("Testooooo");
-	    JPanel jp = new JPanel();
-
-//	    JTable jt = new JTable(tbl.d2Converter(tbl.readDB()), tbl.getHeads());
-	    JTable jt = tbl.makePayTable();
-	    jp.add(new JScrollPane(jt));
-	    jf.setContentPane(jp);
-	    jf.pack();
-	    jf.setVisible(true);
-	}
-	catch (Exception e)
-	{System.err.println("YO: "+e.getMessage());}
     }
 }

@@ -12,7 +12,7 @@ public class FloorForm extends Form{
 
 	setLayout(new GridLayout(0, 1));
 
-	addF(new TextField("Purchase Date"));
+	addF(new TextField("Date Bought"));
 	addF(new TextField("Vehicle"));
 	addF(new TextField("VIN"));
 	addF(new TextField("Cost"));
@@ -25,12 +25,12 @@ public class FloorForm extends Form{
 
 			String s, x;
 
-			s = "Date bought";
+			s = "Date Bought";
 			LocalDate ld = map.getDate(s);
 			bot.insertAdd(noWhite(s), bot.toSQL(ld.toString()));
 
 			s = "Item ID";
-			x = map.getStr(s);
+			x = map.getStr("VIN");
 			bot.insertAdd(noWhite(s), bot.toSQL(x));
 
 			s = "Vehicle";
@@ -38,7 +38,7 @@ public class FloorForm extends Form{
 			bot.insertAdd(noWhite(s), bot.toSQL(x));
 
 			s = "Item Cost";
-			float f = map.getFloat(s);
+			float f = map.getFloat("Cost");
 			bot.insertAdd(noWhite(s), bot.toSQL(f));
 
 			bot.insertAdd("Title", bot.toSQL(0));
