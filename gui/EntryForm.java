@@ -6,7 +6,7 @@ import java.awt.event.*;
 public class EntryForm extends Form {
 
     public EntryForm() throws Exception{
-	super("Contract", "../../db.properties");
+	super("Contract");
 	setSize(400, 600);
 	setLocation(200, 100);
 

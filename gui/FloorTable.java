@@ -6,16 +6,16 @@ import java.time.temporal.ChronoUnit;
 public class FloorTable extends Table{
 
     static final Column[] columns = new Column[] {
-	new Column("ID", 1),
-	new Column("Purchase Date", 3),
-	new Column("VIN", 0),
-	new Column("Vehicle", 0),
-	new Column("Cost", 2),
-	new Column("Title", 1),
-	new Column("Date Paid", 3)};
+	new Column("ID", Type.INT),
+	new Column("Purchase Date", Type.DATE),
+	new Column("VIN", Type.STRING),
+	new Column("Vehicle", Type.STRING),
+	new Column("Cost", Type.FLOAT),
+	new Column("Title", Type.INT),
+	new Column("Date Paid", Type.DATE)};
 
-    public FloorTable(SQLBot bot){
-	super("Cars", columns, bot);
+    public FloorTable(){
+	super("Cars", columns);
     }
 
     public JTable makeFloorTable() throws Exception {
@@ -30,7 +30,7 @@ public class FloorTable extends Table{
 	heads.set(8, "Fees");
 	heads.add("Subtotal");
 
-	List<List<Object>> lzt = readDB();
+	List<List<Object>> lzt = readAll();
 
 	Object[][] objs = new Object[lzt.size()][heads.size()];
 

@@ -17,10 +17,10 @@ public class FloorPage extends Page {
 	addCar.addActionListener(new Relocator<CarForm>(CarForm.class));
 	
 	add(addTitle);
-	addTitle.addActionListener(new Relocator<TitleTable>(TitleTable.class));
+	addTitle.addActionListener(new Relocator<TitlePage>(TitlePage.class));
 	
 	add(payOff);
-	payOff.addActionListener(new Relocator<PayPage>(PayPage.class));
+//	payOff.addActionListener(new Relocator<PayPage>(PayPage.class));
 	
 	//pack();
 	setVisible(true);

@@ -1,26 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Form extends JFrame {
-
-    public static Color bkgd = new Color(218, 218, 218);
+public class Form extends Page { //Page for inputting information
 
     DataMap map = new DataMap();
-    SQLBot bot;
 
-    public Form(String name, String dbFile) throws Exception{
+    public Form(String name){
 	super(name);
-	bot = new SQLBot(dbFile);
-	
-	getContentPane().setBackground(bkgd);
-
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//will actually want DISPOSE_ON_CLOSE, i believe
     }
     
     public void addF(Field f) {
 	map.put(f);
-	f.attach(this);
+	add(f.getJP());
     }
 
     public String noWhite(String a){

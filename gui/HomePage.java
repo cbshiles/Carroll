@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class Home extends Page {
+public class HomePage extends Page {
     JButton floor = new JButton("Floor Plan");
     JButton contracts = new JButton("Contracts");
     
-    public Home(){
+    public HomePage(){
 	super("Home Page");
 	setSize(400, 600);
 	setLayout(new GridLayout(0, 1));
@@ -16,6 +16,6 @@ public class Home extends Page {
 	setVisible(true);
 
 	floor.addActionListener(new Relocator<FloorPage>(FloorPage.class));
-	//floor.addActionListener(new Relocator<ContractPage>(ContractPage.class));
+	//contracts.addActionListener(new Relocator<ContractPage>(ContractPage.class));
     }
 }

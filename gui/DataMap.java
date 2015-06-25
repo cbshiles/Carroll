@@ -46,10 +46,13 @@ public class DataMap {
 
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yy");
 
-    public LocalDate getDate(String s) throws Exception{
-	String dStr = getStr(s);
+    public LocalDate getDate(String key) throws InputXcpt{
+	String dStr = getStr(key);
 	dStr = dStr.replaceAll("/", "-");
-	System.out.println(dStr);
+	try {
 	return LocalDate.parse(dStr, dtf);
+	} catch (DateTimeParseException e){
+	    throw new InputXcpt(key, dStr, "Could not be parsed in MM-dd-yy or MM/dd/yy format");
+	}
     }
 }

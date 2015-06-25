@@ -5,23 +5,23 @@ import java.time.*;
 public class ContractTable extends Table{
 
     static final Column[] columns = new Column[] {
-	new Column("ID", 1),
-	new Column("First Name", 0),
-	new Column("Last Name", 0),
-	new Column("Address", 0),
-	new Column("Phone Number", 0),
-	new Column("Number of Payments", 1),
-	new Column("Amount", 2),
-	new Column("Final Payment", 2),
-	new Column("Payment Frequency", 1),
-	new Column("Total of Payments", 2),
-	new Column("Start Date", 3),
-	new Column("Vehicle", 0),
-	new Column("VIN", 0)};
+	new Column("ID", Type.INT),
+	new Column("First Name", Type.STRING),
+	new Column("Last Name", Type.STRING),
+	new Column("Address", Type.STRING),
+	new Column("Phone Number", Type.STRING),
+	new Column("Number of Payments", Type.INT),
+	new Column("Amount", Type.FLOAT),
+	new Column("Final Payment", Type.FLOAT),
+	new Column("Payment Frequency", Type.INT),
+	new Column("Total of Payments", Type.FLOAT),
+	new Column("Start Date", Type.DATE),
+	new Column("Vehicle", Type.STRING),
+	new Column("VIN", Type.STRING)};
 
 
-    public ContractTable(SQLBot bot){
-	super("Contracts", columns, bot);
+    public ContractTable(){
+	super("Contracts", columns);
     }
 
     public JTable makePayTable() throws Exception{
@@ -29,7 +29,7 @@ public class ContractTable extends Table{
 
 	String[] str = new String[]{"Customer Name", "Terms", "Start Date", "Due Date"};
 
-	List<List<Object>> lzt = readDB();
+	List<List<Object>> lzt = readAll();
 
 	Object[][] objs = new Object[lzt.size()][str.length];
 

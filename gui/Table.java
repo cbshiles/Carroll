@@ -9,11 +9,19 @@ public class Table {
     final Column[] cols;
     DataMap map;
     SQLBot bot;
-    
-    public Table(String n, Column[] c, SQLBot b){
+
+    public Table(String n, Column[] c){
 	name = n;
 	cols = c;
-	bot = b;
+	bot = Driver.bot;
+    }
+    
+    public Table(String n, Column[] c, SQLBot b){
+    	name = n;
+    	cols = c;
+    	bot = b;
+    	System.err.println("Don't call this constructor");
+    	System.exit(1);
     }
 
     String[] getHeads(){
@@ -33,26 +41,48 @@ public class Table {
 
 	return arr;
     }
+
+    List<List<Object>> readAll() throws SQLException {
+	return readDB("SELECT * FROM "+name);
+    }
     
-    List<List<Object>> readDB() throws SQLException { //Read all from the DB
+    List<List<Object>> readCols(String rest) throws SQLException {
+	boolean first = true;
+	String fields = "";
+	for (Column c : cols){
+	    if (! first) fields += ", ";
+	    else first = false;
+	    fields += c.sqlName;
+	}
+	String q = "SELECT "+fields+" FROM "+name+" ";
+	return readDB(q+rest);
+    }
+
+    List<List<Object>> readCols() throws SQLException {
+	return readCols("");}
+    
+    List<List<Object>> readDB(String q) throws SQLException { //Read all from the DB
 	
-	ResultSet rs = bot.query("SELECT * FROM "+name);
+	ResultSet rs = bot.query(q);
 	List<List<Object>> bigLzt = new ArrayList<List<Object>>();
 
 	while (rs.next()){
 	    int j = 1;
 	    List<Object> lzt = new ArrayList<Object>();
 	    for (Column c : cols){
-		if (c.type == 0) //String
-		    lzt.add(rs.getString(j++));
-		else if (c.type == 1) //Integer
-		    lzt.add(rs.getInt(j++));
-		else if (c.type == 2) //Float
-		    lzt.add(rs.getFloat(j++));
-		else if (c.type == 3) //Date
-		    lzt.add(dater(rs.getDate(j++)));
-		else
-		    throw new SQLException("Invalid column type");
+		switch(c.type) {
+
+		 case STRING:
+		    lzt.add(rs.getString(j++)); break;
+		 case INT:
+		     lzt.add(rs.getInt(j++)); break;
+		 case FLOAT:
+		     lzt.add(rs.getFloat(j++)); break;
+		 case DATE:
+		     lzt.add(dater(rs.getDate(j++))); break;
+		 default:
+		     throw new SQLException("Invalid column type");
+		}
 	    }
 	    bigLzt.add(lzt);
 	}

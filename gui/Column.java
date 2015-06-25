@@ -1,7 +1,7 @@
 public class Column{
 
     public String name, sqlName;
-    public int type;
+    public Type type;
     public String txt;
     boolean literal;
 /*
@@ -13,14 +13,14 @@ public class Column{
 
  */
 
-    public Column(String n, int t){
+    public Column(String n, Type t){
 	name = n;
 	sqlName = name.trim().replaceAll("\\s", "_");
 	type = t;
 	literal = false;
     }
 
-    public Column(String n, int t, String z){
+    public Column(String n, Type t, String z){
 	this(n, t);
 	txt = z;
 	literal = true;

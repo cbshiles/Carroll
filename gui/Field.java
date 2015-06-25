@@ -10,18 +10,20 @@ public abstract class Field {
     JPanel jp;
     
     public Field (String n, JPanel j)
-	{
-	    name = n;
-	    jp = j;
-	    jp.setOpaque(false);
-	    jp.setBorder(LineBorder.createBlackLineBorder());
-	}
+    {
+	name = n;
+	jp = j;
+    }
 
     public Field (String n)
-    {this(n, new JPanel());}
+    {
+	name = n;
+	jp = new JPanel();
+	jp.setOpaque(false);
+	jp.setBorder(LineBorder.createBlackLineBorder());
+    }
 
-    public void attach(Container c)
-    {c.add(jp);}
+    public JPanel getJP(){return jp;}
 
     public abstract String text() throws InputXcpt;
 
@@ -31,7 +33,7 @@ public abstract class Field {
 
     JTextField newText(){
 	JTextField tf = new JTextField();
-	tf.setBorder(BorderFactory.createMatteBorder(15, 5, 15, 5, EntryForm.bkgd));
+	tf.setBorder(BorderFactory.createMatteBorder(15, 5, 15, 5, Page.bkgd));
 	return tf;
     }
 }

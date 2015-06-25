@@ -17,10 +17,8 @@ public class TestTable2 {
 
     public static void main(String[] args){
 	try{
-	    SQLBot bot;
-	    bot = new SQLBot("../../db.properties");
 	    //JTable x = new ContractTable(bot).makePayTable();
-	    JTable x = new FloorTable(bot).makeFloorTable();
+	    JTable x = new FloorTable().makeFloorTable();
 	    run(x);
 	} catch (Exception e)
 	{System.err.println("YO: "+e.getCause()+e.getClass().getName());}

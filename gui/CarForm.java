@@ -3,9 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 
-public class FloorForm extends Form{
-    public FloorForm() throws Exception{
-	super("Cars", "../../db.properties");
+public class CarForm extends Form{
+    public CarForm() throws Exception{
+	super("Cars");
 
 	setSize(400, 600);
 	setLocation(200, 100);

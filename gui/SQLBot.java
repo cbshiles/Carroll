@@ -33,11 +33,11 @@ public class SQLBot {
     }
 
     public int update(String sql) throws SQLException{
-	return stmt.executeUpdate(sql);
+	return stmt.executeUpdate(sql+';');
     }
 
     public ResultSet query(String sql) throws SQLException{
-	return stmt.executeQuery(sql);
+	return stmt.executeQuery(sql+';');
     }
 
     private String names, values, table;
