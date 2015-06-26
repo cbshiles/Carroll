@@ -1,3 +1,5 @@
+package sourceone.sql;
+
 import java.sql.*;
 import javax.sql.*;
 import java.util.*;
@@ -44,13 +46,13 @@ public class SQLBot {
 
     private String names, values, table;
 
-    void insertInit(String t){
+    public void insertInit(String t){
 	table = t;
 	names = "";
 	values = "";
     }
 
-    void insertAdd(String n, String v){
+    public void insertAdd(String n, String v){
 	if (! names.equals("")){
 	    names += ", ";
 	    values += ", ";
@@ -59,26 +61,26 @@ public class SQLBot {
 	values += v;
     }
 
-    void insertToday(String s){
+    public void insertToday(String s){
 	insertAdd(s, "CURDATE()");
     }
 
-    int insertSend()throws SQLException{
+    public int insertSend()throws SQLException{
 	String s = "INSERT INTO "+table+" ("+names+") VALUES ("+values+");";
 	System.err.println(s);
 	return update(s);
     }
 
-    String toSQL(String s)
+    public String toSQL(String s)
     {return "'"+s+"'";}
 
-    String toSQL(LocalDate d)
+    public String toSQL(LocalDate d)
     {return "'"+d.toString()+"'";}
     
-    String toSQL(Number n)
+    public String toSQL(Number n)
     {return n.toString();}
 
-    void printSet(ResultSet rs) throws SQLException{
+    public void printSet(ResultSet rs) throws SQLException{
 	ResultSetMetaData rsmd = rs.getMetaData();
 	int nc = rsmd.getColumnCount();
 	while (rs.next()) {

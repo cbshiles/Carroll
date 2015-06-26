@@ -1,3 +1,7 @@
+package sourceone.tables;
+
+import sourceone.*;
+import sourceone.fields.*;
 import java.time.*;
 import java.time.format.*;
 

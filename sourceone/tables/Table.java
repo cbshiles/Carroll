@@ -1,3 +1,7 @@
+package sourceone.tables;
+
+import sourceone.*;
+import sourceone.sql.*;
 import java.sql.*;
 import javax.sql.*;
 import java.util.*;
@@ -7,14 +11,13 @@ import java.time.format.DateTimeFormatter;
 public class Table {
     String name;
     final Column[] cols;
-    DataMap map;
     SQLBot bot;
     Object[][] objs;
 
     public Table(String n, Column[] c){
 	name = n;
 	cols = c;
-	bot = Driver.bot;
+	bot = sourceone.Driver.bot;
     }
     
     public Table(String n, Column[] c, SQLBot b){

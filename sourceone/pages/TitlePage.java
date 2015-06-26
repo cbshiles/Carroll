@@ -1,5 +1,8 @@
 package sourceone.pages;
-import com.sourceone.fields.*;
+
+import sourceone.fields.*;
+import sourceone.csv.*;
+import sourceone.tables.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,8 +12,7 @@ public class TitlePage extends Page {
     JTable jt;
     JPanel jp = new JPanel(new BorderLayout());
     JButton jb;
-    //TitleTable tt = new TitleTable();
-    CSVReadTable tt = new CSVReadTable();
+    TitleTable tt = new TitleTable();
     
     public TitlePage(){
 	super("Pending Titles");

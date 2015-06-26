@@ -1,4 +1,6 @@
+package sourceone.tables;
 import javax.swing.*;
+import sourceone.*;
 
 public class TitleTable extends Table {
 

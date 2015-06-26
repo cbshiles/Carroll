@@ -1,4 +1,8 @@
-//package stink;
+package sourceone;
+
+import sourceone.sql.*;
+import sourceone.pages.*;
+import sourceone.fields.*;
 
 public class Driver {
     private static int pages = 0;
@@ -12,8 +16,10 @@ public class Driver {
     }
     
     public static void main(String[] args) throws Exception{
-	bot = new SQLBot("../res/db.properties");
+	System.out.println(System.getProperty("user.dir"));
+	bot = new SQLBot("res/db.properties");
 	new HomePage();
 	//new CSVTable().dew();
+
     }
 }

@@ -1,3 +1,4 @@
+package sourceone.tables;
 public class View {
     Table tbl;
     int[] dex;

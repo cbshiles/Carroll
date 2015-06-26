@@ -1,5 +1,6 @@
 package sourceone.pages;
-import com.sourceone.fields.*;
+
+import sourceone.fields.*;
 import javax.swing.*;
 import java.awt.*;
 
