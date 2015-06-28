@@ -9,6 +9,7 @@ import java.time.format.*;
 
 public class SQLBot {
 
+    public static SQLBot bot;
     Connection conn;
     Statement stmt;
     
@@ -19,7 +20,7 @@ public class SQLBot {
 	String user = props.getProperty("user");
 	String password = props.getProperty("password");
 	String url = "jdbc:mysql://localhost/"+props.getProperty("database");
-	Class.forName ("com.mysql.jdbc.Driver").newInstance ();
+	Class.forName ("com.mysql.jdbc.Driver").newInstance();
 
 	conn = DriverManager.getConnection (url, user, password);
 	stmt = conn.createStatement();
@@ -37,48 +38,12 @@ public class SQLBot {
     }
 
     public int update(String sql) throws SQLException{
-	return stmt.executeUpdate(sql+';');
+	return stmt.executeUpdate(sql);
     }
 
     public ResultSet query(String sql) throws SQLException{
-	return stmt.executeQuery(sql+';');
+	return stmt.executeQuery(sql);
     }
-
-    private String names, values, table;
-
-    public void insertInit(String t){
-	table = t;
-	names = "";
-	values = "";
-    }
-
-    public void insertAdd(String n, String v){
-	if (! names.equals("")){
-	    names += ", ";
-	    values += ", ";
-	}
-	names += n;
-	values += v;
-    }
-
-    public void insertToday(String s){
-	insertAdd(s, "CURDATE()");
-    }
-
-    public int insertSend()throws SQLException{
-	String s = "INSERT INTO "+table+" ("+names+") VALUES ("+values+");";
-	System.err.println(s);
-	return update(s);
-    }
-
-    public String toSQL(String s)
-    {return "'"+s+"'";}
-
-    public String toSQL(LocalDate d)
-    {return "'"+d.toString()+"'";}
-    
-    public String toSQL(Number n)
-    {return n.toString();}
 
     public void printSet(ResultSet rs) throws SQLException{
 	ResultSetMetaData rsmd = rs.getMetaData();

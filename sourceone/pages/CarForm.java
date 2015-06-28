@@ -1,5 +1,7 @@
 package sourceone.pages;
 
+import static sourceone.key.Type.*;
+import sourceone.key.*;
 import sourceone.fields.*;
 import javax.swing.*;
 import java.awt.GridLayout;
@@ -24,31 +26,39 @@ public class CarForm extends Form{
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    try {
-			bot.insertInit("Cars");
 
-			String s, x;
+			Key key = new Key(
+			    new String[]{"Date Bought", "Vehicle", "VIN", "Cost"},
+			    new sourceone.key.Type[]{DATE, STRING, STRING, FLOAT});
 
-			s = "Date Bought";
-			LocalDate ld = map.getDate(s);
-			bot.insertAdd(noWhite(s), bot.toSQL(ld.toString()));
+			Grid g = new Grid(key, new StringIn(this), new SQLOut(key, "Cars"));
+			g.pull();
+			g.push();
+// bot.insertInit("Cars");
 
-			s = "Item ID";
-			x = map.getStr("VIN");
-			bot.insertAdd(noWhite(s), bot.toSQL(x));
+			// String s, x;
 
-			s = "Vehicle";
-			x = map.getStr(s);
-			bot.insertAdd(noWhite(s), bot.toSQL(x));
+			// s = "Date Bought";
+			// LocalDate ld = map.getDate(s);
+			// bot.insertAdd(noWhite(s), bot.toSQL(ld.toString()));
 
-			s = "Item Cost";
-			float f = map.getFloat("Cost");
-			bot.insertAdd(noWhite(s), bot.toSQL(f));
+			// s = "Item ID";
+			// x = map.getStr("VIN");
+			// bot.insertAdd(noWhite(s), bot.toSQL(x));
 
-			bot.insertAdd("Title", bot.toSQL(0));
+			// s = "Vehicle";
+			// x = map.getStr(s);
+			// bot.insertAdd(noWhite(s), bot.toSQL(x));
 
-			bot.insertSend();
+			// s = "Item Cost";
+			// float f = map.getFloat("Cost");
+			// bot.insertAdd(noWhite(s), bot.toSQL(f));
 
-			bot.printSet(bot.query("SELECT * FROM Cars"));
+			// bot.insertAdd("Title", bot.toSQL(0));
+
+			// bot.insertSend();
+
+			// bot.printSet(bot.query("SELECT * FROM Cars"));
 			
 		    } catch (Exception ix){//(InputXcpt ix) {
 			System.out.println(ix.getMessage());

@@ -1,23 +1,40 @@
 package sourceone.pages;
-import sourceone.fields.*;
+import sourceone.key.*;//StringSource;
+import sourceone.fields.Field;
 import javax.swing.*;
 import java.awt.*;
 
-public class Form extends Page { //Page for inputting information
+public class Form extends Page implements StringSource{ //Page for inputting information
 
-    DataMap map = new DataMap();
+    java.util.List<Field> fields = new java.util.ArrayList<Field>();
+    boolean gotem;
+    int i;
 
     public Form(String name){
 	super(name);
     }
     
     public void addF(Field f) {
-	map.put(f);
-	add(f.getJP());
+	fields.add(f);
+	add(f.getJP()); //This is why you can't use that other constructor
     }
 
-    public String noWhite(String a){
-	return a.trim().replaceAll("\\s", "_");
+    public boolean hasEntries()
+    {
+	if (gotem){
+	    gotem = false;
+	    return true;}
+	else return false;
     }
 
+    public String get() throws InputXcpt{
+	if (i >= fields.size())
+	    throw new InputXcpt("Not enough fields");
+	return fields.get(i++).text();
+    }
+
+    public void refresh() { //Allow info to be input again
+	gotem = true;
+	i=0;
+    }
 }

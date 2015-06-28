@@ -4,7 +4,6 @@ import sourceone.fields.*;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class HomePage extends Page {
     JButton floor = new JButton("Floor Plan");
     JButton contracts = new JButton("Contracts");
