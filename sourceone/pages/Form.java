@@ -7,7 +7,7 @@ import java.awt.*;
 public class Form extends Page implements StringSource{ //Page for inputting information
 
     java.util.List<Field> fields = new java.util.ArrayList<Field>();
-    boolean gotem;
+    boolean gotem = true;
     int i;
 
     public Form(String name){

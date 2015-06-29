@@ -5,14 +5,8 @@ public class Grid extends Matrix{
 
     Input in;
 
-    public Grid(Key k, Input i, Output o){
-	super(k, o);
-	in = i;
-	key.setInput(in);
-    }
-
-    public Grid(Key k, Input i, View v){
-	super(k, v);
+    public Grid(Key k, Input i){
+	super(k);
 	in = i;
 	key.setInput(in);
     }
@@ -21,4 +15,5 @@ public class Grid extends Matrix{
 	while(in.hasEntries())
 	    data.add(key.getEntry());
     }
+
 }

@@ -1,4 +1,4 @@
 package sourceone.key;
-public enum Type { 
+public enum Kind { //what kind of daters?
     STRING, INT, FLOAT, DATE
 }

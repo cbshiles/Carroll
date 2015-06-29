@@ -2,8 +2,11 @@ package sourceone.key;
 
 public class Key{
     public Cut[] cuts;
+    public int length;
+    
+    public Key(Cut[] c){cuts = c; length = cuts.length;}
 
-    public Key(String[] names, Type[] types){
+    public Key(String[] names, Kind[] types){
 	cuts = new Cut[names.length];
 	
 	for (int i=0; i<names.length; i++){
@@ -18,8 +21,9 @@ public class Key{
 		 cuts[i] = new DateCut(names[i]); break;
 	    }
 	}
+	length = cuts.length;
     }
-    
+
     public Object[] getEntry() throws InputXcpt{
 	Object[] arr = new Object[cuts.length];
 	for (int i=0; i<cuts.length; i++)

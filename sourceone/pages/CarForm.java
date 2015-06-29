@@ -1,11 +1,14 @@
 package sourceone.pages;
 
-import static sourceone.key.Type.*;
+import static sourceone.key.Kind.*;
 import sourceone.key.*;
 import sourceone.fields.*;
+import sourceone.sql.SQLOut;
+
 import javax.swing.*;
 import java.awt.GridLayout;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.time.*;
 
 public class CarForm extends Form{
@@ -28,10 +31,21 @@ public class CarForm extends Form{
 		    try {
 
 			Key key = new Key(
-			    new String[]{"Date Bought", "Vehicle", "VIN", "Cost"},
-			    new sourceone.key.Type[]{DATE, STRING, STRING, FLOAT});
+			    new String[]{"Date Bought", "Vehicle", "Item_ID", "Item_Cost"},
+			    new Kind[]{DATE, STRING, STRING, FLOAT});
 
-			Grid g = new Grid(key, new StringIn(this), new SQLOut(key, "Cars"));
+//			View sqview = new View(key){
+
+//			    }
+
+			Grid g = new Grid(key, new StringIn(CarForm.this));
+
+			View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
+				public Object[] editEntry(Object[] objs){
+				    return new Object[] {0};
+				}
+			    });
+			v.addOut(new SQLOut(key, "Cars"));
 			g.pull();
 			g.push();
 // bot.insertInit("Cars");
