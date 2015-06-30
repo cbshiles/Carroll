@@ -38,7 +38,7 @@ public class Matrix{
 	} else { //to a view
 	    for (Object[] objs : data)
 		view.receiveEntry(objs);
-	    view.push();
+//	    view.push();
 	}
     }
 
@@ -46,23 +46,24 @@ public class Matrix{
 	int rl = (remove==null)?0:remove.length;
 	int gl = (gnu==null)?0:gnu.length;
 	int cl = key.length - rl;
+
 		
 	Cut[] c = new Cut[cl + gl];
+
+
 
 	if (remove != null){
 	    int i,j,n;
 	    for (i=j=n=0; i<key.cuts.length; i++){
-		while (i > remove[j]) j++;
-		if (i < remove[j]) c[n++] = key.cuts[i];
-		i++;
+		System.out.println("i: "+i+"j: "+j);
+		while (i > remove[j] && j<rl-1) j++;
+		if (i != remove[j]) c[n++] = key.cuts[i];
 	    }
 	} else System.arraycopy(key.cuts, 0, c, 0, key.length);
 
-	System.out.println(gnu.length);
-	
 	if (gnu != null)
 	    System.arraycopy(gnu, 0, c, cl, gnu.length);
-	
+
 	View v = new View(new Key(c), remove, ent);
 	addOut(v);
 	return v;

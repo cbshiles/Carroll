@@ -14,5 +14,6 @@ public class TextField extends Field{
     }
     
     public String text()
-    {return tf.getText();}
+    {System.out.println("hurr: "+tf.getText());
+	return tf.getText();}
 }

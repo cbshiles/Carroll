@@ -44,6 +44,7 @@ public class CarForm extends Form{
 			v.addOut(new SQLOut(v.key, "Cars"));
 			g.pull();
 			g.push();
+			v.push();
 			
 		    } catch (Exception ix){//(InputXcpt ix) {
 			System.out.println(ix.getMessage());

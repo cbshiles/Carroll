@@ -15,7 +15,6 @@ public class View extends Matrix{
     }
 
     public void receiveEntry(Object[] objs){
-	System.out.println("recieve entry eas pcalled");
 	
 	Object[] arr = new Object[key.length];
 
@@ -23,13 +22,12 @@ public class View extends Matrix{
 	if (remove != null){
 	    int i,j;
 	    for (i=j=n=0; i<objs.length; i++){
-		while (i > remove[j]) j++;
-		if (i < remove[j]) arr[n++] = objs[i];
-		i++;
+		while (i > remove[j] && j<remove.length-1) j++;
+		if (i != remove[j]) arr[n++] = objs[i];
 	    }
 	} else System.arraycopy(objs, 0, arr, 0, n = objs.length);
 
-
+	System.out.println("yadda");
 	if (ent != null){
 	    Object[] gnu = ent.editEntry(objs);
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);

@@ -18,7 +18,7 @@ public class HomePage extends Page {
 	setVisible(true);
 
 	floor.addActionListener(new PageMaker(FloorPage.class));
-	contracts.addActionListener(new PageMaker(ContractForm.class));
+	contracts.addActionListener(new PageMaker(ContractPage.class));
 	//contracts.addActionListener(new Relocator<ContractPage>(ContractPage.class));
     }
 }

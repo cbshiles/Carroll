@@ -12,6 +12,7 @@ public class Grid extends Matrix{
     }
 
     public void pull() throws InputXcpt{
+	data = new ArrayList<Object[]>();
 	while(in.hasEntries())
 	    data.add(key.getEntry());
     }

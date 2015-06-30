@@ -52,12 +52,20 @@ public class ContractForm extends Form {
 			ContractForm.this.refresh();
 			g.pull();
 			Object[] o = g.data.get(0);
-			System.out.println(o.length);
+			System.out.println((int)o[4]*(float)o[5] + (float)o[6] + " == "+ (float)o[8]);
 			if (Math.abs((int)o[4]*(float)o[5] + (float)o[6] - (float)o[8]) > .001)
 			    throw new InputXcpt("Payment summation does not equal total");
-			g.addOut(new SQLOut(g.key, "Contracts"));
+
+			View v = g.addView(null, new Cut[]{new IntCut("Payments made"), new DateCut("Paid off day"), new DateCut("Next Due")},
+					   new Enterer(){
+					       public Object[] editEntry(Object[] objs){
+						   return new Object[] {0, null, objs[9]};
+					       }
+					   });
+
+			v.addOut(new SQLOut(v.key, "Contracts"));
 			g.push();
-			
+			v.push();
 		    } catch (Exception ix){//(InputXcpt ix) {
 			System.out.println("Submission error: "+ix.getMessage());
 			System.out.println(ix.getClass().getName());
