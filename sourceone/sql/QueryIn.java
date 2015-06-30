@@ -1,22 +1,29 @@
+package sourceone.sql;
+
 import java.sql.*;
 import javax.sql.*;
 import java.time.LocalDate;
+import sourceone.key.*;
 
-public class QueryIn{
+public class QueryIn implements Input{
 
     ResultSet rs;
     int i = 1;
     
-    public QueryIn(String q){
-	rs = Driver.bot.query();
+    public QueryIn(String q) throws SQLException{
+	rs = SQLBot.bot.query(q);
     }
 
-    boolean hasEntries(){
+    public boolean hasEntries(){
 	i=1;
-	return rs.next();
+	try {return rs.next();}
+	catch (Exception e){
+	    System.out.println("QueryIn hasEntries Exception");
+	    return false;
+	}
     }
 
-    String getString() throws InputXcpt{
+    public String getString() throws InputXcpt{
 	try {
 	    return rs.getString(i++);
 	} catch (Exception e) {
@@ -24,7 +31,7 @@ public class QueryIn{
 	}
     }
 
-    int getInt() throws InputXcpt{
+    public int getInt() throws InputXcpt{
 	try {
 	    return rs.getInt(i++);
 	} catch (Exception e) {
@@ -32,7 +39,7 @@ public class QueryIn{
 	}
     }
 
-    float getFloat() throws InputXcpt{
+    public float getFloat() throws InputXcpt{
 	try {
 	    return rs.getFloat(i++);
 	} catch (Exception e) {
@@ -40,7 +47,7 @@ public class QueryIn{
 	}
     }
 
-    LocalDate getDate() throws InputXcpt{
+    public LocalDate getDate() throws InputXcpt{
 	try {
 	    Date d =  rs.getDate(i++);
 	    if (d == null) return null;

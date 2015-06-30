@@ -1,6 +1,9 @@
+package sourceone.fields;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import sourceone.key.InputXcpt;
 
 public class RadioField extends Field implements ActionListener{
 

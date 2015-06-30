@@ -2,9 +2,13 @@ package sourceone.key;
 public class InputXcpt extends Exception {
 
     static String z = "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+    public InputXcpt(String msg){
+	super(z+msg+"\n"+z);
+    }
     
     public InputXcpt(String k, String msg){
-	super(z+"Input Error for string "+k+"\n"+msg+z);
+	this("Input Error for "+k+"\n"+msg);
     }
 
     //InputXcpt that takes other exceptions (in constructor)?
@@ -13,11 +17,8 @@ public class InputXcpt extends Exception {
     // 	this(k, "For input string: \""+val+"\"\n"+msg);
     // }
 
-    public InputXcpt(String msg){
-	super(msg+"\n");
-    }
 
     public InputXcpt(Exception e){
-	super(z+e.getClass().getName()+'\n'+e.getMessage()+z);
+	this(e.getClass().getName()+'\n'+e.getMessage());
     }
 }

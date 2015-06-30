@@ -8,5 +8,6 @@ public class IntCut extends Cut{
     {return ip.getInt();}
 
     public void out(Object o)
-    {op.put((int)o);}
+    {System.out.println("yo "+(int)o);
+	op.put((int)o);}
 }

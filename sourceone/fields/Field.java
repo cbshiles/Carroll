@@ -1,4 +1,6 @@
 package sourceone.fields;
+
+import sourceone.key.InputXcpt;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
@@ -26,7 +28,7 @@ public abstract class Field {
 
     public JPanel getJP(){return jp;}
 
-    public abstract String text();
+    public abstract String text() throws InputXcpt;
 
     JLabel newLabel(String n){
 	return new JLabel(n, SwingConstants.CENTER);

@@ -18,7 +18,7 @@ public class FloorPage extends Page {
 	addCar.addActionListener(new PageMaker(CarForm.class));
 	
 	add(addTitle);
-	//addTitle.addActionListener(new PageMaker(TitlePage.class));
+	addTitle.addActionListener(new PageMaker(TitlePage.class));
 	
 	add(payOff);
 //	payOff.addActionListener(new Relocator<PayPage>(PayPage.class));

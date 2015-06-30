@@ -1,6 +1,5 @@
 package sourceone.key;
 
-
 //Any new cuts are to be added to the key before the reach a view constructor
 //This feature is in Matrix's makeView
 
@@ -20,22 +19,23 @@ public class View extends Matrix{
 	
 	Object[] arr = new Object[key.length];
 
+	int n;
 	if (remove != null){
-	    int i,j,n;
+	    int i,j;
 	    for (i=j=n=0; i<objs.length; i++){
 		while (i > remove[j]) j++;
 		if (i < remove[j]) arr[n++] = objs[i];
 		i++;
 	    }
-	} else System.arraycopy(objs, 0, arr, 0, objs.length);
+	} else System.arraycopy(objs, 0, arr, 0, n = objs.length);
 
 
 	if (ent != null){
 	    Object[] gnu = ent.editEntry(objs);
+	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
-	else data.add(objs);
 
-	NOT FINISHED, RIGHT HERE
+	data.add(arr);
     }
 
 //remove selected, or something (takes an int[])
