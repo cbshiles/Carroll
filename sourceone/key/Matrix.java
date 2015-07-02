@@ -1,5 +1,6 @@
 package sourceone.key;
 import java.util.*;
+import javax.swing.JTable;
 
 public class Matrix{
 
@@ -29,12 +30,14 @@ public class Matrix{
     public void push() throws InputXcpt{
 
 	if (! hasOut) return;//throw new InputXcpt("Matrix cant be pushed without an out");
-	
+
 	if (toOut){
 	    for (Object[] objs : data){
 		key.putEntry(objs);
 		out.endEntry();
 	    }
+	    out.close();
+
 	} else { //to a view
 	    for (Object[] objs : data)
 		view.receiveEntry(objs);
@@ -73,17 +76,12 @@ public class Matrix{
 	return v;
     }
 
-    public javax.swing.JTable getTable(){
-	Object[][] arr = new Object[data.size()][key.length];
-	int i=0;
-	for (Object[] row : data)
-	    arr[i++] = row;
+    public JTable getTable()throws InputXcpt{
+	JTable jt = new JTable();
+	TableDest td = new TableDest(key, data.size());
+	addOut(new Formatter(td));
+	push();
 
-	String[] names = new String[key.length];
-	i=0;
-	for (Cut c : key.cuts)
-	    names[i++] = c.name;
-
-	return new javax.swing.JTable(arr, names);
+	return td.getTable();
     }
 }

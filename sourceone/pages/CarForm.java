@@ -21,8 +21,8 @@ public class CarForm extends Form{
 	setLayout(new GridLayout(0, 1));
 
 	addF(new TextField("Date Bought"));
-	addF(new TextField("Vehicle"));
 	addF(new TextField("VIN"));
+	addF(new TextField("Vehicle"));
 	addF(new TextField("Cost"));
 
 	JButton submit = new JButton("Submit");
@@ -30,9 +30,7 @@ public class CarForm extends Form{
 		public void actionPerformed(ActionEvent ae){
 		    try {
 			CarForm.this.refresh();
-			Key key = new Key(
-			    new String[]{"Date Bought", "Vehicle", "Item_ID", "Item_Cost"},
-			    new Kind[]{DATE, STRING, STRING, FLOAT});
+			Key key = Key.floorKey.except(new int[]{0,5,6});
 
 			Grid g = new Grid(key, new StringIn(CarForm.this));
 

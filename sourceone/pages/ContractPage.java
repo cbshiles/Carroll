@@ -15,7 +15,7 @@ public class ContractPage extends Page {
     JButton payOff = new JButton("Pay Off");
 
     public ContractPage(){
-	super("Floor Plan");
+	super("Contract Page");
 	setSize(400, 600);
 	setLayout(new GridLayout(0, 1));
 	

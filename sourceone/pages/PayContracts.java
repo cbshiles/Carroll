@@ -21,7 +21,7 @@ public class PayContracts extends Page {
 	super("Pay Contracts");
 	setSize(400, 600);
 	try{
-	    Key key = Key.contractKey.just(new int[] {1,2,5,6,7,8,9,10,13,14,15});
+	    Key key = Key.contractKey.just(new int[] {0,1,2,5,6,7,8,9,10,13,14,15});
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Contracts WHERE Next_Due < CURDATE()");
 
 	    Grid g = new Grid(key, in);
@@ -34,15 +34,38 @@ public class PayContracts extends Page {
 			
 			new Enterer(){
 		    public Object[] editEntry(Object[] o){
+			int nPays, freq = (int)o[5+1];
+			LocalDate due = (LocalDate)o[10+1];
+			float amt = (float)o[3+1];
+
+			int tmp = numPays(freq, due);
+			int maxPays = (int)o[2+1] - (int)o[8+1];
+			nPays = (tmp<maxPays)?tmp:maxPays;
+
 			return new Object[] {
-			    (String)o[1]+", "+o[0],
-			    terms((int)o[2], (float)o[3], (int)o[5]),
-			    o[7],
-			    o[10],
-			    (float)o[6] - (int)o[8]*(float)o[3],
-			    "???",
-			    "???"
+			    (String)o[1+1]+", "+o[0+1],
+			    terms((int)o[2+1], amt, freq),
+			    o[7+1],
+			    due,
+			    (float)o[6+1] - (int)o[8+1]*amt,
+			    nPays,
+			    nPays*amt + (float)o[4+1] //Final payment
 			};
+		    }
+		    public int numPays(int freq, LocalDate due){
+			int pays = 0;
+			LocalDate today = LocalDate.now();
+			while (today.compareTo(due) > 0){
+			    due = next(freq, due);
+			    pays++;
+			}
+			return pays;
+		    }
+		    public LocalDate next(int freq, LocalDate ld){
+			LocalDate due;
+			if (freq == 30) due = ld.plusMonths(1);
+			else due = ld.plusDays(freq);
+			return due;
 		    }
 
 		    public String terms(int num, float amt, int freq){
@@ -71,15 +94,16 @@ public class PayContracts extends Page {
 
 			    for (int i : jt.getSelectedRows()){
 				Object[] o = g.data.get(i);
-				System.out.println(o[13]+" ~ "+o[15]);
-				int pays = (int)o[13]+1;
-				LocalDate due = next((int)o[8], (LocalDate)o[15]);
-				System.out.println(pays+" ~ "+due);
+				//System.out.println(o[8+1]+" ~ "+o[10+1]);
+				int pays = (int)o[8+1]+1;
+				LocalDate due = next((int)o[5+1], (LocalDate)o[10+1]);
+				//System.out.println("UPDATE Contracts SET Payments_made="+pays+", Next_Due="+due+" WHERE ID="+o[0]);
+				SQLBot.bot.update("UPDATE Contracts SET Payments_made="+pays+", Next_Due='"+due+"' WHERE ID="+o[0]);
 			    }
 
-//				SQLBot.bot.update("UPDATE Cars SET Payments_made="+()+" WHERE ID="+g.data.get(i)[0]);
 			} catch (Exception x)
-			{System.err.println("YO: "+x.getCause()+x.getClass().getName());}
+			{System.err.println("YO: "+x.getCause()+x.getClass().getName());
+			    System.err.println(x.getMessage());}
 	    	    }
 
 		    public LocalDate next(int freq, LocalDate ld){

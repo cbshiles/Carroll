@@ -17,14 +17,14 @@ public class FloorPay extends Page {
 	super("Discotech");
 	setSize(600,600);
 	try {
-	    Key key = Key.floorKey.except(new int[]{0,2,5,6});
+	    Key key = Key.floorKey.except(new int[]{0,2,6});
 
-	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=1");
+	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title<2");
 
 	    Grid g = new Grid(key, in);
 	    g.pull();
 
-	    View v = g.addView(null, new Cut[]{new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	    View v = g.addView(new int[]{3}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 					       new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 		new Enterer(){
 		    public Object[] editEntry(Object[] o){
@@ -34,9 +34,12 @@ public class FloorPay extends Page {
 			float dRate = cost*.0007f; 
 			int days = (int)ChronoUnit.DAYS.between(bot, LocalDate.now());
 
-			float interest = dRate*days;
+			int min = (cost >= 5000)?65:35;
+			float tmp = dRate*days;
+			float interest = tmp>min?tmp:min;
 			float fees = 25;
 			return new Object[]{
+			    ((int)o[3] == 0) ? "Pending":"Yes",
 			    dRate,
 			    days,
 			    interest,

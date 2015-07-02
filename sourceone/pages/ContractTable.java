@@ -70,9 +70,13 @@ public class ContractTable extends Page {
 			   	       return due;
 			   	   }
 			       });
+
 	g.push();
+
 	//jt = g.getTable();
+	try{
 	jt = v.getTable();
+	} catch (Exception e){System.err.println(e.getMessage()+" "+e.getClass().getName());}
 	jp.add(new JScrollPane(jt), BorderLayout.NORTH);
 
 	setContentPane(jp);	
@@ -80,34 +84,3 @@ public class ContractTable extends Page {
 	setVisible(true);	
     }
 }
-
-	    // char ch;
-	    // int freq = (Integer)slzt.get(8);
-	    // LocalDate due;
-	    
-	    // if (freq == 30){
-	    // 	ch = 'M';
-	    // 	due = start.plusMonths(1);
-	    // } else {
-	    // 	if (freq == 7) ch = 'W';
-	    // 	else if (freq == 14) ch = 'B';
-	    // 	else throw new Exception("Invalid payment frequency");
-	    // 	due = start.plusDays(freq);
-	    // }
-
-	    // String terms = slzt.get(5).toString();
-	    // terms += " "+ch+" @ "+princ((float)slzt.get(6));
-
-	    // objs[i][1] = terms;
-	    // objs[i][2] = princ(start);
-	    // objs[i][3] = princ(due);
-
-    // static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-
-    // String princ(LocalDate d){
-    // 	return d.format(dtf);
-    // }
-
-    // String princ(float f){
-    // 	return String.format("%.02f", f);
-    // }

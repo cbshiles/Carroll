@@ -43,12 +43,12 @@ public class TitlePage extends Page {
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 			    }
 			} catch (Exception x)
-			{System.err.println("YO: "+x.getCause()+x.getClass().getName());}
+			{System.err.println("JO: "+x.getCause()+x.getClass().getName());}
 	    	    }
 	    	});
 	    
 	} catch (Exception e)
-	{System.err.println("YO!: "+e.getCause()+e.getClass().getName()+e.getMessage());}
+	{System.err.println("JO!: "+e.getCause()+e.getClass().getName()+e.getMessage());}
 
 	setVisible(true);
     }

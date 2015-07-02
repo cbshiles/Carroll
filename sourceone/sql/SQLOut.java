@@ -45,4 +45,6 @@ public class SQLOut implements Output{
 	catch (Exception e){System.err.println(e.getMessage());}
 	vals = "";
     }
+
+    public void close(){;}
 }

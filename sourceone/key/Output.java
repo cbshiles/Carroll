@@ -10,4 +10,6 @@ public interface Output{
     void put(java.time.LocalDate x);
 
     void endEntry();
+
+    void close();
 }

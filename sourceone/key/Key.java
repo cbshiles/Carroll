@@ -48,6 +48,13 @@ public class Key{
 	    c.op = o;
     }
 
+    public String[] tableNames(){
+	String[] ret = new String[cuts.length];
+	for (int i=0; i<cuts.length; i++)
+	    ret[i] = cuts[i].name;
+	return ret;
+    }
+
     public String sqlNames(){
 	String keys = "";
 	boolean first = true;
