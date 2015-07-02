@@ -24,15 +24,7 @@ public class ContractTable extends Page {
 	setLocation(200, 100);
 
 
-	Key key = new Key(
-	    new String[]{"ID", "First Name", "Last Name", "Address", "Phone Number",
-			 "Number of Payments", "Amount", "Final Payment",
-			 "Payment Frequency", "Total of Payments", "Start Date", "Vehicle",
-			 "VIN", "Payments made", "Paid off day"},
-	    new Kind[]{INT, STRING, STRING, STRING, STRING,
-		       INT, FLOAT, FLOAT,
-		       INT, FLOAT, DATE, STRING,
-		       STRING, INT, DATE});
+	Key key = Key.contractKey;
 
 	Input i = new QueryIn("SELECT * FROM Contracts");
 
@@ -59,32 +51,14 @@ public class ContractTable extends Page {
 					   pays++;
 				       }
 				       ans[2] = pays;
+				       
 				       float cost = (float)o[9];
-
 				       float reserve = cost*.1f;
 				       ans[3] = reserve;
 
 				       float gross = cost - reserve;
 				       ans[4] = gross;
 				       ans[5] = gross*.72f;
-
-
-				       //This is for FloorPlan
-				       //float cost = (float)o[9];
-				       //float dRate = cost*.0007f;
-				       //ans[3] = dRate;
-//				       LocalDate last;
-// new FloatCut("Daily rate"), new IntCut("Days Active"), new FloatCut("Accrued Interest")},
-				       // if (o[14] != null)
-				       // 	   last = (LocalDate)o[14];
-				       // else
-				       // 	   last = today;
-
-				       // System.out.println("last: "+last);
-				       // int days = (int)ChronoUnit.DAYS.between(start, last);
-				       // ans[4] = days;
-
-				       // ans[5] = dRate*days;
 				       
 				       return ans; 
 			   	   }

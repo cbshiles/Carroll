@@ -21,7 +21,7 @@ public class FloorPage extends Page {
 	addTitle.addActionListener(new PageMaker(TitlePage.class));
 	
 	add(payOff);
-//	payOff.addActionListener(new Relocator<PayPage>(PayPage.class));
+	payOff.addActionListener(new PageMaker(FloorPay.class));
 	
 	//pack();
 	setVisible(true);

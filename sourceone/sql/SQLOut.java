@@ -8,15 +8,7 @@ public class SQLOut implements Output{
     
     public SQLOut(Key k, String tableName){
 	stmt = "INSERT INTO "+tableName+" (";
-	
-	String keys = "";
-	for (Cut c : k.cuts){
-	    if (! first) keys += ", ";
-	    else first = false;
-	    keys += c.sqlName;
-	}
-
-	stmt += keys+") VALUES (";
+	stmt += k.sqlNames()+") VALUES (";
 	first = true;
     }
 

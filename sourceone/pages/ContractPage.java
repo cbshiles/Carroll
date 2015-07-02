@@ -11,7 +11,7 @@ import java.awt.event.*;
 public class ContractPage extends Page {
 
     JButton addContract = new JButton("Add Contract");
-    JButton viewForm = new JButton("View Form");
+    JButton viewForm = new JButton("View Info");
     JButton payOff = new JButton("Pay Off");
 
     public ContractPage(){

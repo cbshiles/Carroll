@@ -6,7 +6,7 @@ public class Matrix{
     public List<Object[]> data = new ArrayList<Object[]>();
     public Key key;
     Output out = null;
-    View view = null;
+    public View view = null;
     boolean toOut, hasOut = false;
 
     public Matrix(Key k){key = k;}
@@ -28,7 +28,7 @@ public class Matrix{
 
     public void push() throws InputXcpt{
 
-	if (! hasOut) throw new InputXcpt("Matrix cant be pushed without an out");
+	if (! hasOut) return;//throw new InputXcpt("Matrix cant be pushed without an out");
 	
 	if (toOut){
 	    for (Object[] objs : data){
@@ -38,8 +38,16 @@ public class Matrix{
 	} else { //to a view
 	    for (Object[] objs : data)
 		view.receiveEntry(objs);
-//	    view.push();
+	    view.push();
 	}
+    }
+
+    public View clearView(Cut[] gnu, Enterer ent){
+	int[] is = new int[key.cuts.length];
+	for (int i=0; i<key.cuts.length; i++){
+	    is[i] = i;
+	}
+	return addView(is, gnu, ent);
     }
 
     public View addView(int[] remove, Cut[] gnu, Enterer ent){
@@ -47,15 +55,11 @@ public class Matrix{
 	int gl = (gnu==null)?0:gnu.length;
 	int cl = key.length - rl;
 
-		
 	Cut[] c = new Cut[cl + gl];
-
-
 
 	if (remove != null){
 	    int i,j,n;
 	    for (i=j=n=0; i<key.cuts.length; i++){
-		System.out.println("i: "+i+"j: "+j);
 		while (i > remove[j] && j<rl-1) j++;
 		if (i != remove[j]) c[n++] = key.cuts[i];
 	    }

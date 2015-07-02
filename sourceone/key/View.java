@@ -27,7 +27,6 @@ public class View extends Matrix{
 	    }
 	} else System.arraycopy(objs, 0, arr, 0, n = objs.length);
 
-	System.out.println("yadda");
 	if (ent != null){
 	    Object[] gnu = ent.editEntry(objs);
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);

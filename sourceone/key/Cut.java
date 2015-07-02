@@ -1,6 +1,7 @@
 package sourceone.key;
 
 public abstract class Cut{
+    //cannot store the data: are being reused through references
 
     public String name, sqlName;
     public Input ip;

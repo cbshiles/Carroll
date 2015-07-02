@@ -39,11 +39,7 @@ public class ContractForm extends Form {
 
 	JButton submit = new JButton("Submit");
 
-	Key key = new Key(
-	    new String[]{"First Name", "Last Name", "Address", "Phone Number",
-			 "Number of Payments", "Amount", "Final Payment",
-			 "Payment Frequency", "Total of Payments", "Start Date", "Vehicle", "VIN"},
-	    new Kind[]{STRING, STRING, STRING, STRING, INT, FLOAT, FLOAT, INT, FLOAT, DATE, STRING, STRING});
+	Key key = Key.contractKey.except(new int[]{0,13,14,15});
 	Grid g = new Grid(key, new StringIn(this));
 
 	submit.addActionListener(new ActionListener(){
@@ -65,11 +61,11 @@ public class ContractForm extends Form {
 
 			v.addOut(new SQLOut(v.key, "Contracts"));
 			g.push();
-			v.push();
 		    } catch (Exception ix){//(InputXcpt ix) {
 			System.out.println("Submission error: "+ix.getMessage());
 			System.out.println(ix.getClass().getName());
 		    }}});
+
 	add(submit);
 	pack();
 	setVisible(true);	

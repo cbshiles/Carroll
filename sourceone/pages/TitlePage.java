@@ -20,28 +20,28 @@ public class TitlePage extends Page {
 	setSize(400, 600);
 	try{
 
-	    Input in = new QueryIn("SELECT * FROM Cars WHERE Title=0");
+	    Key key = Key.floorKey.except(new int[]{5,6});
 
-	    Key key = new Key(
-		new String[]{"ID", "Date Bought", "Vehicle", "Item_ID", "Item_Cost", "Title", "Date Paid"},
-		new Kind[]{INT, DATE, STRING, STRING, FLOAT, INT, DATE});
+	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=0");
 
 	    Grid g = new Grid(key, in);
 	    g.pull();
+
 	    jt = g.getTable();
 
 	    jp.add(new JScrollPane(jt), BorderLayout.NORTH);
 
-	    
-	    jp.add(jb = new JButton("tietle emmm"), BorderLayout.SOUTH);
+	    jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
 
 	    setContentPane(jp);
 
 	    jb.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
-			    for (int i : jt.getSelectedRows())
+			    for (int i : jt.getSelectedRows()){
+				System.out.println("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
+			    }
 			} catch (Exception x)
 			{System.err.println("YO: "+x.getCause()+x.getClass().getName());}
 	    	    }
