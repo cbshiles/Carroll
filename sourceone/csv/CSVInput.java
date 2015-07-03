@@ -7,7 +7,7 @@ public class CSVInput implements StringSource{
 
     BufferedReader br;
     String[] strs;
-    int n;
+    int n, i=0;
     
     public CSVInput(String fName) throws Exception{
 	br = new BufferedReader(new FileReader(fName));
@@ -32,8 +32,9 @@ public class CSVInput implements StringSource{
     }
 
     public String get() throws InputXcpt{
+	i++;
 	if (n < strs.length)
 	    return strs[n++];
-	else throw new InputXcpt("CSV line out of entries");
+	else throw new InputXcpt("CSV line "+i+" out of entries");
     }
 }

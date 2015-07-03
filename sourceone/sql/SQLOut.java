@@ -37,13 +37,13 @@ public class SQLOut implements Output{
     }
 
     public void endEntry(){
-
 	System.out.println(stmt+vals+");");
 	try {
-	SQLBot.bot.update(stmt+vals+");");
+	    SQLBot.bot.update(stmt+vals+");");
 	}
 	catch (Exception e){System.err.println(e.getMessage());}
 	vals = "";
+	first = true;
     }
 
     public void close(){;}

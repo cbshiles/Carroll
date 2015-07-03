@@ -87,7 +87,11 @@ public class Key{
 	return new Key(cs);
     }
 
-    public static final Key contractKey = new Key(
+    public KeyMap getMap(){
+	return new KeyMap(cuts);
+    }
+
+    public static final KeyMap contractKey = new KeyMap(
 	    new String[]{"ID", "First Name", "Last Name", "Address", "Phone Number",
 			 "Number of Payments", "Amount", "Final Payment",
 			 "Payment Frequency", "Total of Payments", "Start Date", "Vehicle",
@@ -97,7 +101,7 @@ public class Key{
 		       INT, FLOAT, DATE, STRING,
 		       STRING, INT, DATE, DATE});
 
-    public static final Key floorKey =  new Key(
-		new String[]{"ID", "Date Bought", "Item_ID", "Vehicle", "Item_Cost", "Title", "Date Paid"},
+    public static final KeyMap floorKey =  new KeyMap(
+		new String[]{"ID", "Date Bought", "Item ID", "Vehicle", "Item Cost", "Title", "Date Paid"},
 		new Kind[]{INT, DATE, STRING, STRING, FLOAT, INT, DATE});
 }

@@ -41,4 +41,13 @@ public class StringIn implements Input {
 	}
     }
 
+        public static LocalDate getDate(String str) throws InputXcpt{
+	str = str.replaceAll("/", "-");
+	try {
+	return LocalDate.parse(str, dtf);
+	} catch (DateTimeParseException e){
+	    throw new InputXcpt(str, "Could not be parsed in MM-dd-yy or MM/dd/yy format");
+	}
+    }
+
 }

@@ -28,7 +28,6 @@ public class Matrix{
     }
 
     public void push() throws InputXcpt{
-
 	if (! hasOut) return;//throw new InputXcpt("Matrix cant be pushed without an out");
 
 	if (toOut){

@@ -17,4 +17,9 @@ public class Grid extends Matrix{
 	    data.add(key.getEntry());
     }
 
+    public void go() throws InputXcpt{
+	pull();
+	push();
+    }
+
 }
