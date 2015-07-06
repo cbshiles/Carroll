@@ -11,14 +11,11 @@ public class InputXcpt extends Exception {
 	this("Input Error for "+k+"\n"+msg);
     }
 
-    //InputXcpt that takes other exceptions (in constructor)?
-
-    // public InputXcpt(String k, String val, String msg){
-    // 	this(k, "For input string: \""+val+"\"\n"+msg);
-    // }
-
-
     public InputXcpt(Exception e){
-	this(e.getClass().getName()+'\n'+e.getMessage());
+	super(e);
+    }
+
+    public InputXcpt(String msg, Exception e){
+	super(msg, e);
     }
 }

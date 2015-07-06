@@ -6,5 +6,5 @@ public interface StringDest {
 
     void endEntry();
 
-    void close();
+    Object close();
 }

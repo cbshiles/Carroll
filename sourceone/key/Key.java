@@ -1,12 +1,14 @@
 package sourceone.key;
 
 import static sourceone.key.Kind.*;
+import java.util.HashMap;
 
 public class Key{
     public Cut[] cuts;
     public int length;
+    public String name = null;
     
-    public Key(Cut[] c){cuts = c; length = cuts.length;}
+    public Key(Cut[] c){cuts = c; length = cuts.length; fillMap();}
 
     public Key(String[] names, Kind[] types){
 	cuts = new Cut[names.length];
@@ -24,6 +26,12 @@ public class Key{
 	    }
 	}
 	length = cuts.length;
+	fillMap();
+    }
+
+    public Key(String n, String[] names, Kind[] types){
+	this(names, types);
+	name = n;
     }
 
     public Object[] getEntry() throws InputXcpt{
@@ -87,21 +95,54 @@ public class Key{
 	return new Key(cs);
     }
 
-    public KeyMap getMap(){
-	return new KeyMap(cuts);
+    private HashMap<String, Integer> map;
+    
+    
+    private void fillMap(){
+	map = new HashMap<String, Integer>();
+	for (int i=0; i<cuts.length; i++){
+	    map.put(cuts[i].name, i);
+	}
     }
 
-    public static final KeyMap contractKey = new KeyMap(
-	    new String[]{"ID", "First Name", "Last Name", "Address", "Phone Number",
-			 "Number of Payments", "Amount", "Final Payment",
-			 "Payment Frequency", "Total of Payments", "Start Date", "Vehicle",
-			 "VIN", "Payments made", "Paid off day", "Next Due"},
-	    new Kind[]{INT, STRING, STRING, STRING, STRING,
-		       INT, FLOAT, FLOAT,
-		       INT, FLOAT, DATE, STRING,
-		       STRING, INT, DATE, DATE});
+    public int dex(String cName){
+	Integer i = map.get(cName);
+	if (i == null){
+	    System.err.println(cName+" is not found in the key mapping!");
+	    System.exit(0);
+	}
+	return i;
+    }
 
-    public static final KeyMap floorKey =  new KeyMap(
-		new String[]{"ID", "Date Bought", "Item ID", "Vehicle", "Item Cost", "Title", "Date Paid"},
-		new Kind[]{INT, DATE, STRING, STRING, FLOAT, INT, DATE});
+    public Key except(String[] names){
+	return except(populate(names));
+    }
+
+    public Key just(String[] names){
+	return just(populate(names));
+    }
+
+    private int[] populate(String[] names){
+	int[] ix = new int[names.length];
+	for (int i=0; i<names.length; i++){
+	    ix[i] = dex(names[i]);
+	}
+	return ix;
+    }
+
+    //All keys must have an ID column (cut).
+    
+    public static final Key contractKey = new Key("Contracts",
+	new String[]{"ID", "First Name", "Last Name", "Address", "Phone Number",
+		     "Number of Payments", "Amount", "Final Payment",
+		     "Payment Frequency", "Total of Payments", "Start Date", "Vehicle",
+		     "VIN", "Payments made", "Paid off day", "Next Due"},
+	new Kind[]{INT, STRING, STRING, STRING, STRING,
+		   INT, FLOAT, FLOAT,
+		   INT, FLOAT, DATE, STRING,
+		   STRING, INT, DATE, DATE});
+
+    public static final Key floorKey =  new Key(
+	new String[]{"ID", "Date Bought", "Item ID", "Vehicle", "Item Cost", "Title", "Date Paid"},
+	new Kind[]{INT, DATE, STRING, STRING, FLOAT, INT, DATE});
 }

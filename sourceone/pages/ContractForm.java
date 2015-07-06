@@ -59,10 +59,10 @@ public class ContractForm extends Form {
 					       }
 					   });
 
-			v.addOut(new SQLOut(v.key, "Contracts"));
+			v.addOut(new SQLFormatter(new InsertDest(v.key, "Contracts")));
 			g.push();
-		    } catch (Exception ix){//(InputXcpt ix) {
-			System.out.println("Submission error: "+ix.getMessage());
+		    } catch (InputXcpt ix) {
+			System.err.println("Submission error:\n"+ix);
 			System.out.println(ix.getClass().getName());
 		    }}});
 

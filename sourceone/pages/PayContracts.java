@@ -29,19 +29,14 @@ public class PayContracts extends Page {
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Contracts WHERE Next_Due < CURDATE()");
 
 	    Grid g = new Grid(key, in);
-	    g.pull();
 
 	    g.clearView(new Key(
 			    new String[]{"Customer Name", "Terms", "Start Date", "Due Date", "Remaining Balance",
 					 "Payments Due", "Total Payment"},
 			    new Kind[]{STRING, STRING, DATE, DATE, FLOAT, INT, FLOAT}).cuts,
-			new Ent(key.getMap()));
-			
-	    g.push();
-
-	    jt = g.view.getTable();
-
-	    jp.add(new JScrollPane(jt), BorderLayout.NORTH);
+			new Ent(key));
+	    g.view.addTable();
+	    jp.add(new JScrollPane(jt = (JTable)g.go()), BorderLayout.NORTH);
 
 	    JPanel cPan = new JPanel();
 
@@ -50,7 +45,6 @@ public class PayContracts extends Page {
 	    cPan.add(payDay.getJP());
 
 	    cPan.add(jb = new JButton("pay emmm"));
-	    
 
 	    jp.add(cPan, BorderLayout.SOUTH);
 
@@ -59,7 +53,7 @@ public class PayContracts extends Page {
 	    jb.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
-			    Enterer ec = new Click(key.getMap(), StringIn.getDate(payDay.text()));
+			    Enterer ec = new Click(key, StringIn.parseDate(payDay.text()));
 			    for (int i : jt.getSelectedRows())
 				ec.editEntry(g.data.get(i));
 			} catch (Exception x)
@@ -84,7 +78,7 @@ public class PayContracts extends Page {
 	int id, fq, nd, pm;
 	LocalDate paid;
 	
-	public Click(KeyMap k, LocalDate p){
+	public Click(Key k, LocalDate p){
 	    paid = p;
 	    fq = k.dex("Payment Frequency");
 	    nd = k.dex("Next Due");
@@ -110,7 +104,7 @@ public class PayContracts extends Page {
 
 	int fq, nd, am, np, pm, ln, fn, sd, fp, tp;
 	    
-	public Ent(KeyMap k){
+	public Ent(Key k){
 	    fq = k.dex("Payment Frequency");
 	    nd = k.dex("Next Due");
 	    am = k.dex("Amount");

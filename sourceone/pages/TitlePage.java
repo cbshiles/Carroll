@@ -18,18 +18,17 @@ public class TitlePage extends Page {
     public TitlePage(){
 	super("Pending Titles");
 	setSize(400, 600);
+
+	Key key = Key.floorKey.except(new int[]{5,6});
+
 	try{
-
-	    Key key = Key.floorKey.except(new int[]{5,6});
-
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=0");
 
 	    Grid g = new Grid(key, in);
-	    g.pull();
 
-	    jt = g.getTable();
+	    g.addTable();
 
-	    jp.add(new JScrollPane(jt), BorderLayout.NORTH);
+	    jp.add(new JScrollPane(jt = (JTable)g.go()), BorderLayout.NORTH);
 
 	    jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
 
@@ -42,14 +41,14 @@ public class TitlePage extends Page {
 				System.out.println("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 			    }
-			} catch (Exception x)
-			{System.err.println("JO: "+x.getCause()+x.getClass().getName());}
-	    	    }
-	    	});
-	    
-	} catch (Exception e)
-	{System.err.println("JO!: "+e.getCause()+e.getClass().getName()+e.getMessage());}
-
+			} 	catch (java.sql.SQLException x)
+			{System.err.println(x);}
+		    }});
+	}
+	catch (java.sql.SQLException x)
+	{System.err.println(x); return;}
+	catch (InputXcpt e)
+	{System.err.println(e); return;}
 	setVisible(true);
+	}
     }
-}

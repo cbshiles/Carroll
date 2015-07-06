@@ -27,20 +27,21 @@ public class Matrix{
 	hasOut = true;
     }
 
-    public void push() throws InputXcpt{
-	if (! hasOut) return;//throw new InputXcpt("Matrix cant be pushed without an out");
+    public Object push() {
+
+	if (! hasOut) throw new Error("Matrix cant be pushed without an out");
 
 	if (toOut){
 	    for (Object[] objs : data){
 		key.putEntry(objs);
 		out.endEntry();
 	    }
-	    out.close();
+	    return out.close();
 
 	} else { //to a view
 	    for (Object[] objs : data)
 		view.receiveEntry(objs);
-	    view.push();
+	    return view.push();
 	}
     }
 
@@ -75,12 +76,7 @@ public class Matrix{
 	return v;
     }
 
-    public JTable getTable()throws InputXcpt{
-	JTable jt = new JTable();
-	TableDest td = new TableDest(key, data.size());
-	addOut(new Formatter(td));
-	push();
-
-	return td.getTable();
+    public void addTable(){//throws InputXcpt{
+	addOut(new BasicFormatter(new TableDest(key)));
     }
 }

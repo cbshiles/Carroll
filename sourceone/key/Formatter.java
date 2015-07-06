@@ -1,10 +1,12 @@
 package sourceone.key;
 
-import java.time.*;
-import java.time.format.*;
+/**
+Abstract Output that takes Objects and turns them into formatted Strings.
+Sends these Strings to a {@link StringDest}
+convert() methods for each {@link Kind} are need for an instantiatiable subclass.
+ */
 
-
-public class Formatter implements Output {
+public abstract class Formatter implements Output{
 
     StringDest sd;
     
@@ -13,25 +15,30 @@ public class Formatter implements Output {
     }
 
     public void put(String x){
-	sd.put(x);
+	sd.put(convert(x));
     }
     
     public void put(int x){
-	sd.put(""+x);
+	sd.put(convert(x));
     }
     
     public void put(float x){
-	sd.put(String.format("%.02f", x));
+	sd.put(convert(x));
     }
-
-    static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     
     public void put(java.time.LocalDate x){
-	if (x == null) sd.put("N/A");
-	else sd.put(x.format(dtf));
+	sd.put(convert(x));
     }
 
     public void endEntry(){sd.endEntry();}
 
-    public void close(){sd.close();}
+    public Object close(){return sd.close();}
+
+    public abstract String convert(String x);
+    
+    public abstract String convert(int x);
+    
+    public abstract String convert(float x);
+
+    public abstract String convert(java.time.LocalDate x);
 }

@@ -3,7 +3,7 @@ package sourceone.pages;
 import static sourceone.key.Kind.*;
 import sourceone.key.*;
 import sourceone.fields.*;
-import sourceone.sql.SQLOut;
+import sourceone.sql.*;
 
 import javax.swing.*;
 import java.awt.GridLayout;
@@ -28,22 +28,22 @@ public class CarForm extends Form{
 	JButton submit = new JButton("Submit");
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
+		    CarForm.this.refresh();
+		    Key key = Key.floorKey.except(new int[]{0,5,6});
+
+		    Grid g = new Grid(key, new StringIn(CarForm.this));
+
+		    View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
+			    public Object[] editEntry(Object[] objs){
+				return new Object[] {0};
+			    }
+			});
+		    v.addOut(new SQLFormatter(new InsertDest(v.key, "Cars")));
+
 		    try {
-			CarForm.this.refresh();
-			Key key = Key.floorKey.except(new int[]{0,5,6});
-
-			Grid g = new Grid(key, new StringIn(CarForm.this));
-
-			View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
-				public Object[] editEntry(Object[] objs){
-				    return new Object[] {0};
-				}
-			    });
-			v.addOut(new SQLOut(v.key, "Cars"));
-			g.pull();
-			g.push();
-		    } catch (Exception ix){//(InputXcpt ix) {
-			System.out.println(ix.getMessage());
+			g.go();
+		    } catch (InputXcpt ix){
+			System.err.println("Error on submit:\n"+ix);
 		    }
 		}
 	    });

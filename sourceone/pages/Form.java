@@ -21,10 +21,9 @@ public class Form extends Page implements StringSource{ //Page for inputting inf
 
     public boolean hasEntries()
     {
-	if (gotem){
-	    gotem = false;
-	    return true;}
-	else return false;
+	boolean ans = gotem;
+	gotem = false;
+	return ans;
     }
 
     public String get() throws InputXcpt{

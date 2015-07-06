@@ -32,8 +32,9 @@ public class View extends Matrix{
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
 
+	assert arr.length == key.length : "Row isn't fitting into view";
+	
 	data.add(arr);
     }
 
-//remove selected, or something (takes an int[])
 }

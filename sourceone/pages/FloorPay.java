@@ -16,27 +16,32 @@ public class FloorPay extends Page {
     public FloorPay(){
 	super("Discotech");
 	setSize(600,600);
-	try {
-	    Key key = Key.floorKey.except(new String[]{"ID","Item ID","Date Paid"});
 
+	Key key = Key.floorKey.except(new String[]{"ID","Item ID","Date Paid"});
+	JTable jt;
+	
+	try {
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title<2");
 
 	    Grid g = new Grid(key, in);
-	    g.pull();
 
 	    View v = g.addView(new int[]{3}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 						       new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
-		new Ent(key.getMap()));
+		new Ent(key));
+	    v.addTable();
 
-	    g.push();
-	    JTable jt = v.getTable();
-	    JPanel jp = new JPanel(new BorderLayout());
-	    jp.add(new JScrollPane(jt), BorderLayout.NORTH);
-	    setContentPane(jp);
-	} catch (Exception e)
-	{System.err.println("FloorPay error: "+e.getCause()+e.getClass().getName()+e.getMessage());
-	    System.err.println(e.getMessage());}
+	    jt = (JTable)g.go();
+	}
+ 	catch (java.sql.SQLException x)
+	{System.err.println(x); return;}
+	catch (InputXcpt e)
+	{System.err.println(e); return;}
 
+
+	
+	JPanel jp = new JPanel(new BorderLayout());
+	jp.add(new JScrollPane(jt), BorderLayout.NORTH);
+	setContentPane(jp);
 	setVisible(true);
     }
 
@@ -44,7 +49,7 @@ public class FloorPay extends Page {
 
 	int db, ic, tl;
 	
-	public Ent(KeyMap k){
+	public Ent(Key k){
 	    db = k.dex("Date Bought");
 	    ic = k.dex("Item Cost");
 	    tl = k.dex("Title");
