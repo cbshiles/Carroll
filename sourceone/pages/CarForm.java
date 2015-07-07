@@ -29,7 +29,7 @@ public class CarForm extends Form{
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    CarForm.this.refresh();
-		    Key key = Key.floorKey.except(new int[]{0,5,6});
+		    Key key = Key.floorKey.accept(new String[]{"ID", "Title", "Date Paid"});
 
 		    Grid g = new Grid(key, new StringIn(CarForm.this));
 

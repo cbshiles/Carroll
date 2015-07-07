@@ -17,7 +17,7 @@ public class FloorPay extends Page {
 	super("Discotech");
 	setSize(600,600);
 
-	Key key = Key.floorKey.except(new String[]{"ID","Item ID","Date Paid"});
+	Key key = Key.floorKey.accept(new String[]{"ID","VIN","Date Paid"});
 	JTable jt;
 	
 	try {
@@ -25,7 +25,7 @@ public class FloorPay extends Page {
 
 	    Grid g = new Grid(key, in);
 
-	    View v = g.addView(new int[]{3}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	    View v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 						       new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 		new Ent(key));
 	    v.addTable();

@@ -8,11 +8,11 @@ public class IntCut extends Cut{
 
     //# maybe remove
     public IntCut(String n)
-    {super(n);}
+    {this(n, "");}
     
     public IntCut(String n, String c){
-	this(n);
-	constraints = c;
+	super(n);
+	fullSQL = sqlName+" int "+c;
     }
 
     public Object in() throws InputXcpt

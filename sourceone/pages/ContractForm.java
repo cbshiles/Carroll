@@ -39,35 +39,69 @@ public class ContractForm extends Form {
 
 	JButton submit = new JButton("Submit");
 
-	Key key = Key.contractKey.except(new int[]{0,13,14,15});
-	Grid g = new Grid(key, new StringIn(this));
+	Key custKey = Key.customerKey.accept(new String[]{"ID", "email"});
+	Grid custGrid = new Grid(custKey, new StringIn(this));
+	custGrid.addView(null, null, null);
+	custGrid.view.addOut(new SQLFormatter(new InsertDest(custGrid.view.key, "Customers", true)));
+
+	
+	Key contKey = Key.contractKey.accept(new String[]{"ID", "Reserve", "Gross Amount", "Net Amount", "Next Due", "Paid Off", "Other Payments", "Customer ID", "Payments Made"});
+	Ent ent = new Ent(contKey);
+	Grid contGrid = new Grid(contKey, new StringIn(this));
+	contGrid.addView(null, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID"),
+					 new FloatCut("Reserve"), new FloatCut("Gross Amount"), new FloatCut("Net Amount")},
+	    ent);
+	contGrid.view.addOut(new SQLFormatter(new InsertDest(contGrid.view.key, "Contracts")));
 
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    try {
 			ContractForm.this.refresh();
-			g.pull();
-			Object[] o = g.data.get(0);
-			System.out.println((int)o[4]*(float)o[5] + (float)o[6] + " == "+ (float)o[8]);
-			if (Math.abs((int)o[4]*(float)o[5] + (float)o[6] - (float)o[8]) > .001)
-			    throw new InputXcpt("Payment summation does not equal total");
-
-			View v = g.addView(null, new Cut[]{new IntCut("Payments made"), new DateCut("Paid off day"), new DateCut("Next Due")},
-					   new Enterer(){
-					       public Object[] editEntry(Object[] objs){
-						   return new Object[] {0, null, objs[9]};
-					       }
-					   });
-
-			v.addOut(new SQLFormatter(new InsertDest(v.key, "Contracts")));
-			g.push();
+			ent.set_id((int)custGrid.go());
+			contGrid.go();
 		    } catch (InputXcpt ix) {
 			System.err.println("Submission error:\n"+ix);
-			System.out.println(ix.getClass().getName());
 		    }}});
 
 	add(submit);
 	pack();
-	setVisible(true);	
+	setVisible(true);
+    }
+
+
+    private class Ent implements Enterer{
+	
+	int sd, aop, nop, fpa, tc;
+	int cust_id;
+	
+	public Ent(Key k){
+	    sd = k.dex("Start Date");
+	    aop = k.dex("Amount of Payment");
+	    nop = k.dex("Number of Payments");
+	    fpa = k.dex("Final Payment Amount");
+	    tc = k.dex("Total Contract");
+	}
+
+	public void set_id(int i){cust_id=i;}
+    
+	public Object[] editEntry(Object[] o)throws InputXcpt{
+	    float total, sum;
+	    total = (float)o[tc];
+	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
+	    if (Math.abs(sum - total) > 0.001f)
+		throw new InputXcpt(""+sum+" != "+total+"\nPayment summation does not equal total");
+
+	    float p = .1f;
+	    float z = .72f;
+	    float gross = (1-p)*total;
+	    return new Object[]{
+		o[sd], //Next Due
+		0f, //Other payments
+		cust_id,
+		p*total, //reserve
+		gross,
+		gross*z //net
+	    };
+	}
     }
 }

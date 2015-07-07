@@ -6,17 +6,16 @@ import java.io.*;
 public class CSVOutput implements Output{
 
     FileWriter fw;
-    String line = "", text = "";
+    String line = "", text;
     boolean first = true;
 
     public CSVOutput(Key k, String fileName) throws IOException{
 
 	fw = new FileWriter(fileName); //append option
-	//make a page
-	//do something with headers
-	//at the end, load the text into the file
-	//can make a new one or append to a template
-	//i know when an entry is finished, but how do i know when the whole throughput is??
+
+	text = k.names()+'\n';
+//can make a new one or append to a template
+
     }
     
     public void put(String x){
@@ -39,14 +38,21 @@ public class CSVOutput implements Output{
 	if (! first) line += ", ";
 	else first = false;
 	line += s;
+
     }
 
     public void endEntry(){
 	text += line + '\n';
+	line = "";
 	first = true;
     }
 
-    public void load() throws IOException{
-	fw.write(text);
+    public Object close(){
+	try { 		System.err.println(text); fw.write(text); fw.close();
+	} catch (IOException ie){
+	    System.err.println(ie);
+	    throw new Error("Error on printing to CSV");
+	}
+	return null;
     }
 }

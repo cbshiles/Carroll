@@ -20,31 +20,36 @@ public class PayContracts extends Page {
     
     public PayContracts(){
 	super("Pay Contracts");
-	setSize(400, 600);
+	setSize(1000, 600);
 	try{
-	    Key key = Key.contractKey.just(new String[] {
-		    "ID", "Last Name", "First Name", "Number of Payments", "Amount", "Final Payment",
-		    "Payment Frequency", "Total of Payments", "Start Date", "Payments made", "Paid off day", "Next Due"});
+	    Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	    
-	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Contracts WHERE Next_Due < CURDATE()");
+	    Key contKey = Key.contractKey.just(new String[] {
+		    "ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
+		    "Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due"});
 
+	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < CURDATE() AND Contracts.Customer_ID = Customers.ID");
+
+	    Key key = custKey.add(contKey.cuts);
+	    
 	    Grid g = new Grid(key, in);
 
 	    g.clearView(new Key(
 			    new String[]{"Customer Name", "Terms", "Start Date", "Due Date", "Remaining Balance",
-					 "Payments Due", "Total Payment"},
-			    new Kind[]{STRING, STRING, DATE, DATE, FLOAT, INT, FLOAT}).cuts,
+					 "Payments Due", "Total Amount Due"},
+			    new Kind[]{STRING, STRING, DATE, DATE, FLOAT, STRING, FLOAT}).cuts,
 			new Ent(key));
 	    g.view.addTable();
 	    jp.add(new JScrollPane(jt = (JTable)g.go()), BorderLayout.NORTH);
 
 	    JPanel cPan = new JPanel();
 
-	    Field payDay = new sourceone.fields.TextField("Date paid:");
+	    Field payDay = new sourceone.fields.TextField("Date paid:",
+							  BasicFormatter.cinvert(LocalDate.now()));
 
 	    cPan.add(payDay.getJP());
 
-	    cPan.add(jb = new JButton("pay emmm"));
+	    cPan.add(jb = new JButton("Post Payments"));
 
 	    jp.add(cPan, BorderLayout.SOUTH);
 
@@ -61,87 +66,130 @@ public class PayContracts extends Page {
 			    System.err.println(x.getMessage());}
 		    }});
 	} catch (Exception e)
-	{System.err.println("YO!: "+e.getCause()+e.getClass().getName()+e.getMessage());}
+	{e.printStackTrace(); System.err.println("YO!: ");}
 
 	setVisible(true);
     }
 
-    private LocalDate next(int freq, LocalDate ld){
+    private LocalDate next(LocalDate du, int freq, LocalDate st){
 	LocalDate due;
-	if (freq == 30) due = ld.plusMonths(1);
-	else due = ld.plusDays(freq);
+	if (freq == 30) {
+	    due = du.plusMonths(1);
+	    int len = due.getMonth().length(Year.isLeap(due.getYear()));
+	    int sday = st.getDayOfMonth();
+	    int dday = due.getDayOfMonth();
+	    if (dday < sday && len > dday){
+		due = due.plusDays( (len<sday?len:sday) - dday);
+	    }
+	}
+	else due = du.plusDays(freq);
 	return due;
     }
 
     private class Click  implements Enterer{
 
-	int id, fq, nd, pm;
+	int id, fq, nd, pm, fpa, nop, sd;
 	LocalDate paid;
 	
 	public Click(Key k, LocalDate p){
 	    paid = p;
 	    fq = k.dex("Payment Frequency");
 	    nd = k.dex("Next Due");
-	    pm = k.dex("Payments made");
-	    
+	    pm = k.dex("Payments Made");
+	    id = k.dex("ID");
+	    nop = k.dex("Number of Payments");
+	    fpa = k.dex("Final Payment Amount");
+	    sd = k.dex("Start Date");
 	}
 
 	public Object[] editEntry(Object[] o){
-	    int pays = (int)o[pm]+1;
-	    LocalDate due = next((int)o[fq], (LocalDate)o[nd]);
+	    int pays = (int)o[pm];
+	    int diff = (int)o[nop] - pays;
+	    float fin = (float)o[fpa];
+	    String where = "WHERE ID="+o[id];
+	    if (diff == 0){//all standard payments made
+		//SQLBot.bot.update("UPDATE Contracts SET Other_Payments="+fin+", Paid_Off="+paid+", Next_Due=NULL "+where);
+
+		
+	    } else { //we'll be making a standard payment
+		pays += 1;
+		if (diff == 1 && fin < 0.01){ // last standard, no final
+
+		//set paid off day
+		//clear out next due
+		}else { 
+		    //increment due date
+		}
+	    }
+
+	    LocalDate due = next((LocalDate)o[nd], (int)o[fq], (LocalDate)o[sd]);
 	    try {
-	    //System.out.println
-	    SQLBot.bot.update("UPDATE Contracts SET Payments_made="+pays+", Next_Due='"+due+"' WHERE ID="+o[0]+';');
-	    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day) VALUES ("+o[0]+", '"+paid+"');");
+		//System.out.println("UPDATE Contracts SET Payments_made="+pays+", Next_Due='"+due+"' WHERE ID="+o[id]+';');
+		//System.out.println("INSERT INTO Payments (Contract_ID, Day) VALUES ("+o[id]+", '"+paid+"');");
+	    
+	    SQLBot.bot.update("UPDATE Contracts SET Payments_Made="+pays+", Next_Due='"+due+"' WHERE ID="+o[id]+';');
+	    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day) VALUES ("+o[id]+", '"+paid+"');");
 	    } catch (Exception x)
-	    {System.err.println("Tiresd of dese: "+x.getCause()+x.getClass().getName());
+	    {System.err.println("Tired of dese: "+x.getCause()+x.getClass().getName());
 		System.err.println(x.getMessage());}
 	    return null;
 	}
     }
+
+	    Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
+	    
+	    Key contKey = Key.contractKey.just(new String[] {
+		    "ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
+		    "Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due"});
+
     
     private class Ent implements Enterer{
 
-	int fq, nd, am, np, pm, ln, fn, sd, fp, tp;
+	int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm;
 	    
 	public Ent(Key k){
-	    fq = k.dex("Payment Frequency");
-	    nd = k.dex("Next Due");
-	    am = k.dex("Amount");
-	    np = k.dex("Number of Payments");
-	    pm = k.dex("Payments made");
 	    ln = k.dex("Last Name");
 	    fn = k.dex("First Name");
+
+	    aop = k.dex("Amount of Payment");
+	    nop = k.dex("Number of Payments");
+	    fp = k.dex("Final Payment Amount");
+	    
+	    pf = k.dex("Payment Frequency");
+	    nd = k.dex("Next Due");
+	    pm = k.dex("Payments Made");
 	    sd = k.dex("Start Date");
-	    fp = k.dex("Final Payment");
-	    tp = k.dex("Total of Payments");
+	    tc = k.dex("Total Contract");
 	}
 
 	public Object[] editEntry(Object[] o){
-	    int nPays, freq = (int)o[fq];
+	    int nPays, freq = (int)o[pf];
 	    LocalDate due = (LocalDate)o[nd];
-	    float amt = (float)o[am];
+	    float amt = (float)o[aop];
 
-	    int tmp = numPays(freq, due);
-	    int maxPays = (int)o[np] - (int)o[pm];
+	    int tmp = numPays((LocalDate)o[sd], freq, due);
+	    int maxPays = (int)o[nop] - (int)o[pm];
 	    nPays = (tmp<maxPays)?tmp:maxPays;
 
+	    float finalPayment = (float)o[fp];
+	    boolean fin = finalPayment > 0.01;
+
 	    return new Object[] {
-		(String)o[ln]+", "+o[fn],
-		terms((int)o[np], amt, freq),
+		""+o[ln]+", "+o[fn],
+		terms((int)o[nop], amt, freq),
 		o[sd],
 		due,
-		(float)o[tp] - (int)o[pm]*amt,
-		nPays,
-		nPays*amt + (float)o[fp] //Final payment
+		(float)o[tc] - (int)o[pm]*amt, //# assumes no other payment
+		nPays + (fin?1:0),
+		nPays*amt + finalPayment
 	    };
 	}
 	
-	public int numPays(int freq, LocalDate due){
+	public int numPays(LocalDate st, int freq, LocalDate due){
 	    int pays = 0;
 	    LocalDate today = LocalDate.now();
 	    while (today.compareTo(due) > 0){
-		due = next(freq, due);
+		due = next(due, freq, st);
 		pays++;
 	    }
 	    return pays;

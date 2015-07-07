@@ -19,7 +19,7 @@ public class TitlePage extends Page {
 	super("Pending Titles");
 	setSize(400, 600);
 
-	Key key = Key.floorKey.except(new int[]{5,6});
+	Key key = Key.floorKey.accept(new String[]{"Title", "Date Paid"});
 
 	try{
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=0");

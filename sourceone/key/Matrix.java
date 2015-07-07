@@ -27,7 +27,7 @@ public class Matrix{
 	hasOut = true;
     }
 
-    public Object push() {
+    public Object push() throws InputXcpt{
 
 	if (! hasOut) throw new Error("Matrix cant be pushed without an out");
 
@@ -46,32 +46,14 @@ public class Matrix{
     }
 
     public View clearView(Cut[] gnu, Enterer ent){
-	int[] is = new int[key.cuts.length];
-	for (int i=0; i<key.cuts.length; i++){
-	    is[i] = i;
-	}
-	return addView(is, gnu, ent);
+	View v = new View(new Key(gnu), ent);
+	addOut(v);
+	return v;
     }
 
-    public View addView(int[] remove, Cut[] gnu, Enterer ent){
-	int rl = (remove==null)?0:remove.length;
-	int gl = (gnu==null)?0:gnu.length;
-	int cl = key.length - rl;
-
-	Cut[] c = new Cut[cl + gl];
-
-	if (remove != null){
-	    int i,j,n;
-	    for (i=j=n=0; i<key.cuts.length; i++){
-		while (i > remove[j] && j<rl-1) j++;
-		if (i != remove[j]) c[n++] = key.cuts[i];
-	    }
-	} else System.arraycopy(key.cuts, 0, c, 0, key.length);
-
-	if (gnu != null)
-	    System.arraycopy(gnu, 0, c, cl, gnu.length);
-
-	View v = new View(new Key(c), remove, ent);
+    public View addView(String[] remove, Cut[] gnu, Enterer ent){
+	int[] rem = key.except(remove);
+	View v = new View(key.except(rem).add(gnu), rem, ent);
 	addOut(v);
 	return v;
     }

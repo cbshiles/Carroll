@@ -15,7 +15,7 @@ package sourceone.key;
 
 public abstract class Cut{
 
-    public String name, sqlName, constraints;
+    public String name, sqlName, fullSQL;
     protected Input ip;
     protected Output op;
 
@@ -27,10 +27,6 @@ public abstract class Cut{
     {name = n;
 	sqlName = n.trim().replaceAll("\\s", "_");}
 
-    public Cut(String n, String c){
-	this(n);
-	constraints = c;
-    }
     /**
        Asks for a Object of type Kind from the Input.
        @return The object returned from the Input.

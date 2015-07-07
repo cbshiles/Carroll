@@ -7,25 +7,35 @@ public class View extends Matrix{
 
     Enterer ent;
     int[] remove;
+    boolean clear;
     
     public View(Key k, int[] r, Enterer e){
 	super(k);
 	remove = r;
 	ent = e;
+	clear = false;
     }
 
-    public void receiveEntry(Object[] objs){
+    public View(Key k, Enterer e){//clear one
+	super(k);
+	ent = e;
+	clear = true;
+    }
+
+    public void receiveEntry(Object[] objs) throws InputXcpt{
 	
 	Object[] arr = new Object[key.length];
-
+	
 	int n;
-	if (remove != null){
-	    int i,j;
-	    for (i=j=n=0; i<objs.length; i++){
-		while (i > remove[j] && j<remove.length-1) j++;
-		if (i != remove[j]) arr[n++] = objs[i];
-	    }
-	} else System.arraycopy(objs, 0, arr, 0, n = objs.length);
+	if (! clear){
+	    if (remove != null){
+		int i,j;
+		for (i=j=n=0; i<objs.length; i++){
+		    while (i > remove[j] && j<remove.length-1) j++;
+		    if (i != remove[j]) arr[n++] = objs[i];
+		}
+	    } else System.arraycopy(objs, 0, arr, 0, n = objs.length);
+	} else n=0;
 
 	if (ent != null){
 	    Object[] gnu = ent.editEntry(objs);

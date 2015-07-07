@@ -29,8 +29,8 @@ public class Key{
 	fillMap();
     }
 
-    public Key(String n, String[] names, Kind[] types){
-	this(names, types);
+    public Key(String n, Cut[] c){
+	this(c);
 	name = n;
     }
 
@@ -63,13 +63,28 @@ public class Key{
 	return ret;
     }
 
-    public String sqlNames(){
+    public String names(){
 	String keys = "";
 	boolean first = true;
 	for (Cut c : cuts){
 	    if (! first) keys += ", ";
 	    else first = false;
-	    keys += c.sqlName;
+	    keys += c.name;
+	}
+	return keys;
+
+    }
+
+    public String sqlNames(){return sqlNames(false);}
+
+    public String sqlNames(boolean lng){
+	String keys = "";
+	boolean first = true;
+	String add = (lng?name+".":"");
+	for (Cut c : cuts){
+	    if (! first) keys += ", ";
+	    else first = false;
+	    keys += add+c.sqlName;
 	}
 	return keys;
     }
@@ -78,21 +93,26 @@ public class Key{
 	Cut[] cs = new Cut[dex.length];
 	for (int i=0; i<dex.length; i++)
 	    cs[i] = cuts[dex[i]];
-	return new Key(cs);
+	return new Key(name, cs);
+    }
+
+    public Key accept(String[] dex){
+	return except(except(dex));
     }
 
     public Key except(int[] dex){
+	if (dex==null) return new Key(cuts);
 	//assumes indices to be in order
 	Cut[] cs = new Cut[cuts.length - dex.length];
 	int i, j, n;
 	for (i=j=n=0; i<cuts.length; i++){
-	    while (i > dex[j] && j+1 < dex.length)
+	    while (j+1 < dex.length && i > dex[j])
 		j++;
-	    if (i != dex[j])
+	    if (dex.length == 0 || i != dex[j])
 		cs[n++] = cuts[i];
 	}
 
-	return new Key(cs);
+	return new Key(name, cs);
     }
 
     private HashMap<String, Integer> map;
@@ -114,8 +134,21 @@ public class Key{
 	return i;
     }
 
-    public Key except(String[] names){
-	return except(populate(names));
+    public Key add(Cut[] gnu){
+	if (gnu == null) return new Key(cuts);
+	else {
+	Cut[] crew = new Cut[cuts.length + gnu.length];
+	System.arraycopy(cuts, 0, crew, 0, cuts.length);
+	System.arraycopy(gnu, 0, crew, cuts.length, gnu.length);
+	return new Key(crew);
+	}
+    }
+
+    public int[] except(String[] names){
+	if (names == null) return null;
+	int[] r = populate(names);
+	java.util.Arrays.sort(r);
+	return r;
     }
 
     public Key just(String[] names){
@@ -131,18 +164,55 @@ public class Key{
     }
 
     //All keys must have an ID column (cut).
+
+    public static final Key customerKey = new Key("Customers",
+						  new Cut[]{
+						      new IntCut("ID"),
+						      new StringCut(63, "First Name", "NOT NULL"),
+						      new StringCut(63, "Last Name", "NOT NULL"),
+						      new StringCut(127, "Address"),
+						      new StringCut(31, "Phone Number"),
+						      new StringCut(63, "email")
+						  });
     
     public static final Key contractKey = new Key("Contracts",
-	new String[]{"ID", "First Name", "Last Name", "Address", "Phone Number",
-		     "Number of Payments", "Amount", "Final Payment",
-		     "Payment Frequency", "Total of Payments", "Start Date", "Vehicle",
-		     "VIN", "Payments made", "Paid off day", "Next Due"},
-	new Kind[]{INT, STRING, STRING, STRING, STRING,
-		   INT, FLOAT, FLOAT,
-		   INT, FLOAT, DATE, STRING,
-		   STRING, INT, DATE, DATE});
+						  new Cut[]{
+						      new IntCut("ID"),
+						      new IntCut("Number of Payments", "NOT NULL"),
+						      new FloatCut("Amount of Payment", "NOT NULL"),
+						      new FloatCut("Final Payment Amount"),
+						      new IntCut("Payment Frequency", "NOT NULL"),
+						      new FloatCut("Total Contract", "NOT NULL"),
+						      new DateCut("Start Date", "NOT NULL"),
+						      new StringCut(127, "Vehicle"),
+						      new StringCut(31, "VIN", "NOT NULL"),
 
-    public static final Key floorKey =  new Key(
-	new String[]{"ID", "Date Bought", "Item ID", "Vehicle", "Item Cost", "Title", "Date Paid"},
-	new Kind[]{INT, DATE, STRING, STRING, FLOAT, INT, DATE});
+						      new FloatCut("Reserve", "NOT NULL"),
+						      new FloatCut("Gross Amount", "NOT NULL"),
+						      new FloatCut("Net Amount", "NOT NULL"),
+						      new FloatCut("Other Payments"),
+						      new DateCut("Next Due"),
+						      new DateCut("Paid Off"),
+						      new IntCut("Payments Made"),
+						      new IntCut("Customer ID", "NOT NULL")
+						  });
+
+    public static final Key floorKey =  new Key("Cars",
+						  new Cut[]{
+						    new IntCut("ID"),
+						    new DateCut("Date Bought", "NOT NULL"),
+						    new StringCut(31, "VIN", "NOT NULL"),
+						    new StringCut(127, "Vehicle", "NOT NULL"),
+						    new FloatCut("Item Cost", "NOT NULL"),
+						    new IntCut("Title", "NOT NULL"),
+						    new DateCut("Date Paid")
+						});
+
+    public static final Key paymentKey = new Key("Payments",
+						 new Cut[]{
+						     new IntCut("ID"),
+						     new IntCut("Contract_ID", "NOT NULL"),
+						     new DateCut("Day", "NOT NULL"),
+						     new FloatCut("Amount")
+						 });
 }

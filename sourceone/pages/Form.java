@@ -22,8 +22,8 @@ public class Form extends Page implements StringSource{ //Page for inputting inf
     public boolean hasEntries()
     {
 	boolean ans = gotem;
-	gotem = false;
-	return ans;
+	gotem = !gotem;
+	return ans; 
     }
 
     public String get() throws InputXcpt{

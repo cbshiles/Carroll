@@ -5,40 +5,29 @@ import sourceone.sql.*;
 
 public class TableMaker{
 
-    static void  shit(Key key, String[] post) throws Exception{
-	assert (key.cuts.length == post.length);
-
-//Do this first
-	SQLBot.bot.update("DROP TABLE "+key.name+';');
-
-
-	String max = "CREATE TABLE "+key.name+" ( ID int NOT NULL AUTO_INCREMENT, ";
-	boolean first = true;
-	for (int i=0; i<key.cuts.length; i++){
-	    if (i > 0)
-		max += key.cuts[i].sqlName + " " + post[i-1]+", ";
-	}
-	SQLBot.bot.update(max + "PRIMARY KEY (ID) )");
+    static int drop(Key key)throws Exception{
+	return SQLBot.bot.update("DROP TABLE "+key.name+';');
     }
 
+    static int create(Key key)throws Exception{
+	String cmd = "CREATE TABLE "+key.name+" ( ID int NOT NULL AUTO_INCREMENT, ";
+	for (int i=0; i<key.cuts.length; i++){
+	    if (i > 0)
+		cmd += key.cuts[i].fullSQL+", ";
+	}
+	return SQLBot.bot.update(cmd + "PRIMARY KEY (ID) )");
+    }
+
+    static void recreate(Key key)throws Exception{
+	drop(key);
+	create(key);
+    }
+    
     public static void main(String[] args)throws Exception{
 	SQLBot.bot = new SQLBot("res/db.properties");
-shit(Key.contractKey, new String[]{
-		    "varchar(63) NOT NULL",
-		    "varchar(63) NOT NULL",
-		    "varchar(63)",
-		    "varchar(63)",
-		    "int NOT NULL",
-		    "float NOT NULL",
-		    "float NOT NULL",
-		    "int NOT NULL",
-		    "float NOT NULL",
-		    "date NOT NULL",
-		    "varchar(63)",
-		    "varchar(31) NOT NULL",
-		    "int NOT NULL",
-		    "date",
-		    "date NOT NULL"
-    });
+	 // recreate(Key.customerKey);
+	 // recreate(Key.contractKey);
+	 // recreate(Key.floorKey);
+	recreate(Key.paymentKey);
     }
 }

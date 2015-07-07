@@ -41,6 +41,13 @@ public class SQLBot {
 	return stmt.executeUpdate(sql);
     }
 
+    public int updateGetID(String sql) throws SQLException{
+	stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+	ResultSet rs = stmt.getGeneratedKeys();
+	rs.next();
+	return rs.getInt(1);
+    }
+    
     public ResultSet query(String sql) throws SQLException{
 	return stmt.executeQuery(sql);
     }

@@ -23,7 +23,7 @@ public class ContractPage extends Page {
 	addContract.addActionListener(new PageMaker(ContractForm.class));
 	
 	add(viewForm);
-	viewForm.addActionListener(new PageMaker(ContractTable.class));
+	viewForm.addActionListener(new PageMaker(AReport.class));
 	
 	add(payOff);
 	payOff.addActionListener(new PageMaker(PayContracts.class));

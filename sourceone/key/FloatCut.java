@@ -7,12 +7,12 @@ package sourceone.key;
 public class FloatCut extends Cut{
 
     public FloatCut(String n)
-    {super(n);}
+    {this(n,"");}
     
 
     public FloatCut(String n, String c){
-	this(n);
-	constraints = c;
+	super(n);
+	fullSQL = sqlName+" float "+c;
     }
 
 

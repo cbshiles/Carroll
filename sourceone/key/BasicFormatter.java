@@ -21,7 +21,12 @@ public class BasicFormatter extends Formatter {
 	return String.format("%.02f", x);
     }
 
-    static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
+
+    public static String cinvert(LocalDate x){
+	if (x == null) return "N/A";
+	else return x.format(dtf);
+    }
     
     public String convert(LocalDate x){
 	if (x == null) return "N/A";

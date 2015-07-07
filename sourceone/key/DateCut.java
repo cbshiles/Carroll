@@ -7,12 +7,13 @@ package sourceone.key;
 public class DateCut extends Cut{
 
     public DateCut(String n)
-    {super(n);}
+    {this(n, "");}
     
     public DateCut(String n, String c){
-	this(n);
-	constraints = c;
+	super(n);
+	fullSQL = sqlName+" date "+c;
     }
+    
     public Object in() throws InputXcpt
     {return ip.getDate();}
 
