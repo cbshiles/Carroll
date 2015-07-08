@@ -22,6 +22,14 @@ public class View extends Matrix{
 	clear = true;
     }
 
+    public float floatSum(String name){
+	int i = key.dex(name);
+	float f = 0f;
+	for (Object[] larr : data)
+	    f += (float)larr[i];
+	return f;
+    }
+
     public void receiveEntry(Object[] objs) throws InputXcpt{
 	
 	Object[] arr = new Object[key.length];

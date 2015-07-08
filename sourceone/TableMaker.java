@@ -11,10 +11,10 @@ public class TableMaker{
 
     static int create(Key key)throws Exception{
 	String cmd = "CREATE TABLE "+key.name+" ( ID int NOT NULL AUTO_INCREMENT, ";
-	for (int i=0; i<key.cuts.length; i++){
-	    if (i > 0)
+	for (int i=1; i<key.cuts.length; i++){
 		cmd += key.cuts[i].fullSQL+", ";
 	}
+//	System.out.println(cmd + "PRIMARY KEY (ID) )");
 	return SQLBot.bot.update(cmd + "PRIMARY KEY (ID) )");
     }
 
@@ -28,6 +28,7 @@ public class TableMaker{
 	 // recreate(Key.customerKey);
 	 // recreate(Key.contractKey);
 	 // recreate(Key.floorKey);
-	recreate(Key.paymentKey);
+	//recreate(Key.paymentKey);
+	recreate(Key.metaKey);
     }
 }

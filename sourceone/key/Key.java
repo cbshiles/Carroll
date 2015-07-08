@@ -215,4 +215,10 @@ public class Key{
 						     new DateCut("Day", "NOT NULL"),
 						     new FloatCut("Amount")
 						 });
+
+    public static final Key metaKey = new Key("Meta",
+					      new Cut[]{
+						  new IntCut("ID"),
+						  new DateCut("Pending Report Date")
+					      });
 }

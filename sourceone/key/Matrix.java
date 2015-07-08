@@ -27,6 +27,11 @@ public class Matrix{
 	hasOut = true;
     }
 
+    public void push1() throws InputXcpt{ //assumes pushing to a view
+	for (Object[] objs : data)
+	    view.receiveEntry(objs);
+    }
+
     public Object push() throws InputXcpt{
 
 	if (! hasOut) throw new Error("Matrix cant be pushed without an out");

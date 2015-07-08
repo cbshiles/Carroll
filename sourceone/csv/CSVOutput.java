@@ -8,9 +8,14 @@ public class CSVOutput implements Output{
     FileWriter fw;
     String line = "", text;
     boolean first = true;
+    String addon;
 
     public CSVOutput(Key k, String fileName) throws IOException{
-
+	this (k, fileName, "");
+    }
+    
+    public CSVOutput(Key k, String fileName, String addon) throws IOException{
+	this.addon = addon;
 	fw = new FileWriter(fileName); //append option
 
 	text = k.names()+'\n';
@@ -48,7 +53,7 @@ public class CSVOutput implements Output{
     }
 
     public Object close(){
-	try { 		System.err.println(text); fw.write(text); fw.close();
+	try { fw.write(text+addon); fw.close();
 	} catch (IOException ie){
 	    System.err.println(ie);
 	    throw new Error("Error on printing to CSV");
