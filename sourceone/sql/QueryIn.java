@@ -57,12 +57,14 @@ public class QueryIn implements Input{
     }
 
     public LocalDate getDate() throws InputXcpt{
-	Date d; 
 	try {
-	    d =  rs.getDate(i++);
+	    return convertDate(rs.getDate(i++));
 	} catch (SQLException e) {
 	    throw new InputXcpt(e);
 	}
+    }
+
+    public static LocalDate convertDate(Date d){
 	if (d == null) return null;
 	else return LocalDate.ofEpochDay(d.getTime()/86400000); //millis in day
     }

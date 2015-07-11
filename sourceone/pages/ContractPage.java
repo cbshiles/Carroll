@@ -13,7 +13,8 @@ public class ContractPage extends Page {
     JButton addContract = new JButton("Add Contract");
     JButton viewForm = new JButton("Create Report");
     JButton payOff = new JButton("Pay Off");
-
+    JButton payAll = new JButton("Routine Payments");
+    
     public ContractPage(){
 	super("Contract Page");
 	setSize(400, 600);
@@ -24,9 +25,12 @@ public class ContractPage extends Page {
 	
 	add(viewForm);
 	viewForm.addActionListener(new PageMaker(AReport.class));
+
+	add(payAll);
+	payAll.addActionListener(new PageMaker(PayContracts.class));
 	
 	add(payOff);
-	payOff.addActionListener(new PageMaker(PayContracts.class));
+	payOff.addActionListener(new PageMaker(PayOff.class));
 	
 	//pack();
 	setVisible(true);

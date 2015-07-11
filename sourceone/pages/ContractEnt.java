@@ -54,7 +54,10 @@ public class ContractEnt implements Enterer{
 	    amtDue
 	};
     }
-	
+    
+    public boolean fequal(float a, float b){
+	return 0.01 > Math.abs(a-b);}
+    
     public int numPays(LocalDate st, int freq, LocalDate due){
 	int pays = 0;
 	while (till.compareTo(due) >= 0){
@@ -70,7 +73,10 @@ public class ContractEnt implements Enterer{
 	if (freq==7) c='W';
 	else if (freq ==14) c='B';
 	else c='M';
-	return ""+num+" "+c+" @ "+amt+"& 1 @ "+fin;
+	String trms = ""+num+" "+c+" @ "+amt;
+	if (! fequal(fin, 0f))
+	    trms += " & 1 @ "+fin;
+	return trms;
     }
 
     public static LocalDate next(LocalDate du, int freq, LocalDate st){

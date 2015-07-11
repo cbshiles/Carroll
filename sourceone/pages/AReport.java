@@ -13,9 +13,6 @@ import java.awt.event.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-import java.util.Calendar;
-
-
 public class AReport extends Page{
 
     JTable jt;
@@ -45,7 +42,6 @@ public class AReport extends Page{
 
 	jp.add(jsp, BorderLayout.NORTH);
 	try{
-	    
 	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID");
 
 	    inKey = custKey.add(contKey.cuts);
@@ -93,17 +89,12 @@ public class AReport extends Page{
 			} catch (InputXcpt ix) {;}
 		    }
 		});
-/*
-  Print out report 
-somehow indicate the creation of this payment block in the database
 
- */
 	    jb.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
 			    View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
 
-//			    g.push1();
 			    g.view.push1();
 			    float thing1 = pView.floatSum("Remaining Balance");
 			    float thing2 = pView.floatSum("Total Amount Due");
@@ -116,9 +107,19 @@ somehow indicate the creation of this payment block in the database
 
 			    pView.push();
 
-			    //# check if its null, have a confirmation dialog pop up 
-			    SQLBot.bot.update("UPDATE Meta SET Pending_Report_Date='"+reportDay+"'WHERE ID=1;");
+			    //# check if its null, have a confirmation dialog pop up
+			    LocalDate prd = SQLBot.bot.query1Date("SELECT Pending_Report_Date FROM Meta WHERE ID=1;");
+
+			    boolean doit = true;
 			    
+			    if (prd != null){
+				ConfirmDialog pop = new ConfirmDialog(AReport.this, "Report Overwrite", ""+prd);
+				doit = pop.confirmed();
+//			    pop.dispose();
+			    }
+
+			    if (doit)
+				SQLBot.bot.update("UPDATE Meta SET Pending_Report_Date='"+reportDay+"' WHERE ID=1;");
 
 			}catch (Exception x)
 			{x.printStackTrace(); 

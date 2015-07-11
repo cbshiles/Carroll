@@ -52,6 +52,12 @@ public class SQLBot {
 	return stmt.executeQuery(sql);
     }
 
+    public LocalDate query1Date(String sql) throws SQLException{
+	ResultSet rs = query(sql);
+	rs.next();
+	return QueryIn.convertDate(rs.getDate(1));
+    }
+
     public void printSet(ResultSet rs) throws SQLException{
 	ResultSetMetaData rsmd = rs.getMetaData();
 	int nc = rsmd.getColumnCount();

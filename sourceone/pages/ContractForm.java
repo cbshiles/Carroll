@@ -60,7 +60,7 @@ public class ContractForm extends Form {
 			ent.set_id((int)custGrid.go());
 			contGrid.go();
 		    } catch (InputXcpt ix) {
-			System.err.println("Submission error:\n"+ix);
+			new XcptDialog(ContractForm.this, ix);
 		    }}});
 
 	add(submit);
