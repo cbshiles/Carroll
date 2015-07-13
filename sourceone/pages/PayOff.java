@@ -70,15 +70,16 @@ public class PayOff extends Page {
 	Object[] o;
 	Container pane;
 	LocalDate sdO, payDate;
-	int nopO, pfO, pmO;
-	float  aopO, fpaO, grsO, netO, tcO, fees;
+	int nopO, pfO, pmO, idO;
+	float  aopO, fpaO, grsO, netO, tcO, fees, payoff=0;
+	JTextArea jta;
 /*	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	Key contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
 		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount"});
 */
-	public String figure(){
+	public void figure(){
 	    float tep; //total expected to pay
 	    if (tcO < .001)
 		tep = grsO;
@@ -88,8 +89,8 @@ public class PayOff extends Page {
 	    float balance = tep - pmO*aopO;
 	    String ret = "Balance: "+balance+'\n';
 
-	    LocalDate endDate = nexti(stO, pfO, nopO + ((fpaO > .001)?1:0));
-	    long days = Period.between(stO, endDate).getDays();
+	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
+	    long days = Period.between(sdO, endDate).getDays();
 	    float dailyInt =  (grsO-netO)/days;
 	    float discount = dailyInt * Period.between(payDate, endDate).getDays();
 
@@ -97,10 +98,11 @@ public class PayOff extends Page {
 
 	    ret += "Fees: "+fees+'\n';
 
-	    ret += "Pay Off: "+(balance-discount+fees);
+	    ret += "Pay Off: "+(payoff = balance-discount+fees);
+	    jta.setText(ret);
 	}
 
-	public static LocalDate nexti(LocalDate st, int freq, int i){
+	public LocalDate nexti(LocalDate st, int freq, int i){
 	    if (freq == 30) 
 		return st.plusMonths(i);
 	    else
@@ -122,32 +124,84 @@ public class PayOff extends Page {
 	    grsO = (float)o[k.dex("Gross Amount")];
 	    netO = (float)o[k.dex("Net Amount")];
 	    tcO = (float)o[k.dex("Total Contract")];
+	    idO = (int) o[k.dex("ID")];
 
 	    pane = getContentPane();
 	    GridBagLayout c = new GridBagLayout();
 	    pane.setLayout(c);
 
 	    cadd(new JLabel("Fees"), 0, 0, 1, 1);
-	    JTextField feeField = new JTextField(10);
+	    JTextField feeField = new JTextField("50.00",10);
+	    fees = 50f;
 	    cadd(feeField, 1, 0, 1, 1);
+	    feeField.getDocument().addDocumentListener(new DocumentListener() {
+		    public void changedUpdate(DocumentEvent e) {
+			//System.out.println("changedUpdate");
+			warn();
+		    }
+		    public void removeUpdate(DocumentEvent e) {
+			//System.out.println("removeUpdate");
+			warn();
+		    }
+		    public void insertUpdate(DocumentEvent e) {
+			//System.out.println("insertUpdate");
+			warn();
+		    }
+
+		    public void warn() {
+			try {
+			    float d = StringIn.parseFloat(feeField.getText());
+			    fees = d;
+			    figure();
+			} catch (InputXcpt ix) {;}
+		    }
+		});
 	    
 	    cadd(new JLabel("Payoff Date"), 0, 1, 1, 1);
-	    JTextField dateField = new JTextField(10);
-	    cadd(dateField, 1, 1, 1, 1);
+	    payDate = LocalDate.now();
+	    JTextField dateField = new JTextField(BasicFormatter.cinvert(payDate), 10);
 
-	    JTextArea jta = new JTextArea(4,20);
+	    cadd(dateField, 1, 1, 1, 1);
+	    dateField.getDocument().addDocumentListener(new DocumentListener() {
+		    public void changedUpdate(DocumentEvent e) {
+			//System.out.println("changedUpdate");
+			warn();
+		    }
+		    public void removeUpdate(DocumentEvent e) {
+			//System.out.println("removeUpdate");
+			warn();
+		    }
+		    public void insertUpdate(DocumentEvent e) {
+			//System.out.println("insertUpdate");
+			warn();
+		    }
+
+		    public void warn() {
+			try {
+			    LocalDate d = StringIn.parseDate(dateField.getText());
+			    payDate = d;
+			    figure();
+			} catch (InputXcpt ix) {;}
+		    }
+		});
+
+	    jta = new JTextArea(4,20);
 	    jta.setEditable(false);
 	    cadd(jta, 0, 2, 2, 2);
 
 	    JButton payButton = new JButton("Pay Off");
 	    cadd(payButton, 0, 4, 1, 1);
+	    payButton.addActionListener(this);
+	    payButton.setActionCommand("pay");
 
 	    JButton backButton = new JButton("Go Back");
 	    cadd(backButton, 1, 4, 1, 1);
+	    backButton.addActionListener(this);
+	    backButton.setActionCommand("back");
 	    
 	    setBounds(500,300,300,600);
 
-
+	    figure();
 
 	    setVisible(true);
 	}
@@ -164,7 +218,20 @@ public class PayOff extends Page {
 
 	    @Override
     public void actionPerformed(ActionEvent ae) {
-	dispose();
+		String cmd = ae.getActionCommand();
+		if (cmd.equals("back"))
+		    dispose();
+		else if (cmd.equals("pay")){
+		    try {
+			//System.err.println(
+			//Next_Due
+		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
+
+		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
+		    } catch (Exception e){System.err.println("~!~"+e);}
+		}
+		else {System.err.println("Kentucky derby");
+		    System.exit(1);}
     }
 
     }

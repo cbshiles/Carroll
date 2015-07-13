@@ -22,6 +22,7 @@ public class AReport extends Page{
     Grid g = null;
     Key inKey = null, viewKey = null;
     LocalDate reportDay;
+    boolean full;
     
     public void changeDate(LocalDate ld) throws InputXcpt{
 	g.clearView(viewKey.cuts, new ContractEnt(inKey, ld));
@@ -30,20 +31,24 @@ public class AReport extends Page{
 	reportDay = ld;
     }
     
-    public AReport(){
+    public AReport(Boolean f){
 	super("Create AR Report");
+	full = f;
 	setSize(1000, 600);
 
 	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	
 	Key contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due"});
+		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
 	jp.add(jsp, BorderLayout.NORTH);
 	try{
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID");
+	    String z = full?">":"<";
+	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+"0.01;");
 
+	    //Stopped editting hereerere
+	    
 	    inKey = custKey.add(contKey.cuts);
 	    
 	    g = new Grid(inKey, in);
@@ -86,7 +91,7 @@ public class AReport extends Page{
 			try {
 			    LocalDate d = StringIn.parseDate(payDay.text());
 			    changeDate(d);
-			} catch (InputXcpt ix) {;}
+			} catch (InputXcpt ix) {System.err.println("HGXB");}
 		    }
 		});
 
@@ -108,7 +113,8 @@ public class AReport extends Page{
 			    pView.push();
 
 			    //# check if its null, have a confirmation dialog pop up
-			    LocalDate prd = SQLBot.bot.query1Date("SELECT Pending_Report_Date FROM Meta WHERE ID=1;");
+			    String sel = full?"Full":"Partial";
+			    LocalDate prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
 
 			    boolean doit = true;
 			    
@@ -119,7 +125,7 @@ public class AReport extends Page{
 			    }
 
 			    if (doit)
-				SQLBot.bot.update("UPDATE Meta SET Pending_Report_Date='"+reportDay+"' WHERE ID=1;");
+				SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDay+"' WHERE ID=1;");
 
 			}catch (Exception x)
 			{x.printStackTrace(); 

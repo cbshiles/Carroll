@@ -4,11 +4,21 @@ import java.awt.*;
 
 public class NoLabelField extends Field{
 
-    JTextField tf = newText();
+    public JTextField tf = newText();
 
     public NoLabelField (String n)
     {super(n);}
+
+    public NoLabelField (int n, JComponent j){
+    	super("", j);
+	jp.setLayout(new GridLayout(1, 1));
+	tf = new JTextField(n);
+    }
     
     public String text()
     {return tf.getText();}
+
+    public void addListener(javax.swing.event.DocumentListener dl){
+	tf.getDocument().addDocumentListener(dl);
+    }
 }

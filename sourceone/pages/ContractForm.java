@@ -30,12 +30,16 @@ public class ContractForm extends Form {
 			    new String[]{"Weekly", "Biweekly", "Monthly"},
 			    new String[]{"7", "14", "30"}));
 
-	addF(new TextField("Total of Payments"));
+	addF(new OptionField("Total Contract", "0", true));
 
 	addF(new TextField("Start Date"));
 
 	addF(new TextField("Vehicle"));
 	addF(new TextField("VIN"));
+
+	addF(new TextField("Reserve"));
+	addF(new TextField("Gross Amount"));
+	addF(new TextField("Net Amount"));
 
 	JButton submit = new JButton("Submit");
 
@@ -45,11 +49,10 @@ public class ContractForm extends Form {
 	custGrid.view.addOut(new SQLFormatter(new InsertDest(custGrid.view.key, "Customers", true)));
 
 	
-	Key contKey = Key.contractKey.accept(new String[]{"ID", "Reserve", "Gross Amount", "Net Amount", "Next Due", "Paid Off", "Other Payments", "Customer ID", "Payments Made"});
+	Key contKey = Key.contractKey.accept(new String[]{"ID",  "Next Due", "Paid Off", "Other Payments", "Customer ID", "Payments Made"});
 	Ent ent = new Ent(contKey);
 	Grid contGrid = new Grid(contKey, new StringIn(this));
-	contGrid.addView(null, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID"),
-					 new FloatCut("Reserve"), new FloatCut("Gross Amount"), new FloatCut("Net Amount")},
+	contGrid.addView(null, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID")},
 	    ent);
 	contGrid.view.addOut(new SQLFormatter(new InsertDest(contGrid.view.key, "Contracts")));
 
@@ -71,8 +74,9 @@ public class ContractForm extends Form {
 
     private class Ent implements Enterer{
 	
-	int sd, aop, nop, fpa, tc;
+	int sd, aop, nop, fpa, tc, grs;
 	int cust_id;
+	//"Reserve", "Gross Amount", "Net Amount",
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -80,10 +84,35 @@ public class ContractForm extends Form {
 	    nop = k.dex("Number of Payments");
 	    fpa = k.dex("Final Payment Amount");
 	    tc = k.dex("Total Contract");
+	    grs = k.dex("Gross Amount");
 	}
 
 	public void set_id(int i){cust_id=i;}
     
+	public Object[] editEntry(Object[] o)throws InputXcpt{
+
+	float tep; //total expected to pay
+	float tcO = (float)o[tc];
+	    if (tcO < .001)
+		tep = (float)o[grs];
+	    else
+		tep = tcO;
+	    
+	    float  sum;
+	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
+	    if (Math.abs(sum - tep) > 0.001f)
+		throw new InputXcpt(""+sum+" != "+tep+"\nPayment summation does not equal total");
+
+	    return new Object[]{
+		o[sd], //Next Due
+		0f, //Other payments
+		cust_id
+	    };
+	}
+    }
+}
+
+/*
 	public Object[] editEntry(Object[] o)throws InputXcpt{
 	    float total, sum;
 	    total = (float)o[tc];
@@ -103,5 +132,4 @@ public class ContractForm extends Form {
 		gross*z //net
 	    };
 	}
-    }
-}
+ */

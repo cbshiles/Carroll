@@ -5,7 +5,7 @@ import java.time.*;
 
 public class ContractEnt implements Enterer{
 
-    int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm;
+    int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm, grs;
     LocalDate till;
 	    
     public ContractEnt(Key k, LocalDate t){
@@ -23,6 +23,8 @@ public class ContractEnt implements Enterer{
 	pm = k.dex("Payments Made");
 	sd = k.dex("Start Date");
 	tc = k.dex("Total Contract");
+
+	grs = k.dex("Gross Amount"); 
     }
 
     public Object[] editEntry(Object[] o){
@@ -42,6 +44,13 @@ public class ContractEnt implements Enterer{
 	if (nPays > maxStd)
 	    amtDue += finalPayment - amt;
 
+	float tep; //total expected to pay
+	float tcO = (float)o[tc];
+	    if (tcO < .001)
+		tep = (float)o[grs];
+	    else
+		tep = tcO;
+
 
 	return new Object[] {
 	    ""+o[ln]+", "+o[fn],
@@ -49,7 +58,7 @@ public class ContractEnt implements Enterer{
 	    o[pm],
 	    o[sd],
 	    due,
-	    (float)o[tc] - (int)o[pm]*amt, //# *assumes no other payment*
+	    tep - (int)o[pm]*amt, //# *assumes no other(non-standard) payment has been made*
 	    nPays,
 	    amtDue
 	};

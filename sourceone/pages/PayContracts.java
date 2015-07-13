@@ -18,15 +18,18 @@ public class PayContracts extends Page {
     JPanel jp = new JPanel(new BorderLayout());
     JButton jb;
     LocalDate reportDate;
+    boolean full;
+    String sel;
     
-    public PayContracts(){
+    public PayContracts(Boolean f){
 	super("Pay Contracts");
+	full = f;
 	setSize(1000, 600);
 
 	try{
-	    
+	    sel = full?"Full":"Partial";
 	    Grid nada_surf = new Grid (new Key(new Cut[]{new DateCut("Report Date")}),
-				       new QueryIn("SELECT Pending_Report_Date FROM Meta;"));
+				       new QueryIn("SELECT "+sel+"_Report_Date FROM Meta;"));
 
 	    nada_surf.pull();
 	    reportDate = (LocalDate) nada_surf.data.get(0)[0];
@@ -35,9 +38,10 @@ public class PayContracts extends Page {
 	    
 	    Key contKey = Key.contractKey.just(new String[] {
 		    "ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		    "Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due"});
+		    "Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID");
+	    String z = full?">":"<";
+	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+"0.01;");
 
 	    Key key = custKey.add(contKey.cuts);
 	    
@@ -139,14 +143,14 @@ public class PayContracts extends Page {
 	    try{
 		String cmda = "UPDATE Contracts SET Payments_Made="+((int)v[pm]+pays_due)+", "+paidOff+oPay+" Next_Due="+nDue+" WHERE ID="+di+';';
 		String cmdb = "INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+di+", '"+tday+"', "+tot_due+");";
-		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TEST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.err.println(cmda);
 		System.err.println(cmdb);
-		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TEST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		SQLBot.bot.update(cmda);
 		SQLBot.bot.update(cmdb);
 
-		SQLBot.bot.update("UPDATE Meta SET Pending_Report_Date=NULL WHERE ID=1;");	    
+		SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date=NULL WHERE ID=1;");	    
 	    } catch (Exception x)
 	    {System.err.println("Tired of dese: "+x.getCause()+x.getClass().getName());
 		System.err.println(x.getMessage());

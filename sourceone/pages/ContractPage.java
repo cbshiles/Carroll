@@ -24,10 +24,18 @@ public class ContractPage extends Page {
 	addContract.addActionListener(new PageMaker(ContractForm.class));
 	
 	add(viewForm);
-	viewForm.addActionListener(new PageMaker(AReport.class));
+	viewForm.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent ae){
+		    new ReportDialog(ContractPage.this,  AReport.class);
+		}});
+
+
 
 	add(payAll);
-	payAll.addActionListener(new PageMaker(PayContracts.class));
+	payAll.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent ae){
+		    new ReportDialog(ContractPage.this, PayContracts.class);
+		}});
 	
 	add(payOff);
 	payOff.addActionListener(new PageMaker(PayOff.class));

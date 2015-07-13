@@ -42,6 +42,7 @@ public class Key{
     }
 
     public void putEntry(Object[] arr){
+	System.err.println(arr.length+" - "+cuts.length);
 	for (int i=0; i<cuts.length; i++)
 	    cuts[i].out(arr[i]);
     }
@@ -211,7 +212,7 @@ public class Key{
     public static final Key paymentKey = new Key("Payments",
 						 new Cut[]{
 						     new IntCut("ID"),
-						     new IntCut("Contract_ID", "NOT NULL"),
+						     new IntCut("Contract ID", "NOT NULL"),
 						     new DateCut("Day", "NOT NULL"),
 						     new FloatCut("Amount")
 						 });
@@ -219,6 +220,7 @@ public class Key{
     public static final Key metaKey = new Key("Meta",
 					      new Cut[]{
 						  new IntCut("ID"),
-						  new DateCut("Pending Report Date")
+						  new DateCut("Full Report Date"),
+						  new DateCut("Partial Report Date")
 					      });
 }
