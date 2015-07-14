@@ -15,13 +15,11 @@ import java.time.temporal.ChronoUnit;
 public class PayContracts extends FullnessPage {
 
     JButton jb;
-    String sel;
     
     public PayContracts(Boolean f){
 	super("Pay Contracts");
 
 	try{
-	    sel = full?"Full":"Partial";
 	    Grid nada_surf = new Grid (new Key(new Cut[]{new DateCut("Report Date")}),
 				       new QueryIn("SELECT "+sel+"_Report_Date FROM Meta;"));
 

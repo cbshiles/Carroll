@@ -11,7 +11,6 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 
 public class AReport extends FullnessPage{
 
@@ -20,80 +19,96 @@ public class AReport extends FullnessPage{
     public AReport(){
 	super("Create AR Report");
 
-	try{
-	    getTable(LocalDate.now());
-	    
-	    JPanel cPan = new JPanel();
+	LocalDate today = LocalDate.now();
+	getTable(today);
+	sourceone.fields.TextField payDay;
+	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(today));
 
-	    sourceone.fields.TextField payDay = new sourceone.fields.TextField("Report for:",
-							  BasicFormatter.cinvert(LocalDate.now()));
+	JPanel cPan = new JPanel();
+	cPan.add(payDay.getJP());
+	cPan.add(jb = new JButton("Create Report"));
+	jp.add(cPan, BorderLayout.SOUTH);
 
-	    cPan.add(payDay.getJP());
+	payDay.addListener(new DocumentListener() {
+		public void changedUpdate(DocumentEvent e) {warn();}
 
-	    cPan.add(jb = new JButton("Create Report"));
+		public void removeUpdate(DocumentEvent e) {warn();}
 
-	    jp.add(cPan, BorderLayout.SOUTH);
+		public void insertUpdate(DocumentEvent e) {warn();}
 
-	    payDay.addListener(new DocumentListener() {
-		    public void changedUpdate(DocumentEvent e) {
-			//System.out.println("changedUpdate");
-			warn();
-		    }
-		    public void removeUpdate(DocumentEvent e) {
-			//System.out.println("removeUpdate");
-			warn();
-		    }
-		    public void insertUpdate(DocumentEvent e) {
-			//System.out.println("insertUpdate");
-			warn();
-		    }
+		public void warn() {
+		    try {
+			LocalDate d = StringIn.parseDate(payDay.text());
+			getTable(d);
+		    } catch (InputXcpt ix) {;/*System.err.println("HGXB");*/}
+		}});
 
-		    public void warn() {
-			try {
-			    LocalDate d = StringIn.parseDate(payDay.text());
-			    getTable(d);
-			} catch (InputXcpt ix) {System.err.println("HGXB");}
-		    }
-		});
+	jb.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		    try {
+			View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
 
-	    jb.addActionListener(new ActionListener() {
-	    	    public void actionPerformed(ActionEvent e) {
-			try {
-			    View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
-
-			    g.view.push1();
-			    float thing1 = pView.floatSum("Remaining Balance");
-			    float thing2 = pView.floatSum("Total Amount Due");
+			g.view.push1();
+			float thing1 = pView.floatSum("Remaining Balance");
+			float thing2 = pView.floatSum("Total Amount Due");
 			    
-			    Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
-			    pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
-			    pView.addOut(new CustReport(pKey, "AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
+			Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
+			pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
+			pView.addOut(new CustReport(pKey, "AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
+			pView.push();
 
-			    System.err.println("pview size"+pView.data.size());
+			LocalDate prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
 
-			    pView.push();
+			boolean doit = true;
+			if (prd != null){
+			    ConfirmDialog pop = new ConfirmDialog(AReport.this, "Report Overwrite", ""+prd);
+			    doit = pop.confirmed();
+			}
 
-			    //# check if its null, have a confirmation dialog pop up
-			    String sel = full?"Full":"Partial";
-			    LocalDate prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
+			if (doit)
+			    SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
 
-			    boolean doit = true;
-			    
-			    if (prd != null){
-				ConfirmDialog pop = new ConfirmDialog(AReport.this, "Report Overwrite", ""+prd);
-				doit = pop.confirmed();
-//			    pop.dispose();
-			    }
-
-			    if (doit)
-				SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
-
-			}catch (Exception x)
-			{x.printStackTrace(); 
-			    System.err.println("~?~ "+x);}
-		    }});
+		    }catch (Exception x)
+		    {x.printStackTrace(); 
+			System.err.println("~?~ "+x);}
+		}});
 		
-	} catch (Exception e)
-	{e.printStackTrace(); System.err.println("YO!: ");}
+    }
+    private class ConfirmDialog extends JDialog implements ActionListener{
+
+	boolean ret;
+	String date;
+	JPanel jp = new JPanel();
+	
+	public ConfirmDialog(Frame f, String name, String d){
+	    super(f, name, Dialog.ModalityType.DOCUMENT_MODAL);
+	    date = d;
+	}
+
+	void makeButton(String name, String cmd){
+	    JButton jb = new JButton(name);
+	    jb.setActionCommand(cmd);
+	    jb.addActionListener(this);
+	    jp.add(jb);
+	}
+
+	boolean confirmed(){
+	    jp.add(new JLabel("This will be overwriting a previous report from "+date+". Is this ok?"));
+	    makeButton("Overwrite", "T");
+	    makeButton("Cancel", "F");
+
+	    getContentPane().add(jp);
+	    setBounds(500,500,500,150);
+	    setVisible(true);
+
+	    return ret;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+	    String action = ae.getActionCommand();
+	    ret = action.equals("T");
+	    dispose();
+	}
     }
 }

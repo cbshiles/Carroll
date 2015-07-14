@@ -11,6 +11,8 @@ import java.time.*;
 
 public abstract class FullnessPage extends Page{
     boolean full;
+    String sel;
+
     Key k, viewKey;
     LocalDate reportDate;
     
@@ -29,6 +31,7 @@ public abstract class FullnessPage extends Page{
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
 		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
+	sel = full?"Full":"Partial";
 	String z = full?">":"<";
 	try{
 	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
