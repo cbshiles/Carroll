@@ -13,54 +13,15 @@ import java.awt.event.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-public class AReport extends Page{
+public class AReport extends FullnessPage{
 
-    JTable jt;
-    JPanel jp = new JPanel(new BorderLayout());
     JButton jb;
-    JScrollPane jsp = new JScrollPane();
-    Grid g = null;
-    Key inKey = null, viewKey = null;
-    LocalDate reportDay;
-    boolean full;
     
-    public void changeDate(LocalDate ld) throws InputXcpt{
-	g.clearView(viewKey.cuts, new ContractEnt(inKey, ld));
-	g.view.addTable();
-	jsp.setViewportView(jt = (JTable)g.push());
-	reportDay = ld;
-    }
-    
-    public AReport(Boolean f){
+    public AReport(){
 	super("Create AR Report");
-	full = f;
-	setSize(1000, 600);
 
-	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
-	
-	Key contKey = Key.contractKey.just(new String[] {
-		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
-
-	jp.add(jsp, BorderLayout.NORTH);
 	try{
-	    String z = full?">":"<";
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+"0.01;");
-
-	    //Stopped editting hereerere
-	    
-	    inKey = custKey.add(contKey.cuts);
-	    
-	    g = new Grid(inKey, in);
-
-	    g.pull();
-
-	    viewKey = new Key(
-		new String[]{"Customer Name", "Terms", "Payments Made", "Start Date", "Due Date", "Remaining Balance",
-					 "Payments Due", "Total Amount Due"},
-		new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT});
-
-	    changeDate(LocalDate.now());
+	    getTable(LocalDate.now());
 	    
 	    JPanel cPan = new JPanel();
 
@@ -90,7 +51,7 @@ public class AReport extends Page{
 		    public void warn() {
 			try {
 			    LocalDate d = StringIn.parseDate(payDay.text());
-			    changeDate(d);
+			    getTable(d);
 			} catch (InputXcpt ix) {System.err.println("HGXB");}
 		    }
 		});
@@ -106,7 +67,7 @@ public class AReport extends Page{
 			    
 			    Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
 			    pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
-			    pView.addOut(new CustReport(pKey, "AR_Report_"+reportDay+".csv", ",,,,,"+thing1+",,"+thing2));
+			    pView.addOut(new CustReport(pKey, "AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
 
 			    System.err.println("pview size"+pView.data.size());
 
@@ -125,7 +86,7 @@ public class AReport extends Page{
 			    }
 
 			    if (doit)
-				SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDay+"' WHERE ID=1;");
+				SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
 
 			}catch (Exception x)
 			{x.printStackTrace(); 
@@ -134,9 +95,5 @@ public class AReport extends Page{
 		
 	} catch (Exception e)
 	{e.printStackTrace(); System.err.println("YO!: ");}
-
-	setContentPane(jp);
-
-	setVisible(true);
     }
 }

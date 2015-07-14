@@ -18,8 +18,11 @@ public class SQLBot {
 	Properties props = new Properties();
 	props.load(new FileInputStream(pFile));
 	String user = props.getProperty("user");
-	String password = props.getProperty("password");
-	String url = "jdbc:mysql://localhost/"+props.getProperty("database");
+	String password = props.getProperty("password", "");
+	String host = props.getProperty("hostname", "localhost");
+	String db = props.getProperty("database");
+	
+	String url = "jdbc:mysql://"+host+"/"+db;
 	Class.forName ("com.mysql.jdbc.Driver").newInstance();
 
 	conn = DriverManager.getConnection (url, user, password);

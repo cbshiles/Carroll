@@ -12,19 +12,13 @@ import java.awt.event.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-public class PayContracts extends Page {
+public class PayContracts extends FullnessPage {
 
-    JTable jt;
-    JPanel jp = new JPanel(new BorderLayout());
     JButton jb;
-    LocalDate reportDate;
-    boolean full;
     String sel;
     
     public PayContracts(Boolean f){
 	super("Pay Contracts");
-	full = f;
-	setSize(1000, 600);
 
 	try{
 	    sel = full?"Full":"Partial";
@@ -32,28 +26,7 @@ public class PayContracts extends Page {
 				       new QueryIn("SELECT "+sel+"_Report_Date FROM Meta;"));
 
 	    nada_surf.pull();
-	    reportDate = (LocalDate) nada_surf.data.get(0)[0];
-	    
-	    Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
-	    
-	    Key contKey = Key.contractKey.just(new String[] {
-		    "ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		    "Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
-
-	    String z = full?">":"<";
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+"0.01;");
-
-	    Key key = custKey.add(contKey.cuts);
-	    
-	    Grid g = new Grid(key, in);
-
-	    g.clearView(new Key(
-			    new String[]{"Customer Name", "Terms", "Payments Made", "Start Date", "Next Due", "Remaining Balance",
-					 "Payments Due", "Total Amount Due"},
-			    new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT}).cuts,
-			new ContractEnt(key, reportDate));
-	    g.view.addTable();
-	    jp.add(new JScrollPane(jt = (JTable)g.go()), BorderLayout.NORTH);
+	    getTable((LocalDate) nada_surf.data.get(0)[0]);
 
 	    jt.setRowSelectionAllowed(false);
 	    
@@ -137,7 +110,7 @@ public class PayContracts extends Page {
 	    String nDue;
 	    if (! finul){
 		for (int j=0; j<pays_due; j++)
-		    next_due = ContractEnt.next(next_due, (int)g[fq], start_day);
+		    next_due = next(next_due, (int)g[fq], start_day);
 		nDue = "'"+next_due+"'";
 	    }else nDue = "NULL";
 	    try{

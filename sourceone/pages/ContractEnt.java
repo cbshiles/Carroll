@@ -63,7 +63,7 @@ public class ContractEnt implements Enterer{
 	    amtDue
 	};
     }
-    
+
     public boolean fequal(float a, float b){
 	return 0.01 > Math.abs(a-b);}
     
