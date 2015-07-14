@@ -14,7 +14,7 @@ public abstract class FullnessPage extends Page{
     String sel;
 
     Key k, viewKey;
-    LocalDate reportDate;
+    LocalDate reportDate, prd;
     
     JPanel jp = new JPanel(new BorderLayout());
     JScrollPane jsp = new JScrollPane();
@@ -24,7 +24,7 @@ public abstract class FullnessPage extends Page{
     public FullnessPage(String title){
 	super(title);
 	new FullnessDialog();
-
+			
 	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	
 	Key contKey = Key.contractKey.just(new String[] {
@@ -34,6 +34,7 @@ public abstract class FullnessPage extends Page{
 	sel = full?"Full":"Partial";
 	String z = full?">":"<";
 	try{
+	    prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
 	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
 	    k  = custKey.add(contKey.cuts);
 	    g = new Grid(k, in);

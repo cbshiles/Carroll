@@ -10,48 +10,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 
 public class PayContracts extends FullnessPage {
 
     JButton jb;
     
-    public PayContracts(Boolean f){
+    public PayContracts() throws InputXcpt{
 	super("Pay Contracts");
 
-	try{
-	    Grid nada_surf = new Grid (new Key(new Cut[]{new DateCut("Report Date")}),
-				       new QueryIn("SELECT "+sel+"_Report_Date FROM Meta;"));
-
-	    nada_surf.pull();
-	    getTable((LocalDate) nada_surf.data.get(0)[0]);
-
-	    jt.setRowSelectionAllowed(false);
+	if (prd == null) throw new InputXcpt("No record of any unpaid reports");
+	getTable(prd);
 	    
-	    JPanel cPan = new JPanel();
+	jt.setRowSelectionAllowed(false);
+	    
+	JPanel cPan = new JPanel();
+	cPan.add(new JLabel("Posting payments up to "+reportDate));
+	cPan.add(jb = new JButton("Post Payments"));
+	jp.add(cPan, BorderLayout.SOUTH);
 
-	    cPan.add(new JLabel("Posting payments up to "+reportDate));
+	jb.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		    try {
+			Click ec = new Click(g.key, g.view.key);
+			for (int i=0; i<jt.getRowCount(); i++)
+			    ec.editEntry(g.data.get(i), g.view.data.get(i));
+		    } catch (Exception x)
+		    {System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
+			System.err.println(x.getMessage());}
+		}});
 
-	    cPan.add(jb = new JButton("Post Payments"));
-
-	    jp.add(cPan, BorderLayout.SOUTH);
-
-	    setContentPane(jp);
-
-	    jb.addActionListener(new ActionListener() {
-	    	    public void actionPerformed(ActionEvent e) {
-			try {
-			    Click ec = new Click(g.key, g.view.key);
-			    for (int i=0; i<jt.getRowCount(); i++)
-				ec.editEntry(g.data.get(i), g.view.data.get(i));
-			} catch (Exception x)
-			{System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
-			    System.err.println(x.getMessage());}
-		    }});
-	} catch (Exception e)
-	{e.printStackTrace(); System.err.println("YO!: ");}
-
-	setVisible(true);
+	wrap();
     }
 
     private class Click {

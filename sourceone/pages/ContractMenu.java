@@ -21,16 +21,16 @@ public class ContractMenu extends Page {
 	setLayout(new GridLayout(0, 1));
 	
 	add(addContract);
-	addContract.addActionListener(new PageMaker(ContractForm.class));
+	addContract.addActionListener(new PageMaker(this, ContractForm.class));
 	
 	add(viewForm);
-	viewForm.addActionListener(new PageMaker(AReport.class));
+	viewForm.addActionListener(new PageMaker(this, AReport.class));
 
 	add(payAll);
-	payAll.addActionListener(new PageMaker(PayContracts.class));
+	payAll.addActionListener(new PageMaker(this, PayContracts.class));
 	
 	add(payOff);
-	payOff.addActionListener(new PageMaker(PayOff.class));
+	payOff.addActionListener(new PageMaker(this, PayOff.class));
 	
 	//pack();
 	setVisible(true);

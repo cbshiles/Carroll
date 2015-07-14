@@ -57,8 +57,6 @@ public class AReport extends FullnessPage{
 			pView.addOut(new CustReport(pKey, "AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
 			pView.push();
 
-			LocalDate prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
-
 			boolean doit = true;
 			if (prd != null){
 			    ConfirmDialog pop = new ConfirmDialog(AReport.this, "Report Overwrite", ""+prd);
@@ -72,7 +70,7 @@ public class AReport extends FullnessPage{
 		    {x.printStackTrace(); 
 			System.err.println("~?~ "+x);}
 		}});
-		
+	wrap();
     }
     private class ConfirmDialog extends JDialog implements ActionListener{
 

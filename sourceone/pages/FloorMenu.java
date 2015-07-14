@@ -15,13 +15,13 @@ public class FloorMenu extends Page {
 	setLayout(new GridLayout(0, 1));
 	
 	add(addCar);
-	addCar.addActionListener(new PageMaker(CarForm.class));
+	addCar.addActionListener(new PageMaker(this, CarForm.class));
 	
 	add(addTitle);
-	addTitle.addActionListener(new PageMaker(TitlePage.class));
+	addTitle.addActionListener(new PageMaker(this, TitlePage.class));
 	
 	add(payOff);
-	payOff.addActionListener(new PageMaker(FloorPay.class));
+	payOff.addActionListener(new PageMaker(this, FloorPay.class));
 	
 	//pack();
 	setVisible(true);
