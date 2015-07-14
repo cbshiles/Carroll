@@ -4,7 +4,6 @@ import sourceone.csv.*;
 import sourceone.key.*;
 import sourceone.sql.*;
 import sourceone.fields.*;
-import static sourceone.key.Kind.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +65,7 @@ public class PayContracts extends FullnessPage {
 	public boolean fequal(float a, float b){
 	    return 0.01 > Math.abs(a-b);}
 
-	public Object[] editEntry(Object[] g, Object[] v){
+	public void editEntry(Object[] g, Object[] v){
 
 	    float tot_due = (float)v[tma];
 	    int pays_due = (int)v[pd];
@@ -102,10 +101,8 @@ public class PayContracts extends FullnessPage {
 	    try{
 		String cmda = "UPDATE Contracts SET Payments_Made="+((int)v[pm]+pays_due)+", "+paidOff+oPay+" Next_Due="+nDue+" WHERE ID="+di+';';
 		String cmdb = "INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+di+", '"+tday+"', "+tot_due+");";
-		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TEST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.err.println(cmda);
 		System.err.println(cmdb);
-		System.err.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~TEST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		SQLBot.bot.update(cmda);
 		SQLBot.bot.update(cmdb);
 
@@ -115,7 +112,6 @@ public class PayContracts extends FullnessPage {
 		System.err.println(x.getMessage());
 		x.printStackTrace();
 	    }
-	    return null;
 	}
     }
 }
