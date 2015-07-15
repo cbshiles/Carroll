@@ -8,7 +8,7 @@ public class TableMaker{
     static int drop(Key key)throws Exception{
 	return SQLBot.bot.update("DROP TABLE "+key.name+';');
     }
-
+    
     //A assumes all tables have an ID field (or rather assumes they want one)
     static int create(Key key)throws Exception{
 	String cmd = "CREATE TABLE "+key.name+" ( ID int NOT NULL AUTO_INCREMENT, ";

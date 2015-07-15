@@ -34,6 +34,23 @@ public class LoadTable{
 			      return new Object[] {0};
 			  }
 		      }));
+
+	//# Assumes we're adding these before anything else
+	add(new Model(Kedy.contractKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+		      new Enterer(){
+			  int i = 1;
+			  public Object[] editEntry(Object[] objs){
+			      return new Object[] {i++};
+			  }
+		      }));
+
+	add(new Model(Kedy.customerKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+		      new Enterer(){
+			  int i = 1;
+			  public Object[] editEntry(Object[] objs){
+			      return new Object[] {i++};
+			  }
+		      }));	
     }
 
     private static class Model{

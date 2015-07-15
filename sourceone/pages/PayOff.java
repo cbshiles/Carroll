@@ -42,8 +42,8 @@ public class PayOff extends Page {
 
 	    tableView.addTable();
 
-	    	jsp.setViewportView(jt = (JTable)g.go());
-		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    jsp.setViewportView(jt = (JTable)g.go());
+	    jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    jb.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -76,8 +76,8 @@ public class PayOff extends Page {
 /*	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	Key contKey = Key.contractKey.just(new String[] {
-		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount"});
+	"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
+	"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount"});
 */
 	public void figure(){
 	    float tep; //total expected to pay
@@ -216,23 +216,23 @@ public class PayOff extends Page {
 	    pane.add(jc, gbc);
 	}
 
-	    @Override
-    public void actionPerformed(ActionEvent ae) {
-		String cmd = ae.getActionCommand();
-		if (cmd.equals("back"))
-		    dispose();
-		else if (cmd.equals("pay")){
-		    try {
-			//System.err.println(
-			//Next_Due
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+	    String cmd = ae.getActionCommand();
+	    if (cmd.equals("back"))
+		dispose();
+	    else if (cmd.equals("pay")){
+		try {
+		    //System.err.println(
+		    //Next_Due
 		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
-		    } catch (Exception e){System.err.println("~!~"+e);}
-		}
-		else {System.err.println("Kentucky derby");
-		    System.exit(1);}
-    }
+		} catch (Exception e){System.err.println("~!~"+e);}
+	    }
+	    else {System.err.println("Kentucky derby");
+		System.exit(1);}
+	}
 
     }
 
