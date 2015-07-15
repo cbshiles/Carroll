@@ -55,7 +55,7 @@ public class Matrix{
 	addOut(v);
 	return v;
     }
-
+//# make it to where the ent has a key of its own, which replaces gnu
     public View addView(String[] remove, Cut[] gnu, Enterer ent){
 	int[] rem = key.except(remove);
 	View v = new View(key.except(rem).add(gnu), rem, ent);
