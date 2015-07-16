@@ -11,6 +11,7 @@ public class CustReport extends CSVOutput {
 	super (k, fileName, addon);
     }
 
+    //works by having last name as the first thing on the line
     public void endEntry(){
 	lzt.add(line);
 	line = "";

@@ -38,13 +38,14 @@ public class CarForm extends Form{
 				return new Object[] {0};
 			    }
 			});
-		    v.addOut(new SQLFormatter(new InsertDest(v.key, "Cars")));
+		    v.addOut(new SQLFormatter(new InsertDest(v.key, "Cars", true)));
 
 		    try {
-			g.go();
+			if ((int)g.go() == -1)
+			    throw new InputXcpt("SQL insertion unsuccessful");
 		    } catch (InputXcpt ix){
-			System.err.println("Error on submit:\n"+ix);
-		    }
+			new XcptDialog(CarForm.this, ix);
+		    } catch (Throwable e){System.err.println(e.getClass().getName());}
 		}
 	    });
 

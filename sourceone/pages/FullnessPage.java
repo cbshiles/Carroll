@@ -45,8 +45,6 @@ public abstract class FullnessPage extends Page{
 			 "Payments Due", "Total Amount Due"},
 	    new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT});
 	    
-	
-
 	jp.add(jsp, BorderLayout.NORTH);
     }
 
@@ -54,7 +52,6 @@ public abstract class FullnessPage extends Page{
 	setContentPane(jp);
 	setSize(1000, 600);
 	setVisible(true);
-
     }
 
     public static LocalDate next(LocalDate du, int freq, LocalDate st){

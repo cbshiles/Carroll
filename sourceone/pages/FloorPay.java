@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class FloorPay extends Page {
 
     public FloorPay(){
-	super("Discotech");
+	super("Floor Plan Payoffs");
 	setSize(600,600);
 
 	Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});
@@ -37,8 +37,6 @@ public class FloorPay extends Page {
 	{System.err.println(x); return;}
 	catch (InputXcpt e)
 	{System.err.println(e); return;}
-
-
 	
 	JPanel jp = new JPanel(new BorderLayout());
 	jp.add(new JScrollPane(jt), BorderLayout.NORTH);
@@ -74,7 +72,7 @@ public class FloorPay extends Page {
 	setVisible(true);
     }
 
-    private class Ent implements Enterer{
+    public static class Ent implements Enterer{
 
 	int db, ic, tl;
 	

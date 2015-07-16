@@ -10,6 +10,7 @@ import sourceone.sql.*;
 import sourceone.fields.*;
 import static sourceone.key.Kind.*;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 
 public class PayOff extends Page {
     JTable jt;
@@ -90,10 +91,12 @@ public class PayOff extends Page {
 	    String ret = "Balance: "+balance+'\n';
 
 	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
-	    long days = Period.between(sdO, endDate).getDays();
+	    System.err.println("End day: "+endDate+" payDate: "+payDate+" sdO: "+sdO);
+	    long days = ChronoUnit.DAYS.between(sdO, endDate);
+	    System.err.println("days var: "+days);
 	    float dailyInt =  (grsO-netO)/days;
-	    float discount = dailyInt * Period.between(payDate, endDate).getDays();
-
+	    float discount = dailyInt * ChronoUnit.DAYS.between(payDate, endDate);
+	    System.err.println(dailyInt+" * "+ChronoUnit.DAYS.between(payDate, endDate));
 	    ret += "Discount: "+discount+'\n';
 
 	    ret += "Fees: "+fees+'\n';

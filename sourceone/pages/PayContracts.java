@@ -35,7 +35,7 @@ public class PayContracts extends FullnessPage {
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
 		    } catch (Exception x)
 		    {System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
-			System.err.println(x.getMessage());}
+			x.printStackTrace();}
 		}});
 
 	wrap();
@@ -53,8 +53,8 @@ public class PayContracts extends FullnessPage {
 	    id = gk.dex("ID");
 	    fpa = gk.dex("Final Payment Amount");
 	    aop = gk.dex("Amount of Payment");
+	    nd = gk.dex("Next Due");
 
-	    nd = vk.dex("Next Due");
 	    pm = vk.dex("Payments Made");
 	    pd = vk.dex("Payments Due");
 	    tma = vk.dex("Total Amount Due");
@@ -73,7 +73,7 @@ public class PayContracts extends FullnessPage {
 
 	    float fin_amt = (float)g[fpa];
 
-	    LocalDate next_due = (LocalDate)v[nd];
+	    LocalDate next_due = (LocalDate)g[nd];
 	    LocalDate start_day = (LocalDate)v[sd];
 
 	    boolean finul = fequal(tot_due, (float)v[rb]);
