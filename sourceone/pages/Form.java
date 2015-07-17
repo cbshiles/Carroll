@@ -31,6 +31,10 @@ public class Form extends Page implements StringSource{ //Page for inputting inf
 	    f.clear();
     }
 
+    public String getName(){
+	return fields.get(i-1).name;
+    }
+
     public String get() throws InputXcpt{
 	if (i >= fields.size())
 	    throw new InputXcpt("Not enough fields");

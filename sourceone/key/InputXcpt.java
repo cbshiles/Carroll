@@ -8,7 +8,7 @@ public class InputXcpt extends Exception {
     }
     
     public InputXcpt(String k, String msg){
-	this("Input Error for "+k+"\n"+msg);
+	this("Input Error for '"+k+"\'\n"+msg);
     }
 
     public InputXcpt(Exception e){

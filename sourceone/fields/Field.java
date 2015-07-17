@@ -9,7 +9,7 @@ import javax.swing.border.*;
 
 public abstract class Field {
 
-    String name;
+    public String name;
     JPanel jp;
     
     public Field (String n, JPanel j)

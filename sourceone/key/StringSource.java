@@ -5,4 +5,5 @@ public interface StringSource {
 
     String get() throws InputXcpt;
 
+    String getName();
 }

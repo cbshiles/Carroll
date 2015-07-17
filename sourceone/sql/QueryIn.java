@@ -14,6 +14,15 @@ public class QueryIn implements Input{
 	rs = SQLBot.bot.query(q);
     }
 
+    public QueryIn(Key k, String rest) throws SQLException{
+	if (k.name == null)
+	    throw new SQLException("Table keys must be named");
+
+	String cmd = "SELECT "+k.sqlNames()+" FROM "+k.name+" "+rest;
+	System.out.println(cmd);
+	rs = SQLBot.bot.query(cmd);	
+    }
+    
     public QueryIn(Key a, Key b, String rest) throws SQLException{
 	if (a.name == null || b.name == null)
 	    throw new SQLException("Table keys must be named for a join");

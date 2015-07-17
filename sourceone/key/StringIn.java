@@ -36,7 +36,7 @@ public class StringIn implements Input {
     public static int parseInt(String str) throws InputXcpt{
 	try {return Integer.parseInt(str);}
 	catch (NumberFormatException e) 
-	{throw new InputXcpt(str, e.getMessage()+"\nCouldn't parse as int");}
+	{throw new InputXcpt(e.getMessage()+"\nCouldn't parse as int");}
     }
     
     /**
@@ -51,7 +51,7 @@ public class StringIn implements Input {
     public static float parseFloat(String str) throws InputXcpt{
 	try {return Float.parseFloat(str);}
 	catch (NumberFormatException e)
-	{throw new InputXcpt(str, e.getMessage()+"\nCouldn't parse as float");}
+	{throw new InputXcpt(e.getMessage()+"\nCouldn't parse as float");}
     }
 
     /**

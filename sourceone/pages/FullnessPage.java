@@ -9,18 +9,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 
-public abstract class FullnessPage extends Page{
+public abstract class FullnessPage extends TablePage{
     boolean full;
     String sel;
 
     Key k, viewKey;
     LocalDate reportDate, prd;
     
-    JPanel jp = new JPanel(new BorderLayout());
-    JScrollPane jsp = new JScrollPane();
-    Grid g;
-    JTable jt;
-
     public FullnessPage(String title){
 	super(title);
 	new FullnessDialog();
@@ -44,12 +39,9 @@ public abstract class FullnessPage extends Page{
 	    new String[]{"Customer Name", "Terms", "Payments Made", "Start Date", "Due Date", "Remaining Balance",
 			 "Payments Due", "Total Amount Due"},
 	    new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT});
-	    
-	jp.add(jsp, BorderLayout.NORTH);
     }
 
     protected void wrap(){
-	setContentPane(jp);
 	setSize(1000, 600);
 	setVisible(true);
     }
@@ -72,9 +64,7 @@ public abstract class FullnessPage extends Page{
     protected void getTable(LocalDate d) {
 	reportDate = d;
 	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
-	g.view.addTable();
-	try{ jsp.setViewportView(jt = (JTable)g.push()); }
-	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	pushTable();
     }
 
     private class FullnessDialog extends JDialog implements ActionListener{

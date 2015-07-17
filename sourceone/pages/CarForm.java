@@ -44,7 +44,7 @@ public class CarForm extends Form{
 			    throw new InputXcpt("SQL insertion unsuccessful");
 			freshen();
 		    } catch (InputXcpt ix){
-			new XcptDialog(CarForm.this, ix);
+			new XcptDialog(getName(), CarForm.this, ix);
 		    } 
 		}
 	    });

@@ -29,6 +29,11 @@ public class Key{
 	fillMap();
     }
 
+    public Key(String n, String[] names, Kind[] types){
+	this(names, types);
+	name = n;
+    }
+
     public Key(String n, Cut[] c){
 	this(c);
 	name = n;

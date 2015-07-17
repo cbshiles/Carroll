@@ -1,7 +1,7 @@
 package sourceone.pages;
 
 import sourceone.Driver;
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.event.*;
 import java.awt.Color;
 
@@ -21,5 +21,11 @@ public class Page extends JFrame {
 	    });
 
 	getContentPane().setBackground(bkgd);
+    }
+
+    protected <T extends Page> void addRed(String n, Class<T> t){
+	JButton jb = new JButton(n);
+	add(jb);
+	jb.addActionListener(new PageMaker(this, t));
     }
 }

@@ -73,7 +73,7 @@ Called total contract here due to compatibility issues
 			    throw new InputXcpt("SQL insertion unsuccessful");
 			freshen();
 		    } catch (InputXcpt ix) {
-			new XcptDialog(ContractForm.this, ix);
+			new XcptDialog(getName(), ContractForm.this, ix);
 		    }}});
 
 	add(submit);
