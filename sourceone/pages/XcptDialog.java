@@ -4,7 +4,6 @@ import sourceone.pages.*;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 
 public class XcptDialog extends JDialog implements ActionListener{
