@@ -26,6 +26,11 @@ public class Form extends Page implements StringSource{ //Page for inputting inf
 	return ans; 
     }
 
+    public void freshen(){
+	for (Field f : fields)
+	    f.clear();
+    }
+
     public String get() throws InputXcpt{
 	if (i >= fields.size())
 	    throw new InputXcpt("Not enough fields");

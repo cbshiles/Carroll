@@ -44,6 +44,7 @@ public class Matrix{
 	    return out.close();
 
 	} else { //to a view
+	    view.freshen();
 	    for (Object[] objs : data)
 		view.receiveEntry(objs);
 	    return view.push();

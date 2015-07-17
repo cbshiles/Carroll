@@ -18,6 +18,8 @@ public class TextField extends Field{
 	this(n);
 	tf.setText(init);
     }
+
+    public void clear(){tf.setText("");}
     
     public String text()
     {return tf.getText();}

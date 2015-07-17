@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import sourceone.key.InputXcpt;
+import java.util.Enumeration;
 
 public class RadioField extends Field implements ActionListener{
 
@@ -22,6 +23,11 @@ public class RadioField extends Field implements ActionListener{
 	addButtons(front, back);
     }
 
+    public void clear(){
+	rtVal = "";
+	group.clearSelection();
+    }
+    
     public void init(){
 //	jp.setLayout(new GridLayout(0, 4));//new FlowLayout(FlowLayout.CENTER));
 	JLabel jl = newLabel(name);
@@ -45,7 +51,7 @@ public class RadioField extends Field implements ActionListener{
     public void addButton(String f, String b){
 	JRadioButton jrb = new JRadioButton(f);
 	jrb.setActionCommand(b);
-	//jrb.setSelected(true);
+
 	group.add(jrb);
 	jrb.addActionListener(this);
 	jp.add(jrb);

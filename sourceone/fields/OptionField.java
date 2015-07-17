@@ -7,13 +7,13 @@ public class OptionField extends Field{
 
     JTextField tf = newText();
     JCheckBox cb;
-    boolean textOn;
+    boolean init, textOn;
     String empty;
     
     public OptionField (String n, String e, boolean to) {
 	super(n);
 	empty = e;
-	textOn = to;
+	init = textOn = to;
 
 	jp.setLayout(new GridLayout(0, 2));
 	
@@ -23,14 +23,23 @@ public class OptionField extends Field{
 	
 	cb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
-		    tf.setEnabled(textOn = cb.isSelected());
-		    tf.setText("");
+		    zub(textOn = cb.isSelected());
 		}
 	    });
 
 	tf.setEnabled(to);	
 	jp.add(tf);
 	
+    }
+
+    public void clear(){
+	cb.setSelected(init);
+	zub(init);
+    }
+
+    private void zub(boolean z){
+	tf.setEnabled(z);
+	tf.setText("");
     }
 
     public String text()

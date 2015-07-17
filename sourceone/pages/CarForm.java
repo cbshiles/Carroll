@@ -25,27 +25,27 @@ public class CarForm extends Form{
 	addF(new TextField("Vehicle"));
 	addF(new TextField("Cost"));
 
+	Key key = Key.floorKey.accept(new String[]{"ID", "Title", "Date Paid"});
+	Grid g = new Grid(key, new StringIn(CarForm.this));
+	View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
+		public Object[] editEntry(Object[] objs){
+		    return new Object[] {0};
+		}
+	    });
+	v.addOut(new SQLFormatter(new InsertDest(v.key, "Cars", true)));
+	
 	JButton submit = new JButton("Submit");
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    CarForm.this.refresh();
-		    Key key = Key.floorKey.accept(new String[]{"ID", "Title", "Date Paid"});
-
-		    Grid g = new Grid(key, new StringIn(CarForm.this));
-
-		    View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
-			    public Object[] editEntry(Object[] objs){
-				return new Object[] {0};
-			    }
-			});
-		    v.addOut(new SQLFormatter(new InsertDest(v.key, "Cars", true)));
 
 		    try {
 			if ((int)g.go() == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
+			freshen();
 		    } catch (InputXcpt ix){
 			new XcptDialog(CarForm.this, ix);
-		    } catch (Throwable e){System.err.println(e.getClass().getName());}
+		    } 
 		}
 	    });
 

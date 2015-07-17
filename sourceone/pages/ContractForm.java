@@ -24,24 +24,25 @@ public class ContractForm extends Form {
 	addF(new TextField("Address"));
 	addF(new TextField("Phone Number"));
 
+	addF(new TextField("Start Date"));
+
 	addF(new TextField("Number of Payments"));
 	addF(new TextField("Amount"));
-	addF(new OptionField("Final Payment", "0", true));
-	
 	addF(new RadioField("Payment Frequency",
 			    new String[]{"Weekly", "Biweekly", "Monthly"},
 			    new String[]{"7", "14", "30"}));
+	addF(new OptionField("Final Payment", "0", true));
 
-	addF(new OptionField("Total Contract", "0", true));
-
-	addF(new TextField("Start Date"));
-
+	addF(new TextField("Total Amount"));
+	addF(new TextField("Reserve"));
+	addF(new TextField("Net Amount"));
+	
 	addF(new TextField("Vehicle"));
 	addF(new TextField("VIN"));
 
-	addF(new TextField("Reserve"));
-	addF(new TextField("Gross Amount"));
-	addF(new TextField("Net Amount"));
+	addF(new RadioField("Contract Type",
+			    new String[]{"Full", "Partial"},
+			    new String[]{"0", "1"}));
 
 	JButton submit = new JButton("Submit");
 
@@ -50,22 +51,27 @@ public class ContractForm extends Form {
 	custGrid.addView(null, null, null);
 	custGrid.view.addOut(new SQLFormatter(new InsertDest(custGrid.view.key, "Customers", true)));
 
-	
-	Key contKey = Key.contractKey.accept(new String[]{"ID",  "Next Due", "Paid Off", "Other Payments", "Customer ID", "Payments Made"});
+	/*
+Called Total Contract here, this is actually TEP, or total expected pay.
+Called total contract here due to compatibility issues
+	 */
+	Key contKey = Key.contractKey.just(new String[]{"Start Date", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Total Contract", "Reserve", "Net Amount", "Vehicle", "VIN"}).add(new Cut[]{new IntCut("Fullness")});
+
 	Ent ent = new Ent(contKey);
 	Grid contGrid = new Grid(contKey, new StringIn(this));
-	contGrid.addView(null, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID")},
+	contGrid.addView(new String[]{"Total Contract", "Fullness"}, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID"), new FloatCut("Gross Amount"), new FloatCut("Total Contract")},
 			 ent);
+	
 	contGrid.view.addOut(new SQLFormatter(new InsertDest(contGrid.view.key, "Contracts", true)));
 
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    try {
 			ContractForm.this.refresh();
-			ent.set_id((int)custGrid.go());
+			ent.set_id((int)custGrid.go()); //# causes crap entries into the customers table
 			if ((int)contGrid.go() == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
-
+			freshen();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(ContractForm.this, ix);
 		    }}});
@@ -75,12 +81,10 @@ public class ContractForm extends Form {
 	setVisible(true);
     }
 
-
     private class Ent implements Enterer{
-	
-	int sd, aop, nop, fpa, tc, grs;
-	int cust_id, vin;
-	//"Reserve", "Gross Amount", "Net Amount",
+
+	int sd, aop, nop, fpa, tc;
+	int cust_id, vin, fll, res;
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -88,20 +92,26 @@ public class ContractForm extends Form {
 	    nop = k.dex("Number of Payments");
 	    fpa = k.dex("Final Payment Amount");
 	    tc = k.dex("Total Contract");
-	    grs = k.dex("Gross Amount");
+	    fll = k.dex("Fullness");
 	    vin = k.dex("VIN");
+	    res = k.dex("Reserve");
 	}
 
 	public void set_id(int i){cust_id=i;}
     
 	public Object[] editEntry(Object[] o)throws InputXcpt{
 
-	    float tep; //total expected to pay
-	    float tcO = (float)o[tc];
-	    if (tcO < .001)
-		tep = (float)o[grs];
-	    else
-		tep = tcO;
+	    float tep = (float)o[tc]; //total expected to pay
+
+	    float tc, grs;
+
+	    if ((int)o[fll] == 0) {//full
+		tc = tep;
+		grs = tep - (float)o[res];
+	    } else { //# dont let these have a reserve
+		tc = 0f;
+		grs = tep;
+	    }
 	    
 	    float  sum;
 	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
@@ -122,7 +132,9 @@ public class ContractForm extends Form {
 	    return new Object[]{
 		o[sd], //Next Due
 		0f, //Other payments
-		cust_id
+		cust_id,
+		grs,
+		tc
 	    };
 	}
     }

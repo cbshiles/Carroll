@@ -39,4 +39,6 @@ public abstract class Field {
 //	tf.setBorder(BorderFactory.createMatteBorder(15, 5, 15, 5, Page.bkgd));
 	return tf;
     }
+
+    public abstract void clear();
 }

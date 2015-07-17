@@ -1,5 +1,6 @@
 package sourceone.key;
 
+import java.util.ArrayList;
 //Any new cuts are to be added to the key before the reach a view constructor
 //This feature is in Matrix's makeView
 
@@ -29,6 +30,8 @@ public class View extends Matrix{
 	    f += (float)larr[i];
 	return f;
     }
+
+    public void freshen(){data = new ArrayList<Object[]>();}
 
     public void receiveEntry(Object[] objs) throws InputXcpt{
 	

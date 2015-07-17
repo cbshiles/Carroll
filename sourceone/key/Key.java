@@ -42,7 +42,6 @@ public class Key{
     }
 
     public void putEntry(Object[] arr){
-	System.err.println(arr.length+" - "+cuts.length);
 	for (int i=0; i<cuts.length; i++)
 	    cuts[i].out(arr[i]);
     }
@@ -135,6 +134,10 @@ public class Key{
 	return i;
     }
 
+    public Key add(Key ok){
+	return add(ok.cuts);
+    }
+    
     public Key add(Cut[] gnu){
 	if (gnu == null) return new Key(cuts);
 	else {
