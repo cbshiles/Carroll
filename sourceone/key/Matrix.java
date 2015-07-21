@@ -67,4 +67,22 @@ public class Matrix{
     public void addTable(){//throws InputXcpt{
 	addOut(new BasicFormatter(new TableDest(key)));
     }
+
+    public String toString(){
+	String str = key.names()+'\n';
+	for (Object[] arr : data)
+	    str += games(arr)+'\n';
+	return str;
+    }
+
+    private String games(Object[] o){
+	String keys = "";
+	boolean first = true;
+	for (Object oo : o){
+	    if (! first) keys += ", ";
+	    else first = false;
+	    keys += oo;
+	}
+	return keys;
+    }
 }

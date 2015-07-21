@@ -23,10 +23,12 @@ public class BasicFormatter extends Formatter {
 
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
 
-    public static String cinvert(LocalDate x){
+    public static String cinvert(LocalDate x){ //# make private
 	if (x == null) return "N/A";
 	else return x.format(dtf);
     }
+
+    public static String today(){return cinvert(LocalDate.now());}
     
     public String convert(LocalDate x){
 	if (x == null) return "N/A";

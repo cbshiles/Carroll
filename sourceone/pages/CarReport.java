@@ -2,6 +2,7 @@ package sourceone.pages;
 
 import sourceone.key.*;
 import sourceone.sql.*;
+import sourceone.csv.*;
 import static sourceone.key.Kind.*;
 
 import java.time.*;
@@ -22,19 +23,28 @@ public class CarReport extends TablePage{
 	    g.pull();
 	    Key entKey = new Key("Cars",
 				 new String[]{"Date Bought", "VIN", "Vehicle", "Daily Rate", "Title", "Item Cost", "Days active", "Accrued Interest", "Fees", "Subtotal"},
-				 new Kind[]{DATE, INT, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
+				 new Kind[]{DATE, STRING, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
 	    g.clearView(entKey.cuts, new Ent(inKey));
 	    pushTable();
-	} catch (Exception e){System.err.println("***"+e); return;}
+	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); return;}
 
+	JPanel cPan = new JPanel();
+	
 	JButton jb = new JButton("Print Report");
-
-	JButton bb = new JButton("Back");
-	bb.addActionListener(new ActionListener(){
+	jb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae) {
-		    dispose();
+		    try {
+			g.view.addOut(new CSVOutput(g.view.key, SQLBot.bot.path+"Car_Report_"+LocalDate.now()+".csv"));
+			g.view.push();
+			kill();
+		    } catch (Exception e){
+			new XcptDialog(CarReport.this, e);
+			e.printStackTrace();
+		    }
 		}});
 
+	cPan.add(jb);
+	jp.add(cPan);
 	
 	setSize(1000, 600);
 	setVisible(true);
@@ -52,7 +62,7 @@ public class CarReport extends TablePage{
 	    veh = k.dex("Vehicle");
 	    ic = k.dex("Item Cost");
 	    ttl = k.dex("Title");
-	    System.err.println(db+" "+ vin+" "+ veh+" "+ ic+" "+ ttl);
+//	    System.err.println(db+" "+ vin+" "+ veh+" "+ ic+" "+ ttl);
 	}
 
 	public Object[] editEntry(Object[] o){

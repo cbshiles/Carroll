@@ -23,9 +23,13 @@ public class Page extends JFrame {
 	getContentPane().setBackground(bkgd);
     }
 
-    protected <T extends Page> void addRed(String n, Class<T> t){
+    protected <T extends Page> void addRed(String n, Class<T> t){ //add a redirect, for menus
 	JButton jb = new JButton(n);
 	add(jb);
 	jb.addActionListener(new PageMaker(this, t));
+    }
+
+    protected void kill(){
+	dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 }

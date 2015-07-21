@@ -12,6 +12,7 @@ public class SQLBot {
     public static SQLBot bot;
     Connection conn;
     Statement stmt;
+    public String path;
     
     public SQLBot(String pFile) throws Exception{
 
@@ -21,6 +22,7 @@ public class SQLBot {
 	String password = props.getProperty("password", "");
 	String host = props.getProperty("hostname", "localhost");
 	String db = props.getProperty("database");
+	path = props.getProperty("csvPath", "");
 	
 	String url = "jdbc:mysql://"+host+"/"+db;
 	Class.forName ("com.mysql.jdbc.Driver").newInstance();

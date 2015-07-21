@@ -144,7 +144,7 @@ Called total contract here due to compatibility issues
 	    Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});
 	    JTable jt;
 	    Grid g;
-	    JPanel jp = new JPanel();
+	    JPanel jp = new JPanel(new BorderLayout());
 	    try {
 		Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE ID="+id+';');
 		g = new Grid(key, in);
@@ -164,7 +164,7 @@ Called total contract here due to compatibility issues
 	    jp.add(cPan, BorderLayout.SOUTH);
 	    
 	    JButton jb = new JButton("Pay Car Off");
-	    cPan.add(jb);//, BorderLayout.SOUTH);
+	    cPan.add(jb, BorderLayout.SOUTH);
 	    jb.addActionListener(new ActionListener(){
 		    public void actionPerformed(ActionEvent e){
 			int tl = key.dex("Title");
@@ -172,9 +172,10 @@ Called total contract here due to compatibility issues
 			try {
 			    LocalDate d = LocalDate.now(); //# Should this be today?
 			    
-			    Object[] o = g.data.get(0);
+			    Object[] o = g.data.get(0); //# dangerouts
 			    
 			    SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"' WHERE ID="+o[id]);
+			    dispose();
 			} catch (Exception ix) {new XcptDialog(FloorPayDialog.this, ix);}
 		    }
 		});
@@ -188,7 +189,7 @@ Called total contract here due to compatibility issues
 		});
 		  
 	    setContentPane(jp);
-	    setBounds(500,500,600,420);
+	    setBounds(300,300,1000,600);
 	    setVisible(true);
 	}
     }

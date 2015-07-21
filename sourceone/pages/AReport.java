@@ -54,8 +54,7 @@ public class AReport extends FullnessPage{
 			    
 			Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
 			pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
-			pView.addOut(new CustReport(pKey, "AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
-			pView.push();
+			pView.addOut(new CustReport(pKey, SQLBot.bot.path+"AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
 
 			boolean doit = true;
 			if (prd != null){
@@ -63,8 +62,10 @@ public class AReport extends FullnessPage{
 			    doit = pop.confirmed();
 			}
 
-			if (doit)
+			if (doit){
+			    pView.push();
 			    SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
+			}
 
 		    }catch (Exception x)
 		    {x.printStackTrace(); 

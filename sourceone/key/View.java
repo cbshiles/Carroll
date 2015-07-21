@@ -34,7 +34,7 @@ public class View extends Matrix{
     public void freshen(){data = new ArrayList<Object[]>();}
 
     public void receiveEntry(Object[] objs) throws InputXcpt{
-	
+
 	Object[] arr = new Object[key.length];
 
 	int n;
@@ -50,6 +50,7 @@ public class View extends Matrix{
 
 	if (ent != null){
 	    Object[] gnu = ent.editEntry(objs);
+	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
 	
 	assert arr.length == key.length : "Row isn't fitting into view";

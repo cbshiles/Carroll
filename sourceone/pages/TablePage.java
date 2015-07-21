@@ -23,11 +23,9 @@ public class TablePage extends Page {
     }
 
     public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
-		    System.out.println("Theres an arror around hree...0");
-
 	g.view.addTable();
-		    System.out.println("Theres an arror around hree...1");
 	try{ jsp.setViewportView(jt = (JTable)g.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	catch (Exception e){e.printStackTrace();}
     }
 }
