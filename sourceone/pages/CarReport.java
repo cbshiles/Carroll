@@ -16,7 +16,7 @@ public class CarReport extends TablePage{
 	super("Create Car Report");
 
 	Key inKey = Key.floorKey.accept(new String[]{"ID", "Date Paid"}); //# make an overloaded version for scalars
-	System.err.println(inKey.names());
+
 	try {
 	    Input in = new QueryIn(inKey, "WHERE Title<2;");
 	    g = new Grid(inKey, in);
@@ -26,6 +26,7 @@ public class CarReport extends TablePage{
 				 new Kind[]{DATE, STRING, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
 	    g.clearView(entKey.cuts, new Ent(inKey));
 	    pushTable();
+	    jt.setRowSelectionAllowed(false);
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); return;}
 
 	JPanel cPan = new JPanel();
@@ -52,7 +53,6 @@ public class CarReport extends TablePage{
 
     private class Ent implements Enterer{
 	Key k;
-
 	int db, vin, veh, ic, ttl;
 
 	public Ent(Key kk){

@@ -79,12 +79,12 @@ public class PayOff extends TablePage {
 	    String ret = "Balance: "+balance+'\n';
 
 	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
-	    System.err.println("End day: "+endDate+" payDate: "+payDate+" sdO: "+sdO);
+	    //System.err.println("End day: "+endDate+" payDate: "+payDate+" sdO: "+sdO);
 	    long days = ChronoUnit.DAYS.between(sdO, endDate);
-	    System.err.println("days var: "+days);
+	    //System.err.println("days var: "+days);
 	    float dailyInt =  (grsO-netO)/days;
 	    float discount = dailyInt * ChronoUnit.DAYS.between(payDate, endDate);
-	    System.err.println(dailyInt+" * "+ChronoUnit.DAYS.between(payDate, endDate));
+	    //System.err.println(dailyInt+" * "+ChronoUnit.DAYS.between(payDate, endDate));
 	    ret += "Discount: "+discount+'\n';
 
 	    ret += "Fees: "+fees+'\n';
