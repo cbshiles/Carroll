@@ -17,6 +17,9 @@ public class LoadTable{
 	String mod = args[0];
 	String fpath = args[1];
 	Model m = map.get(mod);
+
+	if (m == null) throw new InputXcpt("Key name not found");
+	
 	Grid g = new Grid(m.ik, new StringIn(new CSVInput(fpath)));
 	View v = g.addView(m.remove, m.gnu, m.ent);
 	v.addOut(new SQLFormatter(new InsertDest(v.key, mod)));
@@ -35,8 +38,8 @@ public class LoadTable{
 			  }
 		      }));
 
-	//# Assumes we're adding these before anything else
-	add(new Model(Kedy.contractKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+	//# Assumes we're adding these before anything else (because of customer id names)
+	add(new Model(Key.contractKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
 		      new Enterer(){
 			  int i = 1;
 			  public Object[] editEntry(Object[] objs){
@@ -44,7 +47,7 @@ public class LoadTable{
 			  }
 		      }));
 
-	add(new Model(Kedy.customerKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+	add(new Model(Key.customerKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
 		      new Enterer(){
 			  int i = 1;
 			  public Object[] editEntry(Object[] objs){

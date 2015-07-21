@@ -10,31 +10,45 @@ import java.awt.event.*;
 import java.time.*;
 
 public abstract class FullnessPage extends TablePage{
-    boolean full;
+    boolean full, ded=false;
     String sel;
 
-    Key k, viewKey;
+    Key k, viewKey, custKey, contKey;
     LocalDate reportDate, prd;
-    
+
+    public void reload() throws InputXcpt{
+	String z = full?">":"<";
+	Input in;
+	try {
+	in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
+	} catch (Exception e) {throw new InputXcpt(e);}
+	k  = custKey.add(contKey.cuts);
+	g = new Grid(k, in);
+	g.pull();
+    }
+
+    //# ant implementation must take care of ded possibilities
     public FullnessPage(String title){
 	super(title);
 	new FullnessDialog();
-			
-	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
+
+	if (ded)  {return;}
 	
-	Key contKey = Key.contractKey.just(new String[] {
+	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
+	
+	contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
 		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
 	sel = full?"Full":"Partial";
-	String z = full?">":"<";
+
+	reportDate = LocalDate.now();
 	try{
+	    //# need to reload table??? (theres will be peeps w/o dues)
 	    prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
-	    k  = custKey.add(contKey.cuts);
-	    g = new Grid(k, in);
-	    g.pull();
+	    reload();
 	}catch(Exception e){System.err.println("@#: "+e); return;}
+	
 	viewKey = new Key(
 	    new String[]{"Customer Name", "Terms", "Payments Made", "Start Date", "Due Date", "Remaining Balance",
 			 "Payments Due", "Total Amount Due"},
@@ -61,8 +75,7 @@ public abstract class FullnessPage extends TablePage{
 	return due;
     }
 
-    protected void getTable(LocalDate d) {
-	reportDate = d;
+    protected void getTable() {
 	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
 	pushTable();
     }
@@ -78,11 +91,15 @@ public abstract class FullnessPage extends TablePage{
 	    bb.setActionCommand("partial");
 	    bb.addActionListener(this);
 
+	    JButton cb = new JButton("Cancel");
+	    cb.setActionCommand("exit");
+	    cb.addActionListener(this);
+
 	    Container c = getContentPane();
 	    JPanel jp = new JPanel();
 	    c.add(jp);
 
-	    jp.add(ab); jp.add(bb);
+	    jp.add(ab); jp.add(bb); jp.add(cb);
 
 	    setBounds(500,500,500,150);
 
@@ -92,6 +109,7 @@ public abstract class FullnessPage extends TablePage{
         @Override
 	public void actionPerformed(ActionEvent ae) {
 	    String cmd = ae.getActionCommand();
+	    if (cmd.equals("exit")) {ded = true;}
 	    full = cmd.equals("full");
 	    dispose();
 	}

@@ -15,14 +15,23 @@ import java.time.*;
 public class AReport extends FullnessPage{
 
     JButton jb;
+
+    @Override
+    public void getTable(){
+	super.getTable();
+	jt.setRowSelectionAllowed(false);
+    }
     
     public AReport(){
 	super("Create AR Report");
 
-	LocalDate today = LocalDate.now();
-	getTable(today);
+	if (ded) return;
+
+	reportDate = LocalDate.now();
+	getTable();
+
 	sourceone.fields.TextField payDay;
-	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(today));
+	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(reportDate));
 
 	JPanel cPan = new JPanel();
 	cPan.add(payDay.getJP());
@@ -38,9 +47,11 @@ public class AReport extends FullnessPage{
 
 		public void warn() {
 		    try {
-			LocalDate d = StringIn.parseDate(payDay.text());
-			getTable(d);
+			reportDate = StringIn.parseDate(payDay.text());
+			reload();
+			getTable();
 		    } catch (InputXcpt ix) {;/*System.err.println("HGXB");*/}
+		    catch (Exception e) {new XcptDialog(AReport.this, e);}
 		}});
 
 	jb.addActionListener(new ActionListener() {
@@ -54,7 +65,7 @@ public class AReport extends FullnessPage{
 			    
 			Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
 			pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
-			pView.addOut(new CustReport(pKey, SQLBot.bot.path+"AR_Report_"+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
+			pView.addOut(new CustReport(pKey, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
 
 			boolean doit = true;
 			if (prd != null){
@@ -66,7 +77,7 @@ public class AReport extends FullnessPage{
 			    pView.push();
 			    SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
 			}
-
+			kill();
 		    }catch (Exception x)
 		    {x.printStackTrace(); 
 			System.err.println("~?~ "+x);}

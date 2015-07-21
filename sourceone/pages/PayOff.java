@@ -12,11 +12,8 @@ import static sourceone.key.Kind.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-public class PayOff extends Page {
-    JTable jt;
-    JPanel jp = new JPanel(new BorderLayout());
+public class PayOff extends TablePage {
     JButton jb;
-    JScrollPane jsp = new JScrollPane();
 
     public PayOff(){
 	super("Pay Off Contract");
@@ -34,16 +31,13 @@ public class PayOff extends Page {
 
 	    Key inKey = custKey.add(contKey.cuts);
 		    
-	    Grid g = new Grid(inKey, in);
+	    g = new Grid(inKey, in); g.pull();
 	    Key tableKey = new Key(
 		new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance"},
 		new Kind[]{STRING, DATE, STRING, INT, FLOAT});
 
-	    View tableView = g.clearView(tableKey.cuts, new Ent(inKey));
-
-	    tableView.addTable();
-
-	    jsp.setViewportView(jt = (JTable)g.go());
+	    g.clearView(tableKey.cuts, new Ent(inKey));
+	    pushTable();
 	    jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    jb.addActionListener(new ActionListener() {
@@ -54,15 +48,10 @@ public class PayOff extends Page {
 			}
 		    }
 		});
-		    
-		    
 	} catch (Exception ix) {
 	    new XcptDialog(PayOff.this, ix);
 	}
 
-	jp.add(jsp, BorderLayout.NORTH);	
-
-	setContentPane(jp);
 	setVisible(true);
     }
 

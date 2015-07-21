@@ -126,7 +126,7 @@ Called total contract here due to compatibility issues
 		    System.out.println("It made it!!");
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
-		    new FloorPayDialog(id);
+		    new FloorPayDialog(id, (LocalDate)o[sd]);
 		}} catch (SQLException e){throw new InputXcpt(e);}
 
 	    return new Object[]{
@@ -140,7 +140,7 @@ Called total contract here due to compatibility issues
     }
 
     public class FloorPayDialog extends JDialog{
-	public FloorPayDialog(int id){
+	public FloorPayDialog(int id, LocalDate date){
 	    Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});
 	    JTable jt;
 	    Grid g;
@@ -151,7 +151,7 @@ Called total contract here due to compatibility issues
 
 		View v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 								    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
-		    new FloorPay.Ent(key));
+		    new FloorPay.Ent(key, date));
 		v.addTable();
 
 		jt = (JTable)g.go();
@@ -170,7 +170,7 @@ Called total contract here due to compatibility issues
 			int tl = key.dex("Title");
 			int id = key.dex("ID");
 			try {
-			    LocalDate d = LocalDate.now(); //# Should this be today?
+			    LocalDate d = date; 
 			    
 			    Object[] o = g.data.get(0); //# dangerouts
 			    

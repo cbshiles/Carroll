@@ -41,6 +41,7 @@ public class TitlePage extends Page {
 				System.out.println("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 			    }
+			    kill();
 			} 	catch (java.sql.SQLException x)
 			{System.err.println(x);}
 		    }});

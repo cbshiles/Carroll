@@ -17,8 +17,12 @@ public class PayContracts extends FullnessPage {
     public PayContracts() throws InputXcpt{
 	super("Pay Contracts");
 
+	if (ded) return;
+
 	if (prd == null) throw new InputXcpt("No record of any unpaid reports");
-	getTable(prd);
+	reportDate = prd;
+	reload(); //# this is a redo(from fullness constructor), figure out a better way
+	getTable();
 	    
 	jt.setRowSelectionAllowed(false);
 	    
@@ -33,6 +37,7 @@ public class PayContracts extends FullnessPage {
 			Click ec = new Click(g.key, g.view.key);
 			for (int i=0; i<jt.getRowCount(); i++)
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
+			kill();
 		    } catch (Exception x)
 		    {System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
 			x.printStackTrace();}

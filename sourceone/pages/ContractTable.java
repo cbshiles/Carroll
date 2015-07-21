@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
+//# Deprecated: integrate, revamp, or deleter
+
 public class ContractTable extends Page {
 
     JTable jt;

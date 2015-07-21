@@ -5,12 +5,12 @@ public class HomePage extends Page {
 
     public HomePage(){
 	super("Home Page");
-	setSize(400, 600);
+	setBounds(550, 300, 400, 300);
 	setLayout(new GridLayout(0, 1));
 
 	addRed("Floor Plan", FloorMenu.class);
 	addRed("Contracts", ContractMenu.class);
-	pack();
+//	pack();
 	setVisible(true);
     }
 }
