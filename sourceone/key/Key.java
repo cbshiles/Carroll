@@ -160,6 +160,10 @@ public class Key{
 	return r;
     }
 
+    public Key just(String name){
+	return just(new String[]{name});
+    }
+
     public Key just(String[] names){
 	return just(populate(names));
     }
@@ -205,6 +209,26 @@ public class Key{
 						      new IntCut("Payments Made"),
 						      new IntCut("Customer ID", "NOT NULL")
 						  });
+
+    /*just (						      "ID",
+						      "Number of Payments",
+						      "Amount of Payment",
+						      "Final Payment Amount",
+						      "Payment Frequency",
+						      "Total Contract", 
+						      "Start Date", 
+						      "Vehicle",
+						      "VIN",
+
+						      "Reserve",
+						      "Gross Amount",
+						      "Net Amount",
+						      "Other Payments",
+						      "Next Due",
+						      "Paid Off",
+						      "Payments Made",
+						      "Customer ID",
+    */
 
     public static final Key floorKey =  new Key("Cars",
 						  new Cut[]{

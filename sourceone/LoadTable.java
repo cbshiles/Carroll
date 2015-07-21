@@ -38,8 +38,22 @@ public class LoadTable{
 			  }
 		      }));
 
+	/*just (			
+					
+	      "Total Contract", "Payment Frequency", "Reserve", "Net Amount", "Gross Amount", "Payments Made", "Start Date", "Next Due", "Amount of Payment", 
+"Number of Payments",
+						      
+						      "Final Payment Amount",
+						       
+						      "Vehicle",
+						      "VIN",
+						      "Other Payments",
+						      "Paid Off",
+    */
+
+
 	//# Assumes we're adding these before anything else (because of customer id names)
-	add(new Model(Key.contractKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+	add(new Model(Key.contractKey.accept(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
 		      new Enterer(){
 			  int i = 1;
 			  public Object[] editEntry(Object[] objs){
@@ -47,14 +61,21 @@ public class LoadTable{
 			  }
 		      }));
 
-	add(new Model(Key.customerKey.except(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
+	add(new Model(Key.customerKey.just(new String[] {"Last Name", "First Name"}), null, null, null));
+
+    }
+
+
+
+/*), new String[]{"First Name"},
+		      new Cut[]{new StringCut("First Name"), new StringCut("Last Name")},
 		      new Enterer(){
-			  int i = 1;
-			  public Object[] editEntry(Object[] objs){
-			      return new Object[] {i++};
+			  public Object[] editEntry(Object[] o){
+			      String fullName = ""+o[0];
+			      return new Object[] {names[1].trim(), names[0].trim()};
 			  }
 		      }));	
-    }
+		      } */
 
     private static class Model{
 	Key ik;

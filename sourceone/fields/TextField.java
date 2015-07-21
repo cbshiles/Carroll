@@ -1,7 +1,6 @@
 package sourceone.fields;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.event.*;
 
 public class TextField extends Field{
 
@@ -24,7 +23,7 @@ public class TextField extends Field{
     public String text()
     {return tf.getText();}
 
-    public void addListener(DocumentListener dl){
+    public void addListener(FieldListener dl){
 	tf.getDocument().addDocumentListener(dl);
     }
 }

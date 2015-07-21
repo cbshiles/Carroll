@@ -18,7 +18,7 @@ public class NoLabelField extends Field{
     public String text()
     {return tf.getText();}
 
-    public void addListener(javax.swing.event.DocumentListener dl){
+    public void addListener(FieldListener dl){
 	tf.getDocument().addDocumentListener(dl);
     }
 }

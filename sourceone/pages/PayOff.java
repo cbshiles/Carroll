@@ -1,7 +1,6 @@
 package sourceone.pages;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -126,21 +125,8 @@ public class PayOff extends TablePage {
 	    JTextField feeField = new JTextField("50.00",10);
 	    fees = 50f;
 	    cadd(feeField, 1, 0, 1, 1);
-	    feeField.getDocument().addDocumentListener(new DocumentListener() {
-		    public void changedUpdate(DocumentEvent e) {
-			//System.out.println("changedUpdate");
-			warn();
-		    }
-		    public void removeUpdate(DocumentEvent e) {
-			//System.out.println("removeUpdate");
-			warn();
-		    }
-		    public void insertUpdate(DocumentEvent e) {
-			//System.out.println("insertUpdate");
-			warn();
-		    }
-
-		    public void warn() {
+	    feeField.getDocument().addDocumentListener(new FieldListener() {
+		    public void dew() {
 			try {
 			    float d = StringIn.parseFloat(feeField.getText());
 			    fees = d;
@@ -154,24 +140,10 @@ public class PayOff extends TablePage {
 	    JTextField dateField = new JTextField(BasicFormatter.cinvert(payDate), 10);
 
 	    cadd(dateField, 1, 1, 1, 1);
-	    dateField.getDocument().addDocumentListener(new DocumentListener() {
-		    public void changedUpdate(DocumentEvent e) {
-			//System.out.println("changedUpdate");
-			warn();
-		    }
-		    public void removeUpdate(DocumentEvent e) {
-			//System.out.println("removeUpdate");
-			warn();
-		    }
-		    public void insertUpdate(DocumentEvent e) {
-			//System.out.println("insertUpdate");
-			warn();
-		    }
-
-		    public void warn() {
+	    dateField.getDocument().addDocumentListener(new FieldListener() {
+		    public void dew() {
 			try {
-			    LocalDate d = StringIn.parseDate(dateField.getText());
-			    payDate = d;
+			    payDate = StringIn.parseDate(dateField.getText());
 			    figure();
 			} catch (InputXcpt ix) {;}
 		    }
@@ -215,11 +187,10 @@ public class PayOff extends TablePage {
 		dispose();
 	    else if (cmd.equals("pay")){
 		try {
-		    //System.err.println(
-		    //Next_Due
 		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
+		    dispose();
 		} catch (Exception e){System.err.println("~!~"+e);}
 	    }
 	    else {System.err.println("Kentucky derby");
@@ -247,7 +218,7 @@ public class PayOff extends TablePage {
 	    net = k.dex("Net Amount");
 	    tc = k.dex("Total Contract");
 	}
-//			new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance"},	
+
 	public Object[] editEntry(Object[] o){
 
 	    int pfO = (int)o[pf];
@@ -265,6 +236,7 @@ public class PayOff extends TablePage {
 	    else
 		tep = (float)o[grs];
 
+	    //			new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance"},	
 	    return new Object[]{
 		""+o[ln]+", "+o[fn],
 		o[sd],

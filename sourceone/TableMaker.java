@@ -25,15 +25,15 @@ public class TableMaker{
     
     public static void main(String[] args)throws Exception{
 	SQLBot.bot = new SQLBot("res/db.properties");
-	create(Key.customerKey);
-	create(Key.contractKey);
-	create(Key.floorKey);
-	create(Key.paymentKey);
+	recreate(Key.customerKey);
+	recreate(Key.contractKey);
+	recreate(Key.floorKey);
+	recreate(Key.paymentKey);
 	meta();
     }
 
     public static void meta() throws Exception{
-	create(Key.metaKey); //change back to re
+	recreate(Key.metaKey); //change back to re
 	SQLBot.bot.update("INSERT INTO Meta (Full_Report_Date, Partial_Report_Date) VALUES(NULL, NULL)");
     }
 }

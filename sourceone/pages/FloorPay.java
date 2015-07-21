@@ -2,10 +2,10 @@ package sourceone.pages;
 import sourceone.csv.*;
 import sourceone.key.*;
 import sourceone.sql.*;
+import sourceone.fields.*;
 import static sourceone.key.Kind.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -53,14 +53,8 @@ public class FloorPay extends TablePage {
 	payDay = new sourceone.fields.TextField("Date paid:", BasicFormatter.cinvert(LocalDate.now()));
 	cPan.add(payDay.getJP());
 
-	payDay.addListener(new DocumentListener() {
-		public void changedUpdate(DocumentEvent e) {warn();}
-
-		public void removeUpdate(DocumentEvent e) {warn();}
-
-		public void insertUpdate(DocumentEvent e) {warn();}
-
-		public void warn() {
+	payDay.addListener(new FieldListener() {
+		public void dew() {
 		    try {
 			LocalDate d = StringIn.parseDate(payDay.text());
 			getTable(d);

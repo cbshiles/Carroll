@@ -7,7 +7,6 @@ import sourceone.fields.*;
 import static sourceone.key.Kind.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
@@ -38,14 +37,8 @@ public class AReport extends FullnessPage{
 	cPan.add(jb = new JButton("Create Report"));
 	jp.add(cPan, BorderLayout.SOUTH);
 
-	payDay.addListener(new DocumentListener() {
-		public void changedUpdate(DocumentEvent e) {warn();}
-
-		public void removeUpdate(DocumentEvent e) {warn();}
-
-		public void insertUpdate(DocumentEvent e) {warn();}
-
-		public void warn() {
+	payDay.addListener(new FieldListener() {
+		public void dew() {
 		    try {
 			reportDate = StringIn.parseDate(payDay.text());
 			reload();
