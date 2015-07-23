@@ -27,6 +27,12 @@ public abstract class Cut{
     {name = n;
 	sqlName = n.trim().replaceAll("\\s", "_");}
 
+    public Cut clone(){
+	try {
+	return this.getClass().getDeclaredConstructor(String.class).newInstance(name);
+	} catch (Exception e) {throw new Error("nope didnt work");}
+    }
+
     /**
        Asks for a Object of type Kind from the Input.
        @return The object returned from the Input.

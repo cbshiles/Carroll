@@ -6,10 +6,9 @@ import java.awt.event.*;
 import sourceone.key.InputXcpt;
 import java.util.Enumeration;
 
-public class RadioField extends Field implements ActionListener{
+public class RadioField extends Field{
 
     ButtonGroup group = new ButtonGroup();
-    private String rtVal = "";
 
     public RadioField (String n, String[] butts){
 	super(n);
@@ -23,10 +22,7 @@ public class RadioField extends Field implements ActionListener{
 	addButtons(front, back);
     }
 
-    public void clear(){
-	rtVal = "";
-	group.clearSelection();
-    }
+    public void clear(){group.clearSelection();}
     
     public void init(){
 //	jp.setLayout(new GridLayout(0, 4));//new FlowLayout(FlowLayout.CENTER));
@@ -53,18 +49,13 @@ public class RadioField extends Field implements ActionListener{
 	jrb.setActionCommand(b);
 
 	group.add(jrb);
-	jrb.addActionListener(this);
 	jp.add(jrb);
     }
-
-    public void actionPerformed(ActionEvent e) {
-	rtVal = e.getActionCommand();
-    }
-
+    
     public String text() throws InputXcpt
     {
-	if (rtVal.equals(""))
-	    throw new InputXcpt(name, "Must make a selection");
-	else return rtVal;
+	ButtonModel bm = group.getSelection();
+	if (bm == null) throw new InputXcpt(name, "Must make a selection");
+	return bm.getActionCommand();
     }
 }

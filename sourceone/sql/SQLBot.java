@@ -11,8 +11,8 @@ public class SQLBot {
 
     public static SQLBot bot;
     Connection conn;
-    Statement stmt;
     public String path;
+    Statement stmt;
     
     public SQLBot(String pFile) throws Exception{
 
@@ -28,7 +28,7 @@ public class SQLBot {
 	Class.forName ("com.mysql.jdbc.Driver").newInstance();
 
 	conn = DriverManager.getConnection (url, user, password);
-	stmt = conn.createStatement();
+	done();
     }
 
     public void dbInfo() throws SQLException{
@@ -40,6 +40,13 @@ public class SQLBot {
 	String productName    = databaseMetaData.getDatabaseProductName();
 	String productVersion = databaseMetaData.getDatabaseProductVersion();
 	System.out.println(majorVersion+"."+minorVersion+" "+productName+" "+productVersion);
+    }
+
+    public void done(){
+	try{
+	    if (stmt != null) stmt.close();
+	    stmt = conn.createStatement();
+	} catch (Exception e) {System.out.println("Couldn't make new statement."); System.exit(1);}
     }
 
     public int update(String sql) throws SQLException{
@@ -61,6 +68,12 @@ public class SQLBot {
 	ResultSet rs = query(sql);
 	rs.next();
 	return QueryIn.convertDate(rs.getDate(1));
+    }
+
+    public int query1Int(String sql) throws SQLException{
+	ResultSet rs = query(sql);
+	rs.next();
+	return rs.getInt(1);
     }
 
     public void printSet(ResultSet rs) throws SQLException{

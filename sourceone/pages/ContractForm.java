@@ -22,6 +22,7 @@ public class ContractForm extends Form {
 	addF(new TextField("First Name"));
 	addF(new TextField("Last Name"));
 	addF(new TextField("Address"));
+	addF(new TextField("Address 2"));
 	addF(new TextField("Phone Number"));
 
 	addF(new TextField("Start Date"));
@@ -46,9 +47,10 @@ public class ContractForm extends Form {
 
 	JButton submit = new JButton("Submit");
 
-	Key custKey = Key.customerKey.accept(new String[]{"ID", "email"});
+	Key custKey = Key.customerKey.just(new String[]{"First Name", "Last Name", "Address"}).add(new Cut[]{new StringCut("Address 2"), new StringCut("Phone Number")});
 	Grid custGrid = new Grid(custKey, new StringIn(this));
-	custGrid.addView(null, null, null);
+	custGrid.addView(new String[]{"Address", "Address 2"}, new Cut[]{new StringCut("Address")},
+									 new Unt(custKey));
 	custGrid.view.addOut(new SQLFormatter(new InsertDest(custGrid.view.key, "Customers", true)));
 
 	/*
@@ -74,13 +76,29 @@ Called total contract here due to compatibility issues
 			freshen();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(getName(), ContractForm.this, ix);
+			//ix.printStackTrace();
 		    }}});
 
 	add(submit);
 	pack();
 	setVisible(true);
     }
+	    
+	    private class Unt implements Enterer{
 
+		int add, add2;
+	
+		public Unt(Key k){
+		    add = k.dex("Address");
+		    add2 = k.dex("Address 2");
+		}
+
+		public Object[] editEntry(Object[] o){
+		    return new Object[]{
+			""+o[add]+"; "+o[add2]
+		    };
+		}
+	    }
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;

@@ -13,7 +13,7 @@ public class QueryIn implements Input{
     public QueryIn(String q) throws SQLException{
 	rs = SQLBot.bot.query(q);
     }
-
+    
     public QueryIn(Key k, String rest) throws SQLException{
 	if (k.name == null)
 	    throw new SQLException("Table keys must be named");
@@ -76,6 +76,10 @@ public class QueryIn implements Input{
     public static LocalDate convertDate(Date d){
 	if (d == null) return null;
 	else return LocalDate.ofEpochDay(d.getTime()/86400000); //millis in day
+    }
+
+    public void done(){
+	SQLBot.bot.done();
     }
     
 }

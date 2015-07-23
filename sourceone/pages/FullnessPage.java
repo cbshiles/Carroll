@@ -21,6 +21,7 @@ public abstract class FullnessPage extends TablePage{
 	Input in;
 	try {
 	in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
+	System.out.println("Fullness in: "+in);
 	} catch (Exception e) {throw new InputXcpt(e);}
 	k  = custKey.add(contKey.cuts);
 	g = new Grid(k, in);
@@ -46,6 +47,7 @@ public abstract class FullnessPage extends TablePage{
 	try{
 	    //# need to reload table??? (theres will be peeps w/o dues)
 	    prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
+	    SQLBot.bot.done();
 	    reload();
 	}catch(Exception e){System.err.println("@#: "+e); return;}
 	

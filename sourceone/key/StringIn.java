@@ -60,7 +60,14 @@ public class StringIn implements Input {
     public float getFloat() throws InputXcpt
     {return parseFloat(ss.get());}
 
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yy");
+
+    // private static final DateTimeFormatter dtf = new DateTimeFormatterBuilder().append(
+    // 	null, new DateTimeParser[]{ 
+    // 	    DateTimeFormat.forPattern("MM-dd-yy").getParser(),
+    // 	    DateTimeFormat.forPattern("M-d-yy").getParser()
+    // 	}).toFormatter();
+
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M-d-yy");
     
     /**
        @return Parsed date as a {@link java.time.LocalDate} from the StringSource
@@ -79,5 +86,7 @@ public class StringIn implements Input {
 	    throw new InputXcpt(str, "Could not be parsed in MM-dd-yy or MM/dd/yy format");
 	}
     }
+
+    public void done(){;}
 
 }

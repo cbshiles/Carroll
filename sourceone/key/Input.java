@@ -18,5 +18,6 @@ public interface Input{
     float getFloat() throws InputXcpt;
 
     java.time.LocalDate getDate() throws InputXcpt;
-    
+
+    void done();
 }

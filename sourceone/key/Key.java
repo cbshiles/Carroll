@@ -8,7 +8,16 @@ public class Key{
     public int length;
     public String name = null;
     
-    public Key(Cut[] c){cuts = c; length = cuts.length; fillMap();}
+    public Key(Cut[] c){
+	cuts = new Cut[c.length];
+	length = c.length;
+	int i = 0;
+	for (Cut cut : c){
+	    cuts[i++] = (Cut)cut.clone();
+	}
+	    
+	fillMap();
+    }
 
     public Key(String[] names, Kind[] types){
 	cuts = new Cut[names.length];

@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Grid extends Matrix{
 
-    Input in;
+    public Input in;
 
     public Grid(Key k, Input i){
 	super(k);
@@ -15,6 +15,7 @@ public class Grid extends Matrix{
 	data = new ArrayList<Object[]>();
 	while(in.hasEntries())
 	    data.add(key.getEntry());
+	in.done();
     }
 
     public Object go() throws InputXcpt{

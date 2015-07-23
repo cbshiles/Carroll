@@ -48,12 +48,14 @@ public class View extends Matrix{
 	    } else System.arraycopy(objs, 0, arr, 0, n = objs.length);
 	} else n=0;
 
+	Object[] gnu = null;
+
 	if (ent != null){
-	    Object[] gnu = ent.editEntry(objs);
+	    gnu = ent.editEntry(objs);
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
 	
-	assert arr.length == key.length : "Row isn't fitting into view";
+	assert arr.length == n + ((ent != null)?gnu.length:0) : "Row isn't fitting into view";
 	
 	data.add(arr);
     }

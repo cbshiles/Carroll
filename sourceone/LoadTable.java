@@ -5,6 +5,8 @@ import sourceone.sql.*;
 import sourceone.csv.*;
 import sourceone.key.*;
 
+import java.sql.*;
+
 public class LoadTable{
     static HashMap<String, Model> map = new HashMap<String, Model>();
     public static void main(String[] args) throws Exception{
@@ -38,45 +40,98 @@ public class LoadTable{
 			  }
 		      }));
 
-	/*just (			
-					
-	      "Total Contract", "Payment Frequency", "Reserve", "Net Amount", "Gross Amount", "Payments Made", "Start Date", "Next Due", "Amount of Payment", 
-"Number of Payments",
-						      
-						      "Final Payment Amount",
-						       
-						      "Vehicle",
-						      "VIN",
-						      "Other Payments",
-						      "Paid Off",
-    */
+	Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
+						     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
+						     "Next Due", "Amount of Payment", "Number of Payments"});
 
-
-	//# Assumes we're adding these before anything else (because of customer id names)
-	add(new Model(Key.contractKey.accept(new String[]{"ID", "Customer ID"}), null, new Cut[]{new IntCut("Customer ID")},
-		      new Enterer(){
-			  int i = 1;
-			  public Object[] editEntry(Object[] objs){
-			      return new Object[] {i++};
-			  }
-		      }));
+	add(new Model("full", fKey, null, new Cut[]{new FloatCut("Final Payment Amount"), new StringCut("VIN"),
+						    new IntCut("Customer ID")}, new FullEnt(fKey)));
 
 	add(new Model(Key.customerKey.just(new String[] {"Last Name", "First Name"}), null, null, null));
 
+	Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
+						     "Payments Made", "Start Date",
+						     "Next Due", "Amount of Payment", "Number of Payments"});
+
+	add(new Model("partial", pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
+						       new IntCut("Customer ID"), new FloatCut("Total Contract")}, new PartEnt(pKey)));
+    }
+
+    private static class PartEnt implements Enterer{
+
+	int sd, aop, nop, grs;
+	int i;
+
+	public PartEnt(Key k){
+	    aop = k.dex("Amount of Payment");
+	    nop = k.dex("Number of Payments");
+	    grs = k.dex("Gross Amount");
+
+	    try {
+		i = SQLBot.bot.query1Int("SELECT MAX(id) FROM Customers");
+	    } catch (SQLException e){
+		System.err.println("RRT: "+e);
+		System.exit(1);
+	    }
+	}
+	    
+	public Object[] editEntry(Object[] o){
+	    float fpa = (float)o[grs] - (float)o[aop]*(int)o[nop];
+	    String vin = "";
+	    int cid = ++i;
+	    return new Object[]{
+		0f, //reserve
+		fpa, vin, cid,
+		0f //total contract
+	    };
+	}
+    }
+
+    //# Assumes we're adding these before anything else (because of customer id names)
+    private static class FullEnt implements Enterer{
+
+	int sd, aop, nop, tc, res;
+	int i;
+
+	public FullEnt(Key k){
+	    sd = k.dex("Start Date");
+	    aop = k.dex("Amount of Payment");
+	    nop = k.dex("Number of Payments");
+	    tc = k.dex("Total Contract");
+	    res = k.dex("Reserve");
+
+	    try {
+		i = SQLBot.bot.query1Int("SELECT MAX(id) FROM Customers");
+	    } catch (SQLException e){
+		System.err.println("RRT: "+e);
+		System.exit(1);
+	    }
+	}
+	    
+	public Object[] editEntry(Object[] o){
+	    float fpa = (float)o[tc] - (float)o[aop]*(int)o[nop];
+	    String vin = "";
+	    int cid = ++i;
+	    return new Object[]{
+		fpa, vin, cid
+	    };
+	}
     }
 
 
 
-/*), new String[]{"First Name"},
-		      new Cut[]{new StringCut("First Name"), new StringCut("Last Name")},
-		      new Enterer(){
-			  public Object[] editEntry(Object[] o){
-			      String fullName = ""+o[0];
-			      return new Object[] {names[1].trim(), names[0].trim()};
-			  }
-		      }));	
-		      } */
 
+/*), new String[]{"First Name"},
+  new Cut[]{new StringCut("First Name"), new StringCut("Last Name")},
+  new Enterer(){
+  public Object[] editEntry(Object[] o){
+  String fullName = ""+o[0];
+  return new Object[] {names[1].trim(), names[0].trim()};
+  }
+  }));	
+  } */
+
+    
     private static class Model{
 	Key ik;
 	String[] remove;
@@ -88,6 +143,11 @@ public class LoadTable{
 	    this.remove = remove;
 	    this.gnu = gnu;
 	    this.ent = ent;
+	}
+
+	public Model(String name, Key ik, String[] remove, Cut[] gnu, Enterer ent){
+	    this(ik, remove, gnu, ent);
+	    ik.name = name;
 	}
 
 	public String name()
