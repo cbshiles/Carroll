@@ -12,8 +12,8 @@ import java.awt.event.ActionEvent;
 import java.time.*;
 
 public class CarForm extends Form{
-    public CarForm() throws Exception{
-	super("Cars");
+    public CarForm(Page p) throws Exception{
+	super("Cars", p);
 
 	setSize(400, 600);
 	setLocation(200, 100);

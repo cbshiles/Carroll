@@ -12,8 +12,8 @@ import java.awt.event.*;
 
 public class CarReport extends TablePage{
 
-    public CarReport(){
-	super("Create Car Report");
+    public CarReport(Page p){
+	super("Create Car Report", p);
 
 	Key inKey = Key.floorKey.accept(new String[]{"ID", "Date Paid"}); //# make an overloaded version for scalars
 

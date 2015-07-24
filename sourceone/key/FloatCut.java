@@ -12,7 +12,7 @@ public class FloatCut extends Cut{
 
     public FloatCut(String n, String c){
 	super(n);
-	fullSQL = sqlName+" float "+c;
+	fullSQL = sqlName+" double(7,2) "+c;
     }
 
 

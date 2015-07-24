@@ -110,6 +110,7 @@ public class LoadTable{
 	    
 	public Object[] editEntry(Object[] o){
 	    float fpa = (float)o[tc] - (float)o[aop]*(int)o[nop];
+	    //System.out.println(""+fpa+" = "+(float)o[tc]+" - "+(float)o[aop]+"*"+(int)o[nop]);
 	    String vin = "";
 	    int cid = ++i;
 	    return new Object[]{

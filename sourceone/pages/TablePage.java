@@ -16,8 +16,8 @@ public class TablePage extends Page {
     Grid g;
     JTable jt;
     
-    public TablePage(String title){
-	super(title);
+    public TablePage(String title, Page p){
+	super(title, p);
 	jp.add(jsp, BorderLayout.NORTH);
 	setContentPane(jp);
     }

@@ -21,8 +21,8 @@ public class AReport extends FullnessPage{
 	jt.setRowSelectionAllowed(false);
     }
     
-    public AReport(){
-	super("Create AR Report");
+    public AReport(Page p){
+	super("Create AR Report", p);
 
 	if (ded) return;
 

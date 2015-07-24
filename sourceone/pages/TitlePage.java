@@ -15,8 +15,8 @@ public class TitlePage extends Page {
     JPanel jp = new JPanel(new BorderLayout());
     JButton jb;
     
-    public TitlePage(){
-	super("Pending Titles");
+    public TitlePage(Page p){
+	super("Pending Titles", p);
 	setSize(400, 600);
 
 	Key key = Key.floorKey.accept(new String[]{"Title", "Date Paid"});

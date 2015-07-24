@@ -26,8 +26,8 @@ public class FloorPay extends TablePage {
 	jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    public FloorPay(){
-	super("Floor Plan Payoffs");
+    public FloorPay(Page p){
+	super("Floor Plan Payoffs", p);
 	setSize(600,600);
 
 	Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});

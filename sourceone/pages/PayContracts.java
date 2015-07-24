@@ -14,8 +14,8 @@ public class PayContracts extends FullnessPage {
 
     JButton jb;
     
-    public PayContracts() throws InputXcpt{
-	super("Pay Contracts");
+    public PayContracts(Page p) throws InputXcpt{
+	super("Pay Contracts", p);
 
 	if (ded) return;
 

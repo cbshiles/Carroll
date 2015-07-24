@@ -10,8 +10,8 @@ public class Form extends Page implements StringSource{ //Page for inputting inf
     boolean gotem = true;
     int i;
 
-    public Form(String name){
-	super(name);
+    public Form(String name, Page p){
+	super(name, p);
     }
     
     public void addF(Field f) {

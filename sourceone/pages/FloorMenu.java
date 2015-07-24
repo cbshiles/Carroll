@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class FloorMenu extends Page {
 
-    public FloorMenu(){
-	super("Floor Plan");
+    public FloorMenu(Page p){
+	super("Floor Plan", p);
 	setSize(400, 600);
 	setLayout(new GridLayout(0, 1));
 

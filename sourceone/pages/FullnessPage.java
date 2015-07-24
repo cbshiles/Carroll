@@ -20,7 +20,7 @@ public abstract class FullnessPage extends TablePage{
 	String z = full?">":"<";
 	Input in;
 	try {
-	in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due < '"+reportDate+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
+	in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
 	System.out.println("Fullness in: "+in);
 	} catch (Exception e) {throw new InputXcpt(e);}
 	k  = custKey.add(contKey.cuts);
@@ -29,8 +29,8 @@ public abstract class FullnessPage extends TablePage{
     }
 
     //# ant implementation must take care of ded possibilities
-    public FullnessPage(String title){
-	super(title);
+    public FullnessPage(String title, Page p){
+	super(title, p);
 	new FullnessDialog();
 
 	if (ded)  {return;}
@@ -84,7 +84,7 @@ public abstract class FullnessPage extends TablePage{
 
     private class FullnessDialog extends JDialog implements ActionListener{
 	public FullnessDialog(){
-	    super(FullnessPage.this, "Choose report type",Dialog.ModalityType.DOCUMENT_MODAL);
+	    super(FullnessPage.this, "Choose report type",Dialog.ModalityType.APPLICATION_MODAL);
 	    JButton ab = new JButton("Full Contracts");
 	    ab.setActionCommand("full");
 	    ab.addActionListener(this);
@@ -163,6 +163,8 @@ public abstract class FullnessPage extends TablePage{
 		tep = (float)o[grs];
 	    else
 		tep = tcO;
+
+	    //System.out.println("~"+(tep - (int)o[pm]*amt)+" = "+tep+" - "+(int)o[pm] +"*"+amt);
 
 
 	    return new Object[] {

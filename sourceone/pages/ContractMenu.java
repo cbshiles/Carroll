@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class ContractMenu extends Page {
     
-    public ContractMenu(){
-	super("Contract Page");
+    public ContractMenu(Page p){
+	super("Contract Page", p);
 	setSize(400, 600);
 	setLayout(new GridLayout(0, 1));
 

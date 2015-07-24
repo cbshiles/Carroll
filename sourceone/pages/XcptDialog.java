@@ -11,15 +11,16 @@ public class XcptDialog extends JDialog implements ActionListener{
     Exception cept;
 
     public XcptDialog(String fname, Window f, Exception ex){
-	super(f, "ERROR", Dialog.ModalityType.DOCUMENT_MODAL);
+	super(f, "ERROR", Dialog.ModalityType.APPLICATION_MODAL);
 	cept = ex;
 	maker("For Field: "+fname+'\n');
     }
     
     public XcptDialog(Window f, Exception ex){
-	super(f, "ERROR", Dialog.ModalityType.DOCUMENT_MODAL);
+	super(f, "ERROR", Dialog.ModalityType.APPLICATION_MODAL);
 	cept = ex;
 	maker("");
+	//ex.printStackTrace();
     }
 
     private void maker(String addon){

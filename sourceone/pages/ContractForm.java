@@ -12,8 +12,8 @@ import sourceone.sql.*;
 import sourceone.fields.*;
 
 public class ContractForm extends Form {
-    public ContractForm() throws Exception{
-	super("Contract");
+    public ContractForm(Page p) throws Exception{
+	super("Contract", p);
 	setSize(400, 600);
 	setLocation(200, 100);
 

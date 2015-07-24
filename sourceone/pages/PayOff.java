@@ -14,8 +14,8 @@ import java.time.temporal.ChronoUnit;
 public class PayOff extends TablePage {
     JButton jb;
 
-    public PayOff(){
-	super("Pay Off Contract");
+    public PayOff(Page p){
+	super("Pay Off Contract", p);
 	setSize(1000, 600);
 	jp.add(jb = new JButton("Select Contract"), BorderLayout.SOUTH);
 	
