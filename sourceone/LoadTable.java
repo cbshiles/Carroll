@@ -24,12 +24,12 @@ public class LoadTable{
 	
 	Grid g = new Grid(m.ik, new StringIn(new CSVInput(fpath)));
 	View v = g.addView(m.remove, m.gnu, m.ent);
-	v.addOut(new SQLFormatter(new InsertDest(v.key, mod)));
+	v.addOut(new SQLFormatter(new InsertDest(v.key, m.ik.name)));
 	g.go();
     }
 
     private static void add(Model m){
-	map.put(m.name(), m);
+	map.put(m.name, m);
     }
 
     private static void load(){
@@ -133,13 +133,15 @@ public class LoadTable{
 
     
     private static class Model{
-	Key ik;
+	public Key ik;
 	String[] remove;
 	Cut[] gnu;
 	Enterer ent;
+	public String name;
 
 	public Model(Key ik, String[] remove, Cut[] gnu, Enterer ent){
 	    this.ik = ik;
+	    name = ik.name;
 	    this.remove = remove;
 	    this.gnu = gnu;
 	    this.ent = ent;
@@ -147,10 +149,7 @@ public class LoadTable{
 
 	public Model(String name, Key ik, String[] remove, Cut[] gnu, Enterer ent){
 	    this(ik, remove, gnu, ent);
-	    ik.name = name;
+	    this.name = name;
 	}
-
-	public String name()
-	{return ik.name;}
     }
 }

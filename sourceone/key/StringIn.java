@@ -34,7 +34,7 @@ public class StringIn implements Input {
        Calls Integer.parseInt
     */
     public static int parseInt(String str) throws InputXcpt{
-	try {return Integer.parseInt(str);}
+	try {return Integer.parseInt(str.trim());}
 	catch (NumberFormatException e) 
 	{throw new InputXcpt(e.getMessage()+"\nCouldn't parse as int");}
     }
@@ -49,7 +49,7 @@ public class StringIn implements Input {
        Calls Float.parseFloat
     */
     public static float parseFloat(String str) throws InputXcpt{
-	try {return Float.parseFloat(str);}
+	try {return Float.parseFloat(str.trim());}
 	catch (NumberFormatException e)
 	{throw new InputXcpt(e.getMessage()+"\nCouldn't parse as float");}
     }
@@ -73,7 +73,7 @@ public class StringIn implements Input {
        @return Parsed date as a {@link java.time.LocalDate} from the StringSource
     */
     public LocalDate getDate() throws InputXcpt
-    {return parseDate(ss.get());}
+    {return parseDate(ss.get().trim());}
 
     /**
        Attempts to parse a String as a date in MM-dd-yy or MM/dd/yy format.

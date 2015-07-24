@@ -15,7 +15,7 @@ public class SQLFormatter extends Formatter {
 
     public String convert(String x){
 	if (x == null) return "NULL";
-	else return "'"+x+"'";
+	else return "'"+x.replaceAll("'", "''")+"'";
     }
     
     public String convert(int x){

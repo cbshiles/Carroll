@@ -5,8 +5,11 @@ import sourceone.sql.*;
 
 public class TableMaker{
 
-    static int drop(Key key)throws Exception{
+    static int drop(Key key){
+	try{
 	return SQLBot.bot.update("DROP TABLE "+key.name+';');
+	}
+	catch (Exception e){System.err.println(e); return -1;}
     }
     
     //A assumes all tables have an ID field (or rather assumes they want one)

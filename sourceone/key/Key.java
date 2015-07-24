@@ -43,8 +43,10 @@ public class Key{
 	name = n;
     }
 
-    public Key(String n, Cut[] c){
-	this(c);
+    private Key(String n, Cut[] c){
+	cuts = c;
+	length = c.length;
+	fillMap();
 	name = n;
     }
 
