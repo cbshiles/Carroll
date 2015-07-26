@@ -12,9 +12,10 @@ public class Page extends JFrame {
     private boolean busy = false;
     Page parent;
     ArrayList<Page> children = new ArrayList<Page>();
+//    String name;
 
     public Page(String name, Page p) {
-	super(name);
+	super(name); //this.name = name;
 	parent = p;
 	if (parent != null) parent.addChild(this);
 	Driver.addPage();
@@ -22,9 +23,13 @@ public class Page extends JFrame {
 	addWindowListener(new WindowAdapter() {
 		@Override
 		public void windowClosing(WindowEvent we) {
-		    Driver.removePage();
-		    if (parent != null) parent.setBusy(false);
 		    removeChildren();
+
+		    if (parent != null) {
+			parent.setBusy(false);
+			parent.dropChild(Page.this);
+		    }
+		    Driver.removePage();
 		}
 	    });
 
@@ -35,10 +40,13 @@ public class Page extends JFrame {
 	children.add(p);
     }
 
+    public void dropChild(Page p){
+	children.remove(p);
+    }
+
     public void removeChildren(){
-	for (Page p : children){
-	    p.dispatchEvent(new WindowEvent(p, WindowEvent.WINDOW_CLOSING));
-	}
+	for (int i = children.size()-1; i>=0; i--)
+	    children.get(i).kill();
 	children = new ArrayList<Page>();
     }
 

@@ -20,8 +20,8 @@ public abstract class FullnessPage extends TablePage{
 	String z = full?">":"<";
 	Input in;
 	try {
-	in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
-	System.out.println("Fullness in: "+in);
+	    in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
+	    System.out.println("Fullness in: "+in);
 	} catch (Exception e) {throw new InputXcpt(e);}
 	k  = custKey.add(contKey.cuts);
 	g = new Grid(k, in);
@@ -33,7 +33,7 @@ public abstract class FullnessPage extends TablePage{
 	super(title, p);
 	new FullnessDialog();
 
-	if (ded)  {return;}
+	if (ded)  {kill(); return;}
 	
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	
@@ -83,6 +83,9 @@ public abstract class FullnessPage extends TablePage{
     }
 
     private class FullnessDialog extends JDialog implements ActionListener{
+
+	boolean usedMyButtons = false;
+	
 	public FullnessDialog(){
 	    super(FullnessPage.this, "Choose report type",Dialog.ModalityType.APPLICATION_MODAL);
 	    JButton ab = new JButton("Full Contracts");
@@ -106,10 +109,24 @@ public abstract class FullnessPage extends TablePage{
 	    setBounds(500,500,500,150);
 
 	    setVisible(true);
+
+	    addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent we) {
+			if (! usedMyButtons)
+			    ded = true;
+		    }
+		});
+
+	}
+
+	protected void kill(){
+	    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	}
 
         @Override
 	public void actionPerformed(ActionEvent ae) {
+	    usedMyButtons = true;
 	    String cmd = ae.getActionCommand();
 	    if (cmd.equals("exit")) {ded = true;}
 	    full = cmd.equals("full");

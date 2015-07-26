@@ -7,6 +7,8 @@ public class Driver {
     private static int pages = 0;
     public static SQLBot bot;
 
+
+    
     public static void addPage() {pages++;}
     
     public static void removePage() {
@@ -17,5 +19,6 @@ public class Driver {
     public static void main(String[] args) throws Exception{
 	SQLBot.bot = new SQLBot("res/db.properties");
 	new HomePage();
+	EventDispatchThreadHangMonitor.initMonitoring();
     }
 }
