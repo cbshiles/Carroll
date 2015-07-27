@@ -19,7 +19,7 @@ public class PayContracts extends FullnessPage {
 
 	if (ded) return;
 
-	if (prd == null) throw new InputXcpt("No record of any unpaid reports");
+	if (prd == null) {kill(); throw new InputXcpt("No record of any unpaid reports");}
 	reportDate = prd;
 	reload(); //# this is a redo(from fullness constructor), figure out a better way
 	getTable();
@@ -27,6 +27,9 @@ public class PayContracts extends FullnessPage {
 	jt.setRowSelectionAllowed(false);
 	    
 	JPanel cPan = new JPanel();
+	sourceone.fields.TextField batchID;
+	batchID = new sourceone.fields.TextField("Batch ID: ", "");
+	cPan.add(batchID.getJP());
 	cPan.add(new JLabel("Posting payments up to "+reportDate));
 	cPan.add(jb = new JButton("Post Payments"));
 	jp.add(cPan, BorderLayout.SOUTH);
@@ -34,7 +37,7 @@ public class PayContracts extends FullnessPage {
 	jb.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 		    try {
-			Click ec = new Click(g.key, g.view.key);
+			Click ec = new Click(g.key, g.view.key, batchID.text());
 			for (int i=0; i<jt.getRowCount(); i++)
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
 			kill();
@@ -50,8 +53,10 @@ public class PayContracts extends FullnessPage {
 
 	int id, fq, nd, pm, fpa, pd, tma, aop, rb, sd;
 	LocalDate tday;
+	String bid;
 	
-	public Click(Key gk, Key vk){
+	public Click(Key gk, Key vk, String bid){
+	    this.bid =bid;
 	    tday = LocalDate.now();
 
 	    fq = gk.dex("Payment Frequency");
@@ -105,7 +110,7 @@ public class PayContracts extends FullnessPage {
 	    }else nDue = "NULL";
 	    try{
 		String cmda = "UPDATE Contracts SET Payments_Made="+((int)v[pm]+pays_due)+", "+paidOff+oPay+" Next_Due="+nDue+" WHERE ID="+di+';';
-		String cmdb = "INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+di+", '"+tday+"', "+tot_due+");";
+		String cmdb = "INSERT INTO Payments (Contract_ID, Day, Amount, Batch_ID) VALUES ("+di+", '"+tday+"', "+tot_due+", '"+bid+"');";
 		System.err.println(cmda);
 		System.err.println(cmdb);
 		SQLBot.bot.update(cmda);

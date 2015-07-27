@@ -19,14 +19,15 @@ public class ContractForm extends Form {
 
 	setLayout(new java.awt.GridLayout(0, 1));
 
+	TextField tot; Field type = null;
+
 	addF(new TextField("First Name"));
 	addF(new TextField("Last Name"));
 	addF(new TextField("Address"));
 	addF(new TextField("Address 2"));
 	addF(new TextField("Phone Number"));
 
-	addF(new TextField("Start Date"));
-
+	addF(tot = new TextField("Total Amount"));
 	addF(new TextField("Number of Payments"));
 	addF(new TextField("Amount"));
 	addF(new RadioField("Payment Frequency",
@@ -34,30 +35,32 @@ public class ContractForm extends Form {
 			    new String[]{"7", "14", "30"}));
 	addF(new OptionField("Final Payment", "0", true));
 
-	addF(new TextField("Total Amount"));
-	addF(new TextField("Reserve"));
+	addF(new TextField("Start Date"));
+	
+	//addF(new TextField("Reserve"));
+	addF(new ReserveField(tot, type));
 	addF(new TextField("Net Amount"));
 	
 	addF(new TextField("Vehicle"));
 	addF(new TextField("VIN"));
 
-	addF(new RadioField("Contract Type",
-			    new String[]{"Full", "Partial"},
-			    new String[]{"0", "1"}));
+	addF(type = new RadioField("Contract Type",
+				   new String[]{"Full", "Partial"},
+				   new String[]{"0", "1"}));
 
 	JButton submit = new JButton("Submit");
 
 	Key custKey = Key.customerKey.just(new String[]{"First Name", "Last Name", "Address"}).add(new Cut[]{new StringCut("Address 2"), new StringCut("Phone Number")});
 	Grid custGrid = new Grid(custKey, new StringIn(this));
 	custGrid.addView(new String[]{"Address", "Address 2"}, new Cut[]{new StringCut("Address")},
-									 new Unt(custKey));
+			 new Unt(custKey));
 	custGrid.view.addOut(new SQLFormatter(new InsertDest(custGrid.view.key, "Customers", true)));
 
 	/*
-Called Total Contract here, this is actually TEP, or total expected pay.
-Called total contract here due to compatibility issues
-	 */
-	Key contKey = Key.contractKey.just(new String[]{"Start Date", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Total Contract", "Reserve", "Net Amount", "Vehicle", "VIN"}).add(new Cut[]{new IntCut("Fullness")});
+	  Called Total Contract here, this is actually TEP, or total expected pay.
+	  Called total contract here due to compatibility issues
+	*/
+	Key contKey = Key.contractKey.just(new String[]{"Total Contract", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Start Date", "Reserve", "Net Amount", "Vehicle", "VIN"}).add(new Cut[]{new IntCut("Fullness")});
 
 	Ent ent = new Ent(contKey);
 	Grid contGrid = new Grid(contKey, new StringIn(this));
@@ -84,21 +87,21 @@ Called total contract here due to compatibility issues
 	setVisible(true);
     }
 	    
-	    private class Unt implements Enterer{
+    private class Unt implements Enterer{
 
-		int add, add2;
+	int add, add2;
 	
-		public Unt(Key k){
-		    add = k.dex("Address");
-		    add2 = k.dex("Address 2");
-		}
+	public Unt(Key k){
+	    add = k.dex("Address");
+	    add2 = k.dex("Address 2");
+	}
 
-		public Object[] editEntry(Object[] o){
-		    return new Object[]{
-			""+o[add]+"; "+o[add2]
-		    };
-		}
-	    }
+	public Object[] editEntry(Object[] o){
+	    return new Object[]{
+		""+o[add]+"; "+o[add2]
+	    };
+	}
+    }
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;
@@ -209,6 +212,24 @@ Called total contract here due to compatibility issues
 	    setContentPane(jp);
 	    setBounds(300,300,1000,600);
 	    setVisible(true);
+	}
+    }
+
+    private class ReserveField extends TextField {
+
+	
+	public ReserveField(TextField tot, Field type){
+	    //# we don't know how type will affect this, ignore for now
+	    super("Reserve at 10%");
+	    
+	    tot.addListener(new FieldListener(){
+		    public void dew(){
+			System.out.println("least it got here");
+			try {
+			tf.setText(""+(StringIn.parseFloat(tot.text())*.1f));
+			} catch (InputXcpt ix) {;}
+		    }
+		});
 	}
     }
 }

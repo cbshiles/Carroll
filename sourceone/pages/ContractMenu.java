@@ -12,6 +12,8 @@ public class ContractMenu extends Page {
 	addRed("Create Report", AReport.class);
 	addRed("Routine Payments", PayContracts.class);
 	addRed("Pay Off", PayOff.class);
+
+	addRed("Finished Contracts", FinishedContracts.class);
 	
 	//pack();
 	setVisible(true);

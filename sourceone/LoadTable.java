@@ -9,7 +9,7 @@ import java.sql.*;
 
 public class LoadTable{
     static HashMap<String, Model> map = new HashMap<String, Model>();
-    public static void main(String[] args) throws Exception{
+    public static void gain(String[] args) throws Exception{
 	if (args.length != 2)
 	    throw new InputXcpt("All I need is the key and the file name");
 
@@ -26,6 +26,13 @@ public class LoadTable{
 	View v = g.addView(m.remove, m.gnu, m.ent);
 	v.addOut(new SQLFormatter(new InsertDest(v.key, m.ik.name)));
 	g.go();
+    }
+
+    public static void main(String[] args) throws Exception{
+	gain(new String[]{"full", "spreadsheets/fullContracts.csv"});
+	gain(new String[]{"Customers", "spreadsheets/fullNames.csv"});
+	gain(new String[]{"partial", "spreadsheets/partContracts.csv"});
+	gain(new String[]{"Customers", "spreadsheets/partNames.csv"});
     }
 
     private static void add(Model m){

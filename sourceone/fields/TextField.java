@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class TextField extends Field{
 
-    JTextField tf = newText();
+    protected JTextField tf = newText();
 
     public TextField (String n){
 	super(n);

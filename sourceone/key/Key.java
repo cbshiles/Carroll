@@ -257,7 +257,8 @@ public class Key{
 						     new IntCut("ID"),
 						     new IntCut("Contract ID", "NOT NULL"),
 						     new DateCut("Day", "NOT NULL"),
-						     new FloatCut("Amount")
+						     new FloatCut("Amount", "NOT NULL"),
+						     new StringCut(63, "Batch ID", "NOT NULL")
 						 });
 
     public static final Key metaKey = new Key("Meta",

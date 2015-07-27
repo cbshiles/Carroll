@@ -84,7 +84,7 @@ public class PayOff extends TablePage {
 	    //System.err.println("days var: "+days);
 	    float dailyInt =  (grsO-netO)/days;
 	    float discount = dailyInt * ChronoUnit.DAYS.between(payDate, endDate);
-	    //System.err.println(dailyInt+" * "+ChronoUnit.DAYS.between(payDate, endDate));
+	    System.err.println(dailyInt+" * "+ChronoUnit.DAYS.between(payDate, endDate));
 	    ret += "Discount: "+discount+'\n';
 
 	    ret += "Fees: "+fees+'\n';

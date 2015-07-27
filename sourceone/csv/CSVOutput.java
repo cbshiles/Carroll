@@ -32,11 +32,11 @@ public class CSVOutput implements Output{
     }
     
     public void put(float x){
-	pat(""+x);
+	pat(String.format("%.2f", x));
     }
     
     public void put(java.time.LocalDate x){
-	pat(x.toString());
+	pat(BasicFormatter.cinvert(x));
     }
 
     private void pat(String s){
