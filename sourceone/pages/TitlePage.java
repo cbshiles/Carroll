@@ -37,12 +37,14 @@ public class TitlePage extends Page {
 	    jb.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
-			    for (int i : jt.getSelectedRows()){
+			    int[] dx = jt.getSelectedRows();
+			    if (dx.length == 0) throw new InputXcpt("No car selected");
+			    for (int i : dx){
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 			    }
 			    kill();
-			} 	catch (java.sql.SQLException x)
-			{System.err.println(x);}
+			} 	catch (Exception x)
+			{new XcptDialog(TitlePage.this, x);}
 		    }});
 	}
 	catch (java.sql.SQLException x)

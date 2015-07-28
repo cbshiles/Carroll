@@ -13,7 +13,15 @@ public class OldFloor extends TablePage {
 	    Input in = new QueryIn(inKey, "WHERE Date_Paid IS NOT NULL;");
 	    g = new Grid(inKey, in);
 	    g.pull();
-	    g.addView(null, new Cut[]{new FloatCut("Profit")}, new Ent(inKey));
+	    g.clearView(new Cut[]{new DateCut("Date Bought", "NOT NULL"),
+				  new StringCut(31, "VIN", "NOT NULL"),
+				  new StringCut(127, "Vehicle", "NOT NULL"),
+				  new FloatCut("Item Cost", "NOT NULL"),
+				  new StringCut("Title"),
+				  new DateCut("Date Paid"),
+				  new FloatCut("Pay Off Amount"),
+				  new FloatCut("Profit")},
+		new Ent(inKey));
 	    pushTable();
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); kill(); return;}
 
@@ -36,8 +44,21 @@ public class OldFloor extends TablePage {
 	    poa = k.dex("Pay Off Amount");
 	}
 
+	public String titleStatus(int t){
+	    switch(t){
+	     case 0: return "Pending";
+	     case 1: return "Yes";
+	     case 2: return "Never";
+	     case 3: return "Nope";
+	    }
+	    return "Invalid code";
+	}
+
 	public Object[] editEntry(Object[] o){
 	    return new Object[]{
+		o[db], o[vin], o[veh], o[ic],
+		titleStatus((int)o[ttl]),
+		o[dp], o[poa],
 		(float)o[poa] - (float)o[ic]
 	    };
 	}

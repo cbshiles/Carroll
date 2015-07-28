@@ -208,7 +208,7 @@ public class Key{
 						      new IntCut("Payment Frequency", "NOT NULL"),
 						      new FloatCut("Total Contract", "NOT NULL"),
 						      new DateCut("Start Date", "NOT NULL"),
-						      new StringCut(127, "Vehicle"),
+//						      new StringCut(127, "Vehicle"),
 						      new StringCut(31, "VIN", "NOT NULL"),
 
 						      new FloatCut("Reserve", "NOT NULL"),
