@@ -37,8 +37,8 @@ public class ContractForm extends Form {
 
 	addF(new TextField("Start Date"));
 	
-	//addF(new TextField("Reserve"));
-	addF(new ReserveField(tot, type));
+	addF(new TextField("Reserve"));
+	//addF(new ReserveField(tot, type));
 	addF(new TextField("Net Amount"));
 	
 	addF(new TextField("Vehicle"));
