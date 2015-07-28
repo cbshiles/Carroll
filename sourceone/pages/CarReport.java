@@ -15,7 +15,7 @@ public class CarReport extends TablePage{
     public CarReport(Page p){
 	super("Create Car Report", p);
 
-	Key inKey = Key.floorKey.accept(new String[]{"ID", "Date Paid"}); //# make an overloaded version for scalars
+	Key inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title"}); 
 
 	try {
 	    Input in = new QueryIn(inKey, "WHERE Title<2;");

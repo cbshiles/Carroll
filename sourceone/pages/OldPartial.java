@@ -2,9 +2,9 @@ package sourceone.pages;
 
 import sourceone.key.*;
 
-public class OldFull extends TablePage{
+public class OldPartial extends TablePage{
 
-    public OldFull(Page p){
+    public OldPartial(Page p){
 	super("Finished Contracts", p);
 	//SELECT * FROM Contracts WHERE Paid_Date IS NOT NULL
 

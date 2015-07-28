@@ -25,7 +25,7 @@ public class CarForm extends Form{
 	addF(new TextField("Vehicle"));
 	addF(new TextField("Cost"));
 
-	Key key = Key.floorKey.accept(new String[]{"ID", "Title", "Date Paid"});
+	Key key = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost"});
 	Grid g = new Grid(key, new StringIn(CarForm.this));
 	View v = g.addView(null, new Cut[]{new IntCut("Title")}, new Enterer(){
 		public Object[] editEntry(Object[] objs){

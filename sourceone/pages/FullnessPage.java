@@ -107,8 +107,6 @@ public abstract class FullnessPage extends TablePage{
 
 	    setBounds(500,500,500,150);
 
-	    setVisible(true);
-
 	    addWindowListener(new WindowAdapter() {
 		    @Override
 		    public void windowClosing(WindowEvent we) {
@@ -116,7 +114,8 @@ public abstract class FullnessPage extends TablePage{
 			    ded = true;
 		    }
 		});
-
+		
+	    setVisible(true);
 	}
 
 	protected void kill(){

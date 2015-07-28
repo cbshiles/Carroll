@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class FrozeMenu extends Page {
 
-    public FrozeMenu(){
-	super("Inactive Inventory", null);
+    public FrozeMenu(Page p){
+	super("Inactive Inventory", p);
 	setBounds(550, 300, 400, 300);
 	setLayout(new GridLayout(0, 1));
 

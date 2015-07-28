@@ -30,7 +30,7 @@ public class FloorPay extends TablePage {
 	super("Floor Plan Payoffs", p);
 	setSize(600,600);
 
-	Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});
+	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
 	try {
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title<2");
 

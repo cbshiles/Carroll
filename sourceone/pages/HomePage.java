@@ -10,7 +10,7 @@ public class HomePage extends Page {
 
 	addRed("Floor Plan", FloorMenu.class);
 	addRed("Contracts", ContractMenu.class);
-//	addRed("Inactive Inventory", FrozeMenu.class);
+	addRed("Inactive Inventory", FrozeMenu.class);
 //	pack();
 	setVisible(true);
     }

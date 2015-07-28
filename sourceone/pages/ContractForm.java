@@ -161,7 +161,7 @@ public class ContractForm extends Form {
 
     public class FloorPayDialog extends JDialog{
 	public FloorPayDialog(int id, LocalDate date){
-	    Key key = Key.floorKey.accept(new String[]{"VIN","Date Paid"});
+	    Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
 	    JTable jt;
 	    Grid g;
 	    JPanel jp = new JPanel(new BorderLayout());

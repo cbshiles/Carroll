@@ -112,7 +112,7 @@ public class Key{
 	return new Key(name, cs);
     }
 
-    public Key accept(String[] dex){
+    public Key accept(String[] dex){ //# make private
 	return except(except(dex));
     }
 
@@ -249,9 +249,17 @@ public class Key{
 						    new StringCut(127, "Vehicle", "NOT NULL"),
 						    new FloatCut("Item Cost", "NOT NULL"),
 						    new IntCut("Title", "NOT NULL"),
-						    new DateCut("Date Paid")
+						    new DateCut("Date Paid"),
+						    new FloatCut("Pay Off Amount")
 						});
 
+//    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid"});
+    //    .just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
+        //    .just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost"});
+//    .just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title"}); //for  cahr
+//    .just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost"});
+
+    
     public static final Key paymentKey = new Key("Payments",
 						 new Cut[]{
 						     new IntCut("ID"),
