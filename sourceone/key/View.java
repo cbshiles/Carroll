@@ -29,7 +29,7 @@ public class View extends Matrix{
 	    larr[i] = rnd((float)larr[i]);
     }
 
-    private float rnd(float f){
+    public static float rnd(float f){
 	return Math.round(f*100)/100f;
     }
 

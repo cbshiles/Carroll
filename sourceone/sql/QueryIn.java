@@ -19,7 +19,6 @@ public class QueryIn implements Input{
 	    throw new SQLException("Table keys must be named");
 
 	String cmd = "SELECT "+k.sqlNames()+" FROM "+k.name+" "+rest;
-	System.out.println(cmd);
 	rs = SQLBot.bot.query(cmd);	
     }
     
@@ -28,7 +27,6 @@ public class QueryIn implements Input{
 	    throw new SQLException("Table keys must be named for a join");
 
 	String cmd = "SELECT "+a.sqlNames(true)+", "+b.sqlNames(true)+" FROM "+a.name+", "+b.name+" "+rest;
-	System.out.println(cmd);
 	rs = SQLBot.bot.query(cmd);	
     }
     
@@ -36,7 +34,7 @@ public class QueryIn implements Input{
 	i=1;
 	try {return rs.next();}
 	catch (SQLException e){
-	    System.err.println("QueryIn hasEntries Exception");
+	    System.err.println("QueryIn hasEntries Exception\n"+e);
 	    return false;
 	}
     }

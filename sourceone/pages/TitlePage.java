@@ -38,7 +38,6 @@ public class TitlePage extends Page {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
 			    for (int i : jt.getSelectedRows()){
-				System.out.println("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+g.data.get(i)[0]);
 			    }
 			    kill();

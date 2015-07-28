@@ -42,7 +42,7 @@ public class PayContracts extends FullnessPage {
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
 			kill();
 		    } catch (Exception x)
-		    {System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
+		    {new InputXcpt(x); //System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
 			x.printStackTrace();}
 		}});
 
@@ -111,8 +111,8 @@ public class PayContracts extends FullnessPage {
 	    try{
 		String cmda = "UPDATE Contracts SET Payments_Made="+((int)v[pm]+pays_due)+", "+paidOff+oPay+" Next_Due="+nDue+" WHERE ID="+di+';';
 		String cmdb = "INSERT INTO Payments (Contract_ID, Day, Amount, Batch_ID) VALUES ("+di+", '"+tday+"', "+tot_due+", '"+bid+"');";
-		System.err.println(cmda);
-		System.err.println(cmdb);
+		// System.err.println(cmda);
+		// System.err.println(cmdb);
 		SQLBot.bot.update(cmda);
 		SQLBot.bot.update(cmdb);
 

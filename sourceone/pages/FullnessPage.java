@@ -21,7 +21,6 @@ public abstract class FullnessPage extends TablePage{
 	Input in;
 	try {
 	    in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
-	    System.out.println("Fullness in: "+in);
 	} catch (Exception e) {throw new InputXcpt(e);}
 	k  = custKey.add(contKey.cuts);
 	g = new Grid(k, in);

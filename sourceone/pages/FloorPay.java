@@ -112,7 +112,7 @@ public class FloorPay extends TablePage {
 	    LocalDate bot = (LocalDate)o[db];
 	    float cost = (float)o[ic];
 
-	    float dRate = cost*.0007f; 
+	    float dRate = View.rnd(cost*.0007f); 
 	    int days = (int)ChronoUnit.DAYS.between(bot, payday);
 
 	    int min = (cost >= 5000)?65:35;

@@ -23,7 +23,7 @@ public class CustReport extends CSVOutput {
 	for (String s : lzt)
 	    text += s+'\n';
 	text += addon;
-	try { System.err.println(text); fw.write(text); fw.close();
+	try { fw.write(text); fw.close();
 	} catch (IOException ie){
 	    System.err.println(ie);
 	    throw new Error("Error on printing to CSV");

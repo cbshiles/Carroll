@@ -129,7 +129,7 @@ public class ContractForm extends Form {
 	    if ((int)o[fll] == 0) {//full
 		tc = tep;
 		grs = tep - (float)o[res];
-	    } else { //# dont let these have a reserve
+	    } else { //# dont let these have a reserve(ehh not sure about that)
 		tc = 0f;
 		grs = tep;
 	    }
@@ -140,11 +140,10 @@ public class ContractForm extends Form {
 		throw new InputXcpt(""+sum+" != "+tep+"\nPayment summation does not equal total");
 
 	    try {
-		System.err.println("SELECT ID FROM Cars WHERE VIN LIKE '"+o[vin]+"' AND Date_Paid IS NULL;");
+		//System.err.println("SELECT ID FROM Cars WHERE VIN LIKE '"+o[vin]+"' AND Date_Paid IS NULL;");
 		ResultSet rs = SQLBot.bot.query("SELECT ID FROM Cars WHERE VIN LIKE '"+o[vin]+"' AND Date_Paid IS NULL;");
 		if (rs.next()){
 		    int id = rs.getInt(1);
-		    System.out.println("It made it!!");
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
 		    new FloorPayDialog(id, (LocalDate)o[sd]);
@@ -172,7 +171,7 @@ public class ContractForm extends Form {
 
 		View v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 								    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
-		    new FloorPay.Ent(key, date));
+		    new FloorPay.Ent(key, LocalDate.now())); //# working here
 		v.addTable();
 
 		jt = (JTable)g.go();
@@ -224,7 +223,6 @@ public class ContractForm extends Form {
 	    
 	    tot.addListener(new FieldListener(){
 		    public void dew(){
-			System.out.println("least it got here");
 			try {
 			tf.setText(""+(StringIn.parseFloat(tot.text())*.1f));
 			} catch (InputXcpt ix) {;}

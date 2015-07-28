@@ -25,12 +25,11 @@ public class InsertDest implements StringDest{
 
     public void endEntry(){
 	String cmd = stmt+vals+");";
-	System.out.println(cmd);
 	try {
 	    if (ID_check) id=SQLBot.bot.updateGetID(cmd);
 	    else SQLBot.bot.update(cmd);
 	}
-	catch (Exception e){System.err.println(e.getMessage());}
+	catch (Exception e){System.err.println(e);}
 	vals = "";
 	first = true;
     }

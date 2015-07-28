@@ -46,6 +46,7 @@ public class SQLBot {
 	try{
 	    if (stmt != null) stmt.close();
 	    stmt = conn.createStatement();
+	    stmt.setQueryTimeout(5);
 	} catch (Exception e) {System.out.println("Couldn't make new statement."); System.exit(1);}
     }
 
