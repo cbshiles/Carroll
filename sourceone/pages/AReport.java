@@ -50,6 +50,7 @@ public class AReport extends FullnessPage{
 	jb.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 		    try {
+			reportDate = StringIn.parseDate(payDay.text());
 			View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
 
 			g.view.push1();
@@ -72,8 +73,7 @@ public class AReport extends FullnessPage{
 			}
 			kill();
 		    }catch (Exception x)
-		    {x.printStackTrace(); 
-			System.err.println("~?~ "+x);}
+		    {new XcptDialog(AReport.this, x); x.printStackTrace(); }
 		}});
 	wrap();
     }

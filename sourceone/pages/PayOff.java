@@ -45,6 +45,9 @@ public class PayOff extends TablePage {
 			if (dx.length > 0){
 			    new PayOffDialog(PayOff.this, g.data.get(dx[0]), inKey);
 			}
+			else {
+			    new XcptDialog(PayOff.this, new InputXcpt("No contract selected"));
+			}
 		    }
 		});
 	} catch (Exception ix) {
@@ -62,6 +65,7 @@ public class PayOff extends TablePage {
 	int nopO, pfO, pmO, idO;
 	float  aopO, fpaO, grsO, netO, tcO, fees, payoff=0;
 	JTextArea jta;
+	boolean valid = true;
 /*	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	Key contKey = Key.contractKey.just(new String[] {
@@ -97,7 +101,7 @@ public class PayOff extends TablePage {
 	}
 	
 	public PayOffDialog(Frame f, Object[] o, Key k){
-	    super(f, "Pay Off for "+o[k.dex("First Name")]+o[k.dex("Last Name")], Dialog.ModalityType.DOCUMENT_MODAL);
+	    super(f, "Pay Off for "+o[k.dex("First Name")]+" "+o[k.dex("Last Name")], Dialog.ModalityType.DOCUMENT_MODAL);
 	    this.o = o;
 
 	    nopO = (int)o[k.dex("Number of Payments")];
@@ -124,10 +128,10 @@ public class PayOff extends TablePage {
 	    feeField.getDocument().addDocumentListener(new FieldListener() {
 		    public void dew() {
 			try {
-			    float d = StringIn.parseFloat(feeField.getText());
-			    fees = d;
+			    fees = StringIn.parseFloat(feeField.getText());
 			    figure();
-			} catch (InputXcpt ix) {;}
+			    valid = true;
+			} catch (InputXcpt ix) {valid = false;}
 		    }
 		});
 	    
@@ -141,7 +145,8 @@ public class PayOff extends TablePage {
 			try {
 			    payDate = StringIn.parseDate(dateField.getText());
 			    figure();
-			} catch (InputXcpt ix) {;}
+			    valid = true;
+			} catch (InputXcpt ix) {valid = false;}
 		    }
 		});
 
@@ -183,11 +188,12 @@ public class PayOff extends TablePage {
 		dispose();
 	    else if (cmd.equals("pay")){
 		try {
+		    if (! valid) throw new InputXcpt("Invalid fields");
 		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
 		    dispose();
-		} catch (Exception e){System.err.println("~!~"+e);}
+		} catch (Exception e){new XcptDialog(PayOff.this, e);}
 	    }
 	    else {System.err.println("Kentucky derby");
 		System.exit(1);}
