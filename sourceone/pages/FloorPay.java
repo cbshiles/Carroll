@@ -15,10 +15,11 @@ import java.time.temporal.ChronoUnit;
 public class FloorPay extends TablePage {
 
     Ent ent;
+    View v;
 
     public void getTable(LocalDate ld){
 	ent.setDay(ld);
-	View v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 							    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 	    ent);
 
@@ -76,7 +77,10 @@ public class FloorPay extends TablePage {
 			if (dx.length == 0) throw new InputXcpt("No car selected");
 			Object[] o = g.data.get(dx[0]);
 
-			SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"' WHERE ID="+o[id]);
+			float amt = (float)v.get("Sub total", dx[0]);
+
+			System.err.println("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
+			SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
 			kill();
 		    } catch (Exception ix) {new XcptDialog(FloorPay.this, ix);}
 		}

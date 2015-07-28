@@ -252,13 +252,7 @@ public class Key{
 						    new DateCut("Date Paid"),
 						    new FloatCut("Pay Off Amount")
 						});
-
-//    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid"});
-    //    .just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
-        //    .just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost"});
-//    .just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title"}); //for  cahr
-//    .just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost"});
-
+//    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount"});
     
     public static final Key paymentKey = new Key("Payments",
 						 new Cut[]{

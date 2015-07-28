@@ -68,6 +68,10 @@ public class Matrix{
 	addOut(new BasicFormatter(new TableDest(key)));
     }
 
+    public Object get(String name, int dx){
+	return data.get(dx)[key.dex(name)];
+    }
+
     public String toString(){
 	String str = key.names()+'\n';
 	for (Object[] arr : data)
