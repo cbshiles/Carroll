@@ -19,7 +19,7 @@ public class ContractForm extends Form {
 
 	setLayout(new java.awt.GridLayout(0, 1));
 
-	TextField tot; Field type = null;
+	TextField tot, res; Field type = null;
 
 	addF(new TextField("First Name"));
 	addF(new TextField("Last Name"));
@@ -38,10 +38,13 @@ public class ContractForm extends Form {
 	addF(new TextField("Start Date"));
 	
 	//addF(new TextField("Reserve"));
-	addF(new ReserveField(tot, type));
-	addF(new TextField("Net Amount"));
+	addF(res = new ReserveField(tot, type));
+
+	//addF(new TextField("Net Amount"));
+	addF(new NetField(tot, res));
 	
 //	addF(new TextField("Vehicle"));
+
 	addF(new TextField("VIN"));
 
 	addF(type = new RadioField("Contract Type",
@@ -165,11 +168,12 @@ public class ContractForm extends Form {
 	    JTable jt;
 	    Grid g;
 	    JPanel jp = new JPanel(new BorderLayout());
+	    View v;
 	    try {
 		Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE ID="+id+';');
 		g = new Grid(key, in);
 
-		View v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+		v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 								    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 		    new FloorPay.Ent(key, LocalDate.now())); //# working here
 		v.addTable();
@@ -189,12 +193,13 @@ public class ContractForm extends Form {
 		    public void actionPerformed(ActionEvent e){
 			int tl = key.dex("Title");
 			int id = key.dex("ID");
+			float st = (float)v.get("Sub total", 0);
 			try {
 			    LocalDate d = date; 
 			    
-			    Object[] o = g.data.get(0); //# dangerouts
+			    Object[] o = g.data.get(0); //# dangerouts buts its just getting the row
 			    
-			    SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"' WHERE ID="+o[id]);
+			    SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+st+" WHERE ID="+o[id]);
 			    dispose();
 			} catch (Exception ix) {new XcptDialog(FloorPayDialog.this, ix);}
 		    }
@@ -215,8 +220,6 @@ public class ContractForm extends Form {
     }
 
     private class ReserveField extends TextField {
-
-	
 	public ReserveField(TextField tot, Field type){
 	    //# we don't know how type will affect this, ignore for now
 	    super("Reserve at 10%");
@@ -224,12 +227,14 @@ public class ContractForm extends Form {
 	    tot.addListener(new FieldListener(){
 		    public void dew(){
 			try {
-			tf.setText(""+(StringIn.parseFloat(tot.text())*.1f));
+			    float f = StringIn.parseFloat(tot.text())*.1f;
+			    tf.setText(""+View.rnd(f));
 			} catch (InputXcpt ix) {;}
 		    }
 		});
 	}
     }
+
 }
 
 /**

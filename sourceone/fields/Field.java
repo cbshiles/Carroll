@@ -34,10 +34,13 @@ public abstract class Field {
 	return new JLabel(n, SwingConstants.CENTER);
     }
 
+    JTextField newText(String x){
+	return new JTextField(x);
+    }
+    
     JTextField newText(){
-	JTextField tf = new JTextField();
 //	tf.setBorder(BorderFactory.createMatteBorder(15, 5, 15, 5, Page.bkgd));
-	return tf;
+	return newText("");
     }
 
     public abstract void clear();

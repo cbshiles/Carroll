@@ -79,7 +79,7 @@ public class FloorPay extends TablePage {
 
 			float amt = (float)v.get("Sub total", dx[0]);
 
-			System.err.println("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
+			//System.err.println("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
 			SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
 			kill();
 		    } catch (Exception ix) {new XcptDialog(FloorPay.this, ix);}
