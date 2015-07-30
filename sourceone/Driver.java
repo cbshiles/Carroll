@@ -1,7 +1,7 @@
 package sourceone;
 
 import sourceone.sql.SQLBot;
-import sourceone.pages.HomePage;
+import sourceone.pages.*;
 
 public class Driver {
     private static int pages = 0;
@@ -18,6 +18,10 @@ public class Driver {
     
     public static void main(String[] args) throws Exception{
 	SQLBot.bot = new SQLBot("res/db.properties");
+
+	Page.dim = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+	System.out.println(Page.dim);
+
 	new HomePage();
 	EventDispatchThreadHangMonitor.initMonitoring();
     }

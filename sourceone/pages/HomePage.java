@@ -5,7 +5,8 @@ public class HomePage extends Page {
 
     public HomePage(){
 	super("Home Page", null);
-	setBounds(550, 300, 400, 300);
+	place(.1f, 0f, .8f, .1f);
+//	setBounds(550, 300, 400, 300);
 	setLayout(new GridLayout(1, 0));
 
 	addRed("Floor Plan", FloorMenu.class);

@@ -3,11 +3,12 @@ package sourceone.pages;
 import sourceone.Driver;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.Color;
+import java.awt.*;
 import java.util.*;
 
 public class Page extends JFrame {
 
+    public static Rectangle dim; 
     public static final Color bkgd = new Color(190, 190, 240);
     private boolean busy = false;
     Page parent;
@@ -66,5 +67,9 @@ public class Page extends JFrame {
 
     public void setBusy(boolean b){
 	busy = b;
+    }
+
+    public void place(float x, float y, float w, float h){
+	setBounds((int)(x*dim.width+dim.x), (int)(y*dim.height+dim.y), (int)(w*dim.width), (int)(h*dim.height));
     }
 }
