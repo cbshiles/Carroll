@@ -47,7 +47,7 @@ public class CarReport extends TablePage{
 	cPan.add(jb);
 	jp.add(cPan);
 	
-	setSize(1000, 600);
+	tablePlace();
 	setVisible(true);
     }
 

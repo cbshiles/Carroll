@@ -30,7 +30,7 @@ public class OldContracts extends TablePage{
 	    pushTable();
 	} catch (Exception e) {new XcptDialog(OldContracts.this, e);}
 
-	setSize(1000, 600);
+	tablePlace();
 	setVisible(true);
     }
 }

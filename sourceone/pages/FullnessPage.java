@@ -57,7 +57,7 @@ public abstract class FullnessPage extends TablePage{
     }
 
     protected void wrap(){
-	setSize(1000, 600);
+	tablePlace();
 	setVisible(true);
     }
 
@@ -105,7 +105,7 @@ public abstract class FullnessPage extends TablePage{
 
 	    jp.add(ab); jp.add(bb); jp.add(cb);
 
-	    setBounds(500,500,500,150);
+	    place(.6f, .25f, .3f, .15f);
 
 	    addWindowListener(new WindowAdapter() {
 		    @Override
@@ -120,6 +120,10 @@ public abstract class FullnessPage extends TablePage{
 
 	protected void kill(){
 	    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	}
+
+	public void place(float x, float y, float w, float h){
+	    setBounds((int)(x*dim.width+dim.x), (int)(y*dim.height+dim.y), (int)(w*dim.width), (int)(h*dim.height));
 	}
 
         @Override

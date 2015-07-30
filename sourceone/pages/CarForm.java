@@ -15,9 +15,7 @@ public class CarForm extends Form{
     public CarForm(Page p) throws Exception{
 	super("Cars", p);
 
-	setSize(400, 600);
-	setLocation(200, 100);
-
+	place(.3f, .1f, .25f, .35f);
 	setLayout(new GridLayout(0, 1));
 
 	addF(new TextField("Date Bought"));

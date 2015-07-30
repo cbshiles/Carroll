@@ -17,7 +17,7 @@ public class TitlePage extends Page {
     
     public TitlePage(Page p){
 	super("Pending Titles", p);
-	setSize(400, 600);
+	place(.3f, .1f, .3f, .65f);
 
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost"});
 

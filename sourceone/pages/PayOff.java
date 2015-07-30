@@ -16,7 +16,7 @@ public class PayOff extends TablePage {
 
     public PayOff(Page p){
 	super("Pay Off Contract", p);
-	setSize(1000, 600);
+	tablePlace();
 	jp.add(jb = new JButton("Select Contract"), BorderLayout.SOUTH);
 	
 	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});

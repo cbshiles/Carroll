@@ -5,7 +5,7 @@ public class FloorMenu extends Page {
 
     public FloorMenu(Page p){
 	super("Floor Plan", p);
-	setSize(400, 600);
+	place(0f, .1f, .3f, .4f);
 	setLayout(new GridLayout(0, 1));
 
 	addRed("Add Car", CarForm.class);

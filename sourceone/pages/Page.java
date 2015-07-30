@@ -72,4 +72,8 @@ public class Page extends JFrame {
     public void place(float x, float y, float w, float h){
 	setBounds((int)(x*dim.width+dim.x), (int)(y*dim.height+dim.y), (int)(w*dim.width), (int)(h*dim.height));
     }
+
+    public void tablePlace(){
+	place(.05f, .15f, .7f, .6f);
+    }
 }

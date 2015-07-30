@@ -25,7 +25,7 @@ public class OldFloor extends TablePage {
 	    pushTable();
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); kill(); return;}
 
-	setSize(1000, 600);
+	tablePlace();
 	setVisible(true);
     }
 

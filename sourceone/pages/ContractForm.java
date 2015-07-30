@@ -14,9 +14,9 @@ import sourceone.fields.*;
 public class ContractForm extends Form {
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
-	setSize(400, 600);
-	setLocation(200, 100);
 
+	place(.15f, .15f, .25f, .8f);
+	
 	setLayout(new java.awt.GridLayout(0, 1));
 
 	TextField tot, res; Field type = null;
