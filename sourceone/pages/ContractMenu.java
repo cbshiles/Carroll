@@ -5,7 +5,7 @@ public class ContractMenu extends Page {
     
     public ContractMenu(Page p){
 	super("Contract Page", p);
-	setSize(400, 600);
+	place(.1f, .1f, .266f, .4f);
 	setLayout(new GridLayout(0, 1));
 
 	addRed("Add Contract", ContractForm.class);
