@@ -47,20 +47,12 @@ public class LoadTable{
 			  }
 		      }));
 
-	Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
-						     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
-						     "Next Due", "Amount of Payment", "Number of Payments"});
-
-	add(new Model("full", fKey, null, new Cut[]{new FloatCut("Final Payment Amount"), new StringCut("VIN"),
+	add(new Model("full", Key.fKey, null, new Cut[]{new FloatCut("Final Payment Amount"), new StringCut("VIN"),
 						    new IntCut("Customer ID")}, new FullEnt(fKey)));
 
 	add(new Model(Key.customerKey.just(new String[] {"Last Name", "First Name"}), null, null, null));
 
-	Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
-						     "Payments Made", "Start Date",
-						     "Next Due", "Amount of Payment", "Number of Payments"});
-
-	add(new Model("partial", pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
+	add(new Model("partial", Key.pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
 						       new IntCut("Customer ID"), new FloatCut("Total Contract")}, new PartEnt(pKey)));
     }
 

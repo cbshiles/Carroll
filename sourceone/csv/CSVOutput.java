@@ -8,11 +8,17 @@ public class CSVOutput implements Output{
     FileWriter fw;
     String line = "", text;
     boolean first = true;
-    String addon;
+    String addon = "";
 
     public CSVOutput(Key k, String fileName) throws IOException{
 	this (k, fileName, "");
     }
+
+    public CSVOutput(String str, String fileName) throws IOException{
+	text = str;
+	fw = new FileWriter(fileName); //append optionx
+	close();
+    }    
     
     public CSVOutput(Key k, String fileName, String addon) throws IOException{
 	this.addon = addon;

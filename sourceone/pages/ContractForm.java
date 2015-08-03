@@ -9,9 +9,12 @@ import java.time.*;
 import static sourceone.key.Kind.*;
 import sourceone.key.*;
 import sourceone.sql.*;
+import sourceone.csv.*;
 import sourceone.fields.*;
 
 public class ContractForm extends Form {
+    private String csv, csvFile, csvTail = "";
+    
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
 
@@ -79,6 +82,7 @@ public class ContractForm extends Form {
 			ent.set_id((int)custGrid.go()); //# causes crap entries into the customers table
 			if ((int)contGrid.go() == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
+			makeCSV(custGrid, contGrid);
 			freshen();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(getName(), ContractForm.this, ix);
@@ -88,6 +92,106 @@ public class ContractForm extends Form {
 	add(submit);
 	pack();
 	setVisible(true);
+    }
+
+    private void makeCSV(Grid custGrid, Grid contGrid){
+	int sd, aop, nop, fpa, tc;
+	int cust_id, vin, fll, res, pf;
+
+	Object [] co = contGrid.data.get(0);
+	sd = contGrid.key.dex("Start Date");
+	aop = contGrid.key.dex("Amount of Payment");
+	nop = contGrid.key.dex("Number of Payments");
+	fpa = contGrid.key.dex("Final Payment Amount");
+	tc = contGrid.key.dex("Total Contract");
+	fll = contGrid.key.dex("Fullness");
+	vin = contGrid.key.dex("VIN");
+	res = contGrid.key.dex("Reserve");
+	pf = contGrid.key.dex("Payment Frequency");
+	
+	int add, add2, fn, ln, pn;
+
+	Object [] cu = custGrid.data.get(0);
+	add = custGrid.key.dex("Address");
+	add2 = custGrid.key.dex("Address 2");
+	fn = custGrid.key.dex("First Name");
+	ln = custGrid.key.dex("Last Name");
+	pn = custGrid.key.dex("Phone Number");
+	
+	csv = "";
+	csv += addLine(3);
+	csv += addLine(BasicFormatter.cinvert((LocalDate)co[sd]), 0);
+	csv += 	addLine();
+	csv += addLine(new String[] {"A/R Purchase:", "", "Gross", "%", "Net"});
+	csv += addLine();
+	csv += addLine("Name/Address/Phone #:", 0);
+	csv += addLine();
+	float gross = (float)co[tc];
+	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", ""+gross, "", ""});
+	csv += addLine(""+cu[pn], 0); //# format
+	csv += addLine(""+cu[add], 0);
+	csv += addLine(""+cu[add2], 0);
+	csv += addLine("Terms:", 0);
+	csv += addLine(terms((int)co[nop], (float)co[aop], (int)co[pf], (float)co[fpa])+
+		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0); //#! need to add the start day of contract
+	csv += addLine();
+	float rez = gross*-.1f;
+	csv += addLine(new String[]{"Reserve 10%", "", ""+rez,"",""});
+	float mid = gross+rez, net = mid*.72f;
+	csv += addLine(new String[]{"", "", ""+mid, "72", ""+net});
+
+	csvFile = "reports/"+cu[fn]+'_'+cu[ln]+"_Contract.csv";
+    }
+
+    private void sendReport(){
+	csv += csvTail;
+	try {
+	    new CSVOutput(csv, csvFile);
+	} catch (Exception e){System.err.println("Error csving"); System.err.println(e);}
+    }
+
+    public String terms(int num, float amt, int freq, float fin){
+	char c;
+	if (freq==7) c='W';
+	else if (freq ==14) c='B';
+	else c='M';
+	String trms = ""+num+" "+c+" @ "+amt;
+	if (fin - .01f > 0f)
+	    trms += " & 1 @ "+fin;
+	return trms;
+    }
+
+
+    String addLine(String[] arr){
+	String a=""; boolean first = true;
+	for (String s : arr){
+	    if (! first) a += ", ";
+	    else first = false;
+	    a += s;
+	}
+	return a+'\n';
+    }
+
+    String addLine(String s, int x){
+	String a ="";
+	for (int i=0; i<5; i++){
+	    if (i==x) a += s;
+	    a += ',';
+	}
+	return a+'\n';
+    }
+
+    String addLine(){return addLine(1);}
+
+    String addLine(int n){
+	String a = "";
+	for (int j= 0; j<n; j++){
+	    for (int i=0; i<5; i++){
+		a += ',';
+	    }
+	    a += '\n';
+	}
+	return a;
     }
 	    
     private class Unt implements Enterer{
@@ -164,7 +268,7 @@ public class ContractForm extends Form {
 
     public class FloorPayDialog extends JDialog{
 	public FloorPayDialog(int id, LocalDate date){
-	    Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
+	    Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title"});
 	    JTable jt;
 	    Grid g;
 	    JPanel jp = new JPanel(new BorderLayout());
@@ -193,11 +297,20 @@ public class ContractForm extends Form {
 		    public void actionPerformed(ActionEvent e){
 			int tl = key.dex("Title");
 			int id = key.dex("ID");
+			int vin = key.dex("VIN");
+			int veh = key.dex("Vehicle");
 			float st = (float)v.get("Sub total", 0);
 			try {
 			    LocalDate d = date; 
 			    
 			    Object[] o = g.data.get(0); //# dangerouts buts its just getting the row
+
+			    //{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
+			    csvTail += addLine("Vehicle:", 0);
+			    csvTail += addLine(new String[] {""+o[veh],""+o[vin],"","",""});
+			    csvTail += addLine();
+			    csvTail += addLine(new String[] {"FP Pay Off","","","",""+st});
+			    sendReport();
 			    
 			    SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+st+" WHERE ID="+o[id]);
 			    dispose();

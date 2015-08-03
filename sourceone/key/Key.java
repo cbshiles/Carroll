@@ -260,7 +260,7 @@ public class Key{
 						     new IntCut("Contract ID", "NOT NULL"),
 						     new DateCut("Day", "NOT NULL"),
 						     new FloatCut("Amount", "NOT NULL"),
-						     new StringCut(63, "Batch ID", "NOT NULL")
+						     new StringCut(63, "Batch ID")
 						 });
 
     public static final Key metaKey = new Key("Meta",
@@ -269,4 +269,11 @@ public class Key{
 						  new DateCut("Full Report Date"),
 						  new DateCut("Partial Report Date")
 					      });
+    public static final Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
+								     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
+								     "Next Due", "Amount of Payment", "Number of Payments"});
+    
+    public static final Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
+								     "Payments Made", "Start Date",
+								     "Next Due", "Amount of Payment", "Number of Payments"});
 }
