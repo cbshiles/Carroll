@@ -28,7 +28,7 @@ public class Matrix{
     }
 
     public void sort(int i){
-	//# uggggg
+	
     }
 
     public void push1() throws InputXcpt{ //assumes pushing to a view

@@ -18,7 +18,7 @@ public class CarReport extends TablePage{
 	Key inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title"}); 
 
 	try {
-	    Input in = new QueryIn(inKey, "WHERE Pay_Off_Amount IS NOT NULL"); //"WHERE Title<2;"
+	    Input in = new QueryIn(inKey, "WHERE Pay_Off_Amount IS NULL"); //"WHERE Title<2;"
 	    g = new Grid(inKey, in);
 	    g.pull();
 	    Key entKey = new Key("Cars",

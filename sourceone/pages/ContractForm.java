@@ -14,6 +14,7 @@ import sourceone.fields.*;
 
 public class ContractForm extends Form {
     private String csv, csvFile, csvTail = "";
+    private boolean stuck;
     
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
@@ -83,6 +84,7 @@ public class ContractForm extends Form {
 			if ((int)contGrid.go() == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
 			makeCSV(custGrid, contGrid);
+			if (!stuck) sendReport();
 			freshen();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(getName(), ContractForm.this, ix);
@@ -120,7 +122,7 @@ public class ContractForm extends Form {
 	
 	csv = "";
 	csv += addLine(3);
-	csv += addLine(BasicFormatter.cinvert((LocalDate)co[sd]), 0);
+	csv += addLine(BasicFormatter.cinvert(LocalDate.now()), 0);
 	csv += 	addLine();
 	csv += addLine(new String[] {"A/R Purchase:", "", "Gross", "%", "Net"});
 	csv += addLine();
@@ -145,6 +147,7 @@ public class ContractForm extends Form {
 
     private void sendReport(){
 	csv += csvTail;
+	System.err.println("yadda\ndood"+csv);
 	try {
 	    new CSVOutput(csv, csvFile);
 	} catch (Exception e){System.err.println("Error csving"); System.err.println(e);}
@@ -249,12 +252,13 @@ public class ContractForm extends Form {
 	    try {
 		//System.err.println("SELECT ID FROM Cars WHERE VIN LIKE '"+o[vin]+"' AND Date_Paid IS NULL;");
 		ResultSet rs = SQLBot.bot.query("SELECT ID FROM Cars WHERE VIN LIKE '"+o[vin]+"' AND Date_Paid IS NULL;");
-		if (rs.next()){
+		if (stuck = rs.next()){
 		    int id = rs.getInt(1);
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
 		    new FloorPayDialog(id, (LocalDate)o[sd]);
-		}} catch (SQLException e){throw new InputXcpt(e);}
+		} 
+	    } catch (SQLException e){throw new InputXcpt(e);}
 
 	    return new Object[]{
 		o[sd], //Next Due

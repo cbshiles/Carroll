@@ -33,6 +33,7 @@ public class LoadTable{
 	gain(new String[]{"Customers", "spreadsheets/fullNames.csv"});
 	gain(new String[]{"partial", "spreadsheets/partContracts.csv"});
 	gain(new String[]{"Customers", "spreadsheets/partNames.csv"});
+	gain(new String[]{"Cars", "spreadsheets/floor.csv"});
     }
 
     private static void add(Model m){
@@ -40,7 +41,7 @@ public class LoadTable{
     }
 
     private static void load(){
-	add(new Model(Key.floorKey.except(new int[]{0,5,6}), null, new Cut[]{new IntCut("Title")},
+	add(new Model(Key.floorKey.except(new int[]{0,5,6,7}), null, new Cut[]{new IntCut("Title")},
 		      new Enterer(){
 			  public Object[] editEntry(Object[] objs){
 			      return new Object[] {0};
@@ -48,12 +49,12 @@ public class LoadTable{
 		      }));
 
 	add(new Model("full", Key.fKey, null, new Cut[]{new FloatCut("Final Payment Amount"), new StringCut("VIN"),
-						    new IntCut("Customer ID")}, new FullEnt(fKey)));
+						    new IntCut("Customer ID")}, new FullEnt(Key.fKey)));
 
 	add(new Model(Key.customerKey.just(new String[] {"Last Name", "First Name"}), null, null, null));
 
 	add(new Model("partial", Key.pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
-						       new IntCut("Customer ID"), new FloatCut("Total Contract")}, new PartEnt(pKey)));
+						       new IntCut("Customer ID"), new FloatCut("Total Contract")}, new PartEnt(Key.pKey)));
     }
 
     private static class PartEnt implements Enterer{
