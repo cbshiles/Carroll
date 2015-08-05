@@ -18,7 +18,7 @@ public class AReport extends FullnessPage{
     @Override
     public void getTable(){
 	super.getTable();
-	jt.setRowSelectionAllowed(false);
+//	jt.setRowSelectionAllowed(false);
     }
     
     public AReport(Page p){

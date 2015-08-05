@@ -271,29 +271,59 @@ public class ContractForm extends Form {
     }
 
     public class FloorPayDialog extends JDialog{
+
+	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title"});
+	JTable jt;
+	Grid g;
+	JPanel jp = new JPanel(new BorderLayout());
+	View v;
+	FloorPay.Ent ent;
+	JScrollPane jsp = new JScrollPane();
+
+	public void getTable(LocalDate ld){
+	    ent.setDay(ld);
+	    v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+							   new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
+		ent);
+
+	    v.addTable();
+	    
+	    try{ jsp.setViewportView(jt = (JTable)g.push());}
+	    catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	    catch (Exception e){e.printStackTrace();}
+
+	    jt.setRowSelectionAllowed(false);
+	}
+	
 	public FloorPayDialog(int id, LocalDate date){
-	    Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title"});
-	    JTable jt;
-	    Grid g;
-	    JPanel jp = new JPanel(new BorderLayout());
-	    View v;
+
+
+	    jp.add(jsp, BorderLayout.NORTH);
+	    setContentPane(jp);
+	    
 	    try {
 		Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE ID="+id+';');
 		g = new Grid(key, in);
-
-		v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
-								    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
-		    new FloorPay.Ent(key, LocalDate.now())); //# working here
-		v.addTable();
-
-		jt = (JTable)g.go();
-		jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		g.pull();
+		ent = new FloorPay.Ent(key);
+		getTable(LocalDate.now());
+		
 	    } catch (Exception e){ new XcptDialog(ContractForm.this, e); return;}
-
-	    jp.add(new JScrollPane(jt), BorderLayout.NORTH);
 
 	    JPanel cPan = new JPanel();
 	    jp.add(cPan, BorderLayout.SOUTH);
+
+	    sourceone.fields.TextField dateOf;
+	    dateOf = new sourceone.fields.TextField("Date paid:", BasicFormatter.cinvert(LocalDate.now()));
+	    cPan.add(dateOf.getJP(), BorderLayout.EAST);
+
+	    dateOf.addListener(new FieldListener() {
+		    public void dew() {
+			try {
+			    LocalDate d = StringIn.parseDate(dateOf.text());
+			    getTable(d);
+			} catch (InputXcpt ix) {;/*System.err.println("HGXB");*/}
+		    }});
 	    
 	    JButton jb = new JButton("Pay Car Off");
 	    cPan.add(jb, BorderLayout.SOUTH);
@@ -316,7 +346,8 @@ public class ContractForm extends Form {
 			    csvTail += addLine(new String[] {"FP Pay Off","","","",""+st});
 			    sendReport();
 			    
-			    SQLBot.bot.update("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+st+" WHERE ID="+o[id]);
+			    //! removed Title="+((int)o[tl]+2)+",
+			    SQLBot.bot.update("UPDATE Cars SET Date_Paid='"+d+"', Pay_Off_Amount="+st+" WHERE ID="+o[id]);
 			    dispose();
 			} catch (Exception ix) {new XcptDialog(FloorPayDialog.this, ix);}
 		    }
@@ -330,7 +361,7 @@ public class ContractForm extends Form {
 		    }
 		});
 		  
-	    setContentPane(jp);
+
 	    setBounds(300,300,1000,600);
 	    setVisible(true);
 	}
@@ -338,7 +369,7 @@ public class ContractForm extends Form {
 
     private class ReserveField extends TextField {
 	public ReserveField(TextField tot, Field type){
-	    //# we don't know how type will affect this, ignore for now
+	    //# we don't know how type(of contract) will affect this, ignore for now
 	    super("Reserve at 10%");
 	    
 	    tot.addListener(new FieldListener(){

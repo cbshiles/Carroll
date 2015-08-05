@@ -9,9 +9,9 @@ public class HomePage extends Page {
 //	setBounds(550, 300, 400, 300);
 	setLayout(new GridLayout(1, 0));
 
-	addRed("Floor Plan", FloorMenu.class);
-	addRed("Contracts", ContractMenu.class);
-	addRed("Inactive Inventory", FrozeMenu.class);
+	addRed("Floor Plan", FloorMenu.class, false);
+	addRed("Contracts", ContractMenu.class, false);
+	addRed("Inactive Inventory", FrozeMenu.class, false);
 //	pack();
 	setVisible(true);
     }

@@ -11,6 +11,7 @@ public class FloorMenu extends Page {
 	addRed("Add Car", CarForm.class);
 	addRed("Active Report", CarReport.class);
 	addRed("Add Title", TitlePage.class);
+	addRed("\"Remove\" Title", TitleDone.class);
 	addRed("Pay Off", FloorPay.class);
 	
 	//pack();

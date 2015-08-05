@@ -17,7 +17,7 @@ public class CSVInput implements StringSource{
 	String s;
 	try {
 	    boolean r = ((s = br.readLine()) != null);
-	    if (r) strs = s.split(",");
+	    if (r) strs = s.split("~"); //! changed delimeter to tilde
 	    n=0;
 	    return r;
 	} catch (IOException e){

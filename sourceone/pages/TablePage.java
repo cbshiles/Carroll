@@ -22,10 +22,15 @@ public class TablePage extends Page {
 	setContentPane(jp);
     }
 
-    public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
-	g.view.addTable();
+    public void pushTable(boolean hasView){
+	if (hasView) g.view.addTable();
+	else g.addTable();
 	try{ jsp.setViewportView(jt = (JTable)g.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
+    }
+
+    public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
+	pushTable(true);
     }
 }

@@ -10,7 +10,7 @@ public class Page extends JFrame {
 
     public static Rectangle dim; 
     public static final Color bkgd = new Color(190, 190, 240);
-    private boolean busy = false;
+    private boolean busy = false, isParent = false;
     Page parent;
     ArrayList<Page> children = new ArrayList<Page>();
 //    String name;
@@ -39,6 +39,7 @@ public class Page extends JFrame {
 
     public void addChild(Page p){
 	children.add(p);
+	setParent(true);
     }
 
     public void dropChild(Page p){
@@ -49,12 +50,17 @@ public class Page extends JFrame {
 	for (int i = children.size()-1; i>=0; i--)
 	    children.get(i).kill();
 	children = new ArrayList<Page>();
+	setParent(false);
     }
 
-    protected <T extends Page> void addRed(String n, Class<T> t){ //add a redirect, for menus
+    protected <T extends Page> void addRed(String n, Class<T> t, boolean lk){ //add a redirect, for menus
 	JButton jb = new JButton(n);
 	add(jb);
-	jb.addActionListener(new PageMaker(this, t));
+	jb.addActionListener(new PageMaker(this, t, lk));
+    }
+    
+    protected <T extends Page> void addRed(String n, Class<T> t){ //add a redirect, for menus
+	addRed(n, t, true);
     }
 
     protected void kill(){
@@ -65,8 +71,18 @@ public class Page extends JFrame {
 	return busy;
     }
 
+    public boolean isParent(){
+	return isParent;
+    }
+
     public void setBusy(boolean b){
 	busy = b;
+	if (parent != null) parent.setBusy(b);
+    }
+
+    public void setParent(boolean b){
+	isParent = b;
+//	if (parent != null) parent.setParent(b);
     }
 
     public void place(float x, float y, float w, float h){

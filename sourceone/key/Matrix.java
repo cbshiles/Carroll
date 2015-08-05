@@ -27,8 +27,26 @@ public class Matrix{
 	hasOut = true;
     }
 
-    public void sort(int i){
-	//# uggggg
+    public int dexOf(String[] a, String s){
+	for (int i=0; i<a.length; i++){
+	    if (s == a[i]) return i;
+	}
+	return -1;
+    }
+
+    public void sort(int col, boolean asc){ //what column and order
+	String[] tings = new String[data.size()];
+	for (int i=0; i<tings.length; i++)
+	    tings[i] = data.get(i)[col].toString();
+	String[] sorted = Arrays.copyOf(tings, tings.length);
+	Arrays.sort(sorted);
+
+	List<Object[]> newData = new ArrayList<Object[]>();
+
+	for (int j=0; j<tings.length; j++){
+	    newData.add(data.get(dexOf(tings, sorted[j])));
+	}
+	data = newData;
     }
 
     public void push1() throws InputXcpt{ //assumes pushing to a view

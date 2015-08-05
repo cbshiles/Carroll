@@ -7,15 +7,19 @@ public class PageMaker implements ActionListener{
 
     private Class type;
     private Page owner;
-    
-    public <T extends Page> PageMaker(Page f, Class<T> t)
-    {owner = f; type = t;}
+    private boolean locker;
+
+    public <T extends Page> PageMaker(Page f, Class<T> t, boolean lk)
+    {owner = f; type = t; locker=lk;}
 
     public void actionPerformed(ActionEvent ae)
     {
 	    try {
-		if (owner.isBusy()) throw new InputXcpt("Already have a window open.");
-		owner.setBusy(true);
+		if (owner.isBusy())
+		    throw new InputXcpt("Already have a window open.");
+		else if (owner.isParent())
+		    owner.removeChildren();
+		owner.setBusy(locker);
 		try {type.getDeclaredConstructor(Page.class).newInstance(owner);}
 		catch (java.lang.reflect.InvocationTargetException e) { 
 		    throw e.getCause();

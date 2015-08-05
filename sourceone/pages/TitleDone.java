@@ -9,18 +9,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TitlePage extends TablePage {
+public class TitleDone extends TablePage {
 
     JButton jb;
     
-    public TitlePage(Page p){
-	super("Pending Titles", p);
+    public TitleDone(Page p){
+	super("Titles wE hAVE", p);
 	place(.3f, .1f, .3f, .65f);
 
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost"});
 
 	try{
-	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=0");
+	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=1 AND Pay_Off_Amount IS NOT NULL");
 
 	    g = new Grid(key, in);
 
@@ -41,11 +41,11 @@ public class TitlePage extends TablePage {
 			    if (dx.length == 0) throw new InputXcpt("No car selected");
 			    for (int i : dx){
 				Object[] datum = g.data.get(i);
-				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+datum[0]);
+				SQLBot.bot.update("UPDATE Cars SET Title=3 WHERE ID="+datum[0]);
 			    }
 			    kill();
 			} 	catch (Exception x)
-			{new XcptDialog(TitlePage.this, x);}
+			{new XcptDialog(TitleDone.this, x);}
 		    }});
 	}
 	catch (java.sql.SQLException x)

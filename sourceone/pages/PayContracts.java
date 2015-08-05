@@ -24,7 +24,7 @@ public class PayContracts extends FullnessPage {
 	reload(); //# this is a redo(from fullness constructor), figure out a better way
 	getTable();
 	    
-	jt.setRowSelectionAllowed(false);
+//	jt.setRowSelectionAllowed(false);
 	    
 	JPanel cPan = new JPanel();
 	sourceone.fields.TextField batchID;

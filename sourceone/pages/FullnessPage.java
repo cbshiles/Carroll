@@ -78,7 +78,12 @@ public abstract class FullnessPage extends TablePage{
 
     protected void getTable() {
 	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
-	pushTable();
+	g.view.addTable();
+	try{ g.push1();
+	g.view.sort(0, true);
+	jsp.setViewportView(jt = (JTable)g.view.push());}
+	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	catch (Exception e){e.printStackTrace();}
     }
 
     private class FullnessDialog extends JDialog implements ActionListener{

@@ -26,7 +26,7 @@ public class CarReport extends TablePage{
 				 new Kind[]{DATE, STRING, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
 	    g.clearView(entKey.cuts, new Ent(inKey));
 	    pushTable();
-	    jt.setRowSelectionAllowed(false);
+//	    jt.setRowSelectionAllowed(false);
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); kill(); return;}
 
 	JPanel cPan = new JPanel();
