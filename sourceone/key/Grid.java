@@ -11,6 +11,12 @@ public class Grid extends Matrix{
 	key.setInput(in);
     }
 
+    void switchInput(Input i){ key.setInput(in = i);}
+
+    public Grid(Key k){ // the skeezy one; only useful for manual loading
+	super(k);
+    }
+
     public void pull() throws InputXcpt{
 	data = new ArrayList<Object[]>();
 	while(in.hasEntries())

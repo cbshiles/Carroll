@@ -1,7 +1,7 @@
 package sourceone.key;
 import java.util.*;
 import javax.swing.JTable;
-
+import java.math.BigDecimal;
 public class Matrix{
 
     public List<Object[]> data = new ArrayList<Object[]>();
@@ -111,4 +111,32 @@ public class Matrix{
 	}
 	return keys;
     }
+
+    public float floatSum(String name){
+	int i = key.dex(name);
+	rownd(i);
+	BigDecimal f = new BigDecimal(0);
+	for (Object[] larr : data){
+	    f = f.add(new BigDecimal((float)larr[i]));
+	}
+	return f.floatValue();
+    }
+
+    private void rownd(int i){//i is index
+	for (Object[] larr : data)
+	    larr[i] = rnd((float)larr[i]);
+    }
+
+    public static float rnd(float f){
+	return Math.round(f*100)/100f;
+    }
+
+    public int numRows(){
+	return data.size();
+    }
+    
+    public void chunk (Object[] entry) {//manually load in an alreay prepared entry
+	data.add(entry);
+    }
+    
 }

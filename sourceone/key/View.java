@@ -1,7 +1,7 @@
 package sourceone.key;
 
 import java.util.ArrayList;
-import java.math.BigDecimal;
+
 //Any new cuts are to be added to the key before the reach a view constructor
 //This feature is in Matrix's makeView
 
@@ -24,6 +24,13 @@ public class View extends Matrix{
 	clear = true;
     }
 
+        public View(Key k){//skeez one
+	super(k);
+	clear = true;
+    }
+
+    public void switchEnts(Enterer e){ent=e;}
+
     private void rownd(int i){//i is index
 	for (Object[] larr : data)
 	    larr[i] = rnd((float)larr[i]);
@@ -33,15 +40,6 @@ public class View extends Matrix{
 	return Math.round(f*100)/100f;
     }
 
-    public float floatSum(String name){
-	int i = key.dex(name);
-	rownd(i);
-	BigDecimal f = new BigDecimal(0);
-	for (Object[] larr : data){
-	    f = f.add(new BigDecimal((float)larr[i]));
-	}
-	return f.floatValue();
-    }
 
     public void freshen(){data = new ArrayList<Object[]>();}
 
@@ -71,5 +69,4 @@ public class View extends Matrix{
 	
 	data.add(arr);
     }
-
 }

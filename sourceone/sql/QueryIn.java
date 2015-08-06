@@ -18,7 +18,7 @@ public class QueryIn implements Input{
 	if (k.name == null)
 	    throw new SQLException("Table keys must be named");
 
-	String cmd = "SELECT "+k.sqlNames()+" FROM "+k.name+" "+rest+';';
+	String cmd = "SELECT "+k.sqlNames()+" FROM "+k.name+" "+rest;//+';';
 	rs = SQLBot.bot.query(cmd);	
     }
     
