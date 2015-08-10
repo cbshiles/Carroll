@@ -24,7 +24,7 @@ public class View extends Matrix{
 	clear = true;
     }
 
-        public View(Key k){//skeez one
+    public View(Key k){//skeez one
 	super(k);
 	clear = true;
     }
@@ -42,6 +42,13 @@ public class View extends Matrix{
 
 
     public void freshen(){data = new ArrayList<Object[]>();}
+
+    // public void pint(Object[] objs){
+    // 	System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    // 	for (Object o : objs)
+    // 	    System.out.print(o+" ");
+    // 	System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    // }
 
     public void receiveEntry(Object[] objs) throws InputXcpt{
 
@@ -64,7 +71,7 @@ public class View extends Matrix{
 	    gnu = ent.editEntry(objs);
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
-	
+
 	assert arr.length == n + ((ent != null)?gnu.length:0) : "Row isn't fitting into view";
 	
 	data.add(arr);

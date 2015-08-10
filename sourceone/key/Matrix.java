@@ -73,6 +73,13 @@ public class Matrix{
 	}
     }
 
+    // public Object appendPush() throws InputXcpt{
+    // 	if (view == null) throw new Error("Matrix cant use append push without a view");
+    // 	for (Object[] objs : data)
+    // 	    view.receiveEntry(objs);
+    // 	return view.push();
+    // }
+
     public View clearView(Cut[] gnu, Enterer ent){
 	View v = new View(new Key(gnu), ent);
 	addOut(v);

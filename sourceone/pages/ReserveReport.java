@@ -29,38 +29,46 @@ public class ReserveReport extends TablePage{
 	ko = custKey.add(contOKey.cuts);
 	kn = custKey.add(contNKey.cuts);
 
-	//from beginning of month A to end of month B (A might == B)
-	LocalDate lda  = LocalDate.of(2015, 6, 1);
-	LocalDate ldb  = LocalDate.of(2015, 8, 1);
+	//from beginning of month A to end of month B (A might == B) //itll have to be slightly greater for the while loop atm
+	LocalDate lda  = LocalDate.of(2015, 8, 1);
+	LocalDate ldb  = LocalDate.of(2015, 8, 2);
 
 	v = new View(reportKey);
-		
+	View vend = new View(reportKey, null, null);
+	v.addOut(vend);	
 //BasicFormatter.cinvert(lda)
-	v.chunk(new Object[]{lda, "Beginning Balance", 0f, 0f, getStart(lda)});
+	vend.chunk(new Object[]{lda, "Beginning Balance", 0f, 0f, getStart(lda)});
 	
 	while (lda.compareTo(ldb) < 0){
 	    LocalDate lde = lda.plusDays(lda.getMonth().maxLength() - lda.getDayOfMonth());
 
-	    go = new Grid(ko, new QueryIn(custKey, contOKey, "WHERE Contracts.Paid_Off >= '"+lda+"' AND Contracts.Paid_Off <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
+//you need to use a result set ( probably input) before making a new one
+
 	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Start_Date >= '"+lda+"' AND Contracts.Start_Date <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
-	
-	    go.addOut(v);
 	    g.addOut(v);
-
 	    v.switchEnts(new Nnt(kn));
-	    System.err.println("AA");
-	    g.pull(); System.err.println("BB"); g.push1();
+	    g.go1();
 
+
+	    go = new Grid(ko, new QueryIn(custKey, contOKey, "WHERE Contracts.Paid_Off >= '"+lda+"' AND Contracts.Paid_Off <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
+	    go.addOut(v);	    
 	    v.switchEnts(new Ont(ko));
-	    System.err.println("CC");
-	    go.pull(); 	    System.err.println(go.numRows()); go.push1();
+	    go.go1();
 	    
 	    //wrapIt(); sorting and vertyhing
+	    v.switchEnts(null);
+	    v.push1();
+	    
 	    //after everything
 	    lda = lda.plusMonths(1);
 	}
-	pushTable();
-	tablePlace();
+
+	//replacing pushTable();
+	vend.addTable();
+	try{ jsp.setViewportView(jt = (javax.swing.JTable)vend.push());}
+	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	catch (Exception e){e.printStackTrace();}
+	tablePlace(); //location - size settings
 	setVisible(true);
     }
 

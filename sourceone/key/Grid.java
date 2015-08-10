@@ -29,4 +29,10 @@ public class Grid extends Matrix{
 	return push();
     }
 
+    public void go1() throws InputXcpt{ //assumes going to a view, also note lack of return value
+	pull();
+	push1();
+    }
+
+    
 }
