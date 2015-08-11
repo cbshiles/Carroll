@@ -12,7 +12,7 @@ public class HomePage extends Page {
 	addRed("Floor Plan", FloorMenu.class, false);
 	addRed("Contracts", ContractMenu.class, false);
 	addRed("Inactive Inventory", FrozeMenu.class, false);
-	addRed("Reserve Report", ReserveReport.class, false);
+	addRed("Reports", ReportMenu.class, false);
 //	pack();
 	setVisible(true);
     }

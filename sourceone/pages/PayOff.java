@@ -30,7 +30,7 @@ public class PayOff extends TablePage {
 
 	    Key inKey = custKey.add(contKey.cuts);
 		    
-	    g = new Grid(inKey, in); g.pull();
+	    g = new Grid(inKey, in); g.pull(); g.sort("Last Name", true);
 	    Key tableKey = new Key(
 		new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance"},
 		new Kind[]{STRING, DATE, STRING, INT, FLOAT});

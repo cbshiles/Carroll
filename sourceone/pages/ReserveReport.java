@@ -2,7 +2,12 @@ package sourceone.pages;
 
 import sourceone.key.*;
 import sourceone.sql.*;
+import sourceone.csv.*;
 import java.time.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class ReserveReport extends TablePage{
 
@@ -75,8 +80,22 @@ public class ReserveReport extends TablePage{
 	try{ jsp.setViewportView(jt = (javax.swing.JTable)vend.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
-	tablePlace(); //location - size settings
-	setVisible(true);
+
+	JButton jb = new JButton("Create Report");
+	jp.add(jb, BorderLayout.SOUTH);
+	jb.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent a) {
+		    try {
+//			vend.addOut(new CSVOutput(reportKey, SQLBot.bot.path+"ReserveReport_"+LocalDate.now()+".csv"));
+			vend.addOut(new ReserveFormatter(new CSVDest(SQLBot.bot.path+"ReserveReport_"+LocalDate.now()+".csv", reportKey.csvnames()+'\n')));
+			vend.push();
+		    } catch (Exception e){
+			System.err.println("RORRE: "+e);
+		    }
+		    kill();
+		}});
+	
+	    wrap();
     }
 
     float getStart(LocalDate ld) {//get beginning balance, starting at ld
@@ -84,7 +103,7 @@ public class ReserveReport extends TablePage{
 	Grid g;
 	try {
 	    g = new Grid(r, new QueryIn(r,
-					"WHERE Start_Date < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off > '"+ld
+					"WHERE Date_Bought < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off > '"+ld
 					+"' );"));
 	    g.pull();
 	} catch (Exception e) {new XcptDialog(this, e); return .1337f;}
@@ -119,7 +138,7 @@ public class ReserveReport extends TablePage{
 	    ln = k.dex("Last Name");
 	    fn = k.dex("First Name");
 	    res = k.dex("Reserve");
-	    sd = k.dex("Start Date");
+	    sd = k.dex("Date Bought");
 	}
 	
 	public Object[] editEntry(Object[] o){

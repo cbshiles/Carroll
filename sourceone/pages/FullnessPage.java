@@ -56,11 +56,6 @@ public abstract class FullnessPage extends TablePage{
 	    new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT});
     }
 
-    protected void wrap(){
-	tablePlace();
-	setVisible(true);
-    }
-
     public static LocalDate next(LocalDate du, int freq, LocalDate st){
 	LocalDate due;
 	if (freq == 30) {

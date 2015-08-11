@@ -88,7 +88,17 @@ public class Key{
 	    keys += c.name;
 	}
 	return keys;
+    }
 
+    public String csvnames(){
+	String keys = "";
+	boolean first = true;
+	for (Cut c : cuts){
+	    if (! first) keys += "~";
+	    else first = false;
+	    keys += c.name;
+	}
+	return keys;
     }
 
     public String sqlNames(){return sqlNames(false);}

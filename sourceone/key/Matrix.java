@@ -35,7 +35,7 @@ public class Matrix{
     }
 
     public void sort(String name, boolean asc){ //what column and order (doesnt support null)
-	int col = key.dex(name); System.out.println(col+"*");
+	int col = key.dex(name);
 	String[] tings = new String[data.size()];
 	for (int i=0; i<tings.length; i++){
 	    tings[i] = data.get(i)[col].toString();

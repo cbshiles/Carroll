@@ -46,7 +46,7 @@ public class CSVOutput implements Output{
     }
 
     private void pat(String s){
-	if (! first) line += ", ";
+	if (! first) line += "~ "; //! changed delimeter to tilde
 	else first = false;
 	line += s;
 

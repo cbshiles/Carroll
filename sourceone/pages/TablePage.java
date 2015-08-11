@@ -36,4 +36,9 @@ public class TablePage extends Page {
     public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
 	pushTable(true);
     }
+
+    protected void wrap(){
+	tablePlace();
+	setVisible(true);
+    }
 }

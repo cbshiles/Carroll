@@ -5,7 +5,7 @@ public class FrozeMenu extends Page {
 
     public FrozeMenu(Page p){
 	super("Inactive Inventory", p);
-	place(.6f, .1f, .3f, .4f);
+	place(.9f/2, .1f, .9f/4, .4f);
 	setLayout(new GridLayout(0, 1));
 
 	addRed("Old Floor", OldFloor.class);
