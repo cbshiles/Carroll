@@ -26,7 +26,7 @@ public class TitleDone extends TablePage {
 
 	    g.addTable();
 	    g.pull();
-	    g.sort(2, true);
+	    g.sort("VIN", true);
 
 	    pushTable(false);
 

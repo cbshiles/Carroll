@@ -24,27 +24,30 @@ public class ReserveReport extends TablePage{
 
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	contOKey = Key.contractKey.just(new String[] {"Reserve", "Paid Off"});
-	contNKey = Key.contractKey.just(new String[] {"Reserve", "Start Date"});
+	contNKey = Key.contractKey.just(new String[] {"Reserve", "Date Bought"});
 	
 	ko = custKey.add(contOKey.cuts);
 	kn = custKey.add(contNKey.cuts);
 
 	//from beginning of month A to end of month B (A might == B) //itll have to be slightly greater for the while loop atm
-	LocalDate lda  = LocalDate.of(2015, 8, 1);
-	LocalDate ldb  = LocalDate.of(2015, 8, 2);
+	LocalDate lda, ldb, lde = null;
+	lda  = LocalDate.of(2015, 5, 1);
+	ldb  = LocalDate.of(2015, 8, 2);
 
-	v = new View(reportKey);
+
 	View vend = new View(reportKey, null, null);
-	v.addOut(vend);	
 //BasicFormatter.cinvert(lda)
 	vend.chunk(new Object[]{lda, "Beginning Balance", 0f, 0f, getStart(lda)});
 	
 	while (lda.compareTo(ldb) < 0){
-	    LocalDate lde = lda.plusDays(lda.getMonth().maxLength() - lda.getDayOfMonth());
+	    lde = lda.plusDays(lda.getMonth().maxLength() - lda.getDayOfMonth());
 
-//you need to use a result set ( probably input) before making a new one
+	    v = new View(reportKey);
+	    v.addOut(vend);	
 
-	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Start_Date >= '"+lda+"' AND Contracts.Start_Date <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
+// tip: you need to use a result set ( probably input) before making a new one
+
+	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Date_Bought >= '"+lda+"' AND Contracts.Date_Bought <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
 	    g.addOut(v);
 	    v.switchEnts(new Nnt(kn));
 	    g.go1();
@@ -54,16 +57,20 @@ public class ReserveReport extends TablePage{
 	    go.addOut(v);	    
 	    v.switchEnts(new Ont(ko));
 	    go.go1();
-	    
-	    //wrapIt(); sorting and vertyhing
-	    v.switchEnts(null);
+
+	    v.sort("Date", true);
+
+	    float deb = v.floatSum("Debit Amt");
+	    float cred = v.floatSum("Credit Amt");
+	    v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
+
 	    v.push1();
 	    
-	    //after everything
 	    lda = lda.plusMonths(1);
 	}
 
-	//replacing pushTable();
+
+	vend.chunk(new Object[]{lde, "Ending Balance", 0f, 0f, vend.floatSum("Balance")});
 	vend.addTable();
 	try{ jsp.setViewportView(jt = (javax.swing.JTable)vend.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
@@ -127,24 +134,3 @@ public class ReserveReport extends TablePage{
 	}
     }
 }
-
-/*
-  custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
-
-  contKey = Key.contractKey.just(new String[] {"ID", "Reserve"});
-  Input in;
-  try { //Contracts.Next_Due IS NOT NULL
-  in = new QueryIn(custKey, contKey, "WHERE Contracts.Paid_Off IS NULL AND Contracts.Customer_ID = Customers.ID;");
-
-  k = custKey.add(contKey.cuts);
-  g = new Grid(k, in);
-  g.pull();
-  } catch (Exception e) {new XcptDialog(this, e); return;}
-  pushTable(false);
-  System.out.println("1Reserve balance: "+g.floatSum("Reserve"));
-  System.out.println(g.numRows());
-  LocalDate dt = LocalDate.of(2015, 8, 6);//LocalDate.now()
-  System.out.println("2Reserve balance: "+getStart(dt));
-  tablePlace();
-  setVisible(true);
-*/

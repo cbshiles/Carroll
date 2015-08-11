@@ -218,7 +218,9 @@ public class Key{
 						      new DateCut("Next Due"),
 						      new DateCut("Paid Off"),
 						      new IntCut("Payments Made"),
-						      new IntCut("Customer ID", "NOT NULL")
+						      new IntCut("Customer ID", "NOT NULL"),
+						      new DateCut("Date Bought")
+						      //Date bought is assumed to be the start date, if not explicitly given
 						  });
 
     /*just (						      "ID",

@@ -46,15 +46,17 @@ public class LoadTable{
 			  public Object[] editEntry(Object[] objs){
 			      return new Object[] {0};
 			  }
-		      }));
+		      })); 
 
 	add(new Model("full", Key.fKey, null, new Cut[]{new FloatCut("Final Payment Amount"), new StringCut("VIN"),
-						    new IntCut("Customer ID")}, new FullEnt(Key.fKey)));
+							new IntCut("Customer ID"), new DateCut("Date Bought")},
+		new FullEnt(Key.fKey)));
 
 	add(new Model(Key.customerKey.just(new String[] {"Last Name", "First Name"}), null, null, null));
 
 	add(new Model("partial", Key.pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
-						       new IntCut("Customer ID"), new FloatCut("Total Contract")}, new PartEnt(Key.pKey)));
+							   new IntCut("Customer ID"), new FloatCut("Total Contract"), new DateCut("Date Bought")},
+		new PartEnt(Key.pKey)));
     }
 
     private static class PartEnt implements Enterer{
@@ -66,6 +68,7 @@ public class LoadTable{
 	    aop = k.dex("Amount of Payment");
 	    nop = k.dex("Number of Payments");
 	    grs = k.dex("Gross Amount");
+	    sd = k.dex("Start Date");
 
 	    try {
 		i = SQLBot.bot.query1Int("SELECT MAX(id) FROM Customers");
@@ -82,7 +85,8 @@ public class LoadTable{
 	    return new Object[]{
 		0f, //reserve
 		fpa, vin, cid,
-		0f //total contract
+		0f, //total contract
+		o[sd]
 	    };
 	}
     }
@@ -114,7 +118,7 @@ public class LoadTable{
 	    String vin = "";
 	    int cid = ++i;
 	    return new Object[]{
-		fpa, vin, cid
+		fpa, vin, cid, o[sd]
 	    };
 	}
     }

@@ -51,6 +51,8 @@ public class ContractForm extends Form {
 
 	addF(new TextField("VIN"));
 
+	addF(new TextField("Date Bought"));
+
 	addF(type = new RadioField("Contract Type",
 				   new String[]{"Full", "Partial"},
 				   new String[]{"0", "1"}));
@@ -67,7 +69,7 @@ public class ContractForm extends Form {
 	  Called Total Contract here, this is actually TEP, or total expected pay.
 	  Called total contract here due to compatibility issues
 	*/
-	Key contKey = Key.contractKey.just(new String[]{"Total Contract", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Start Date", "Reserve", "Net Amount", "VIN"}).add(new Cut[]{new IntCut("Fullness")});
+	Key contKey = Key.contractKey.just(new String[]{"Total Contract", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Start Date", "Reserve", "Net Amount", "VIN", "Date Bought"}).add(new Cut[]{new IntCut("Fullness")});
 
 	Ent ent = new Ent(contKey);
 	Grid contGrid = new Grid(contKey, new StringIn(this));

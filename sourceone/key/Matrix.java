@@ -34,10 +34,12 @@ public class Matrix{
 	return -1;
     }
 
-    public void sort(int col, boolean asc){ //what column and order
+    public void sort(String name, boolean asc){ //what column and order (doesnt support null)
+	int col = key.dex(name); System.out.println(col+"*");
 	String[] tings = new String[data.size()];
-	for (int i=0; i<tings.length; i++)
+	for (int i=0; i<tings.length; i++){
 	    tings[i] = data.get(i)[col].toString();
+	}
 	String[] sorted = Arrays.copyOf(tings, tings.length);
 	Arrays.sort(sorted);
 

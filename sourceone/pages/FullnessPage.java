@@ -80,7 +80,7 @@ public abstract class FullnessPage extends TablePage{
 	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
 	g.view.addTable();
 	try{ g.push1();
-	g.view.sort(0, true);
+	g.view.sort("Customer Name", true);
 	jsp.setViewportView(jt = (JTable)g.view.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
