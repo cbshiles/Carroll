@@ -19,7 +19,7 @@ public class FloorPay extends TablePage {
 
     public void getTable(LocalDate ld){
 	ent.setDay(ld);
-	v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	v = g.addView(new String[]{"ID", "Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 							    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 	    ent);
 
@@ -31,7 +31,7 @@ public class FloorPay extends TablePage {
 	super("Floor Plan Payoffs", p);
 	tablePlace();
 
-	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
+	Key key = Key.floorKey.just(new String[]{"ID", "VIN", "Date Bought", "Vehicle", "Item Cost", "Title"});
 	try {
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Pay_Off_Amount IS NULL");
 
@@ -82,6 +82,7 @@ public class FloorPay extends TablePage {
 			//! removed Title="+((int)o[tl]+2)+",
 			//System.err.println("UPDATE Cars SET Title="+((int)o[tl]+2)+", Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
 			SQLBot.bot.update("UPDATE Cars SET Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
+			System.err.println("UPDATE Cars SET Date_Paid='"+d+"', Pay_Off_Amount="+amt+" WHERE ID="+o[id]);
 			kill();
 		    } catch (Exception ix) {new XcptDialog(FloorPay.this, ix);}
 		}

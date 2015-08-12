@@ -147,5 +147,17 @@ public class Matrix{
     public void chunk (Object[] entry) {//manually load in an alreay prepared entry
 	data.add(entry);
     }
+
+    public int search(String col, String val){
+	int i = key.dex(col);
+
+	for (int j=0; j<data.size(); j++){
+	    Object[] arr = data.get(j);
+	    if (arr[i] != null)
+		if (arr[i].toString().equals(val))
+		    return j;
+	}
+	return -1;
+    }
     
 }

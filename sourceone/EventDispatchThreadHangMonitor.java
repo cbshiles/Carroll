@@ -27,7 +27,7 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
     private static final long CHECK_INTERVAL_MS = 100;
     
     // Maximum time we won't warn about.
-    private static final long UNREASONABLE_DISPATCH_DURATION_MS = 500;
+    private static final long UNREASONABLE_DISPATCH_DURATION_MS = 900;
     
     // Used as the value of startedLastEventDispatchAt when we're not in
     // the middle of event dispatch.

@@ -33,6 +33,21 @@ public class TablePage extends Page {
 	catch (Exception e){e.printStackTrace();}
     }
 
+    public void pushTable(boolean hasView, String sortBy, boolean asc){ //push w/ sort
+
+	Matrix m;
+	try{
+	    if (hasView) { m = g.view; g.push1();}
+	    else { m = g; }
+
+	    m.sort(sortBy, asc);
+	    m.addTable();
+
+	    jsp.setViewportView(jt = (JTable)m.push());}
+	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	catch (Exception e){e.printStackTrace();}
+    }
+
     public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
 	pushTable(true);
     }
@@ -40,5 +55,10 @@ public class TablePage extends Page {
     protected void wrap(){
 	tablePlace();
 	setVisible(true);
+    }
+
+        void addEmpties(int n, JPanel pj){
+	for (int i=0; i<n; i++)
+	    pj.add(new JPanel());
     }
 }

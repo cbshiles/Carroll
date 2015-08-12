@@ -15,6 +15,7 @@ import sourceone.fields.*;
 public class ContractForm extends Form {
     private String csv, csvFile, csvTail = "";
     private boolean stuck;
+    private float floorAmount, net;
     
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
@@ -100,7 +101,7 @@ public class ContractForm extends Form {
 
     private void makeCSV(Grid custGrid, Grid contGrid){
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, fll, res, pf;
+	int cust_id, vin, fll, res, pf, nt;
 
 	Object [] co = contGrid.data.get(0);
 	sd = contGrid.key.dex("Start Date");
@@ -112,6 +113,7 @@ public class ContractForm extends Form {
 	vin = contGrid.key.dex("VIN");
 	res = contGrid.key.dex("Reserve");
 	pf = contGrid.key.dex("Payment Frequency");
+	nt = contGrid.key.dex("Net Amount");
 	
 	int add, add2, fn, ln, pn;
 
@@ -131,7 +133,7 @@ public class ContractForm extends Form {
 	csv += addLine("Name/Address/Phone #:", 0);
 	csv += addLine();
 	float gross = (float)co[tc];
-	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", ""+gross, "", ""});
+	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", frm(gross), "", ""});
 	csv += addLine(""+cu[pn], 0); //# format
 	csv += addLine(""+cu[add], 0);
 	csv += addLine(""+cu[add2], 0);
@@ -140,16 +142,19 @@ public class ContractForm extends Form {
 		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0); //#! need to add the start day of contract
 	csv += addLine();
 	float rez = gross*-.1f;
-	csv += addLine(new String[]{"Reserve 10%", "", ""+rez,"",""});
-	float mid = gross+rez, net = mid*.72f;
-	csv += addLine(new String[]{"", "", ""+mid, "72", ""+net});
+	csv += addLine(new String[]{"Reserve 10%", "", frm(rez),"",""});
+	float mid = gross+rez; net = (float)co[nt];
+	csv += addLine(new String[]{"", "", frm(mid), frm(net/mid*100), frm(net)});
 
 	csvFile = "reports/"+cu[fn]+'_'+cu[ln]+"_Contract.csv";
     }
 
+    private String frm(float ff) {return String.format("%.02f", ff);}
+
     private void sendReport(){
 	csv += csvTail;
-	System.err.println("yadda\ndood"+csv);
+	csv += addLine();	csv += addLine(); 	csv += addLine();
+	csv += addLine(new String[]{"Net"," ","","",frm(net-floorAmount)});
 	try {
 	    new CSVOutput(csv, csvFile);
 	} catch (Exception e){System.err.println("Error csving"); System.err.println(e);}
@@ -170,7 +175,7 @@ public class ContractForm extends Form {
     String addLine(String[] arr){
 	String a=""; boolean first = true;
 	for (String s : arr){
-	    if (! first) a += ", ";
+	    if (! first) a += "~";
 	    else first = false;
 	    a += s;
 	}
@@ -181,7 +186,7 @@ public class ContractForm extends Form {
 	String a ="";
 	for (int i=0; i<5; i++){
 	    if (i==x) a += s;
-	    a += ',';
+	    a += '~';
 	}
 	return a+'\n';
     }
@@ -192,7 +197,7 @@ public class ContractForm extends Form {
 	String a = "";
 	for (int j= 0; j<n; j++){
 	    for (int i=0; i<5; i++){
-		a += ',';
+		a += '~';
 	    }
 	    a += '\n';
 	}
@@ -217,7 +222,7 @@ public class ContractForm extends Form {
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, fll, res;
+	int cust_id, vin, fll, res, db;
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -228,6 +233,7 @@ public class ContractForm extends Form {
 	    fll = k.dex("Fullness");
 	    vin = k.dex("VIN");
 	    res = k.dex("Reserve");
+	    db = k.dex("Date Bought");
 	}
 
 	public void set_id(int i){cust_id=i;}
@@ -258,8 +264,8 @@ public class ContractForm extends Form {
 		    int id = rs.getInt(1);
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
-		    new FloorPayDialog(id, (LocalDate)o[sd]);
-		} 
+		    new FloorPayDialog(id, (LocalDate)o[db]);
+		} else floorAmount = 0f;
 	    } catch (SQLException e){throw new InputXcpt(e);}
 
 	    return new Object[]{
@@ -273,6 +279,8 @@ public class ContractForm extends Form {
     }
 
     public class FloorPayDialog extends JDialog{
+
+
 
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title"});
 	JTable jt;
@@ -308,7 +316,7 @@ public class ContractForm extends Form {
 		g = new Grid(key, in);
 		g.pull();
 		ent = new FloorPay.Ent(key);
-		getTable(LocalDate.now());
+		getTable(date);
 		
 	    } catch (Exception e){ new XcptDialog(ContractForm.this, e); return;}
 
@@ -316,7 +324,7 @@ public class ContractForm extends Form {
 	    jp.add(cPan, BorderLayout.SOUTH);
 
 	    sourceone.fields.TextField dateOf;
-	    dateOf = new sourceone.fields.TextField("Date paid:", BasicFormatter.cinvert(LocalDate.now()));
+	    dateOf = new sourceone.fields.TextField("Date paid:", BasicFormatter.cinvert(date));
 	    cPan.add(dateOf.getJP(), BorderLayout.EAST);
 
 	    dateOf.addListener(new FieldListener() {
@@ -345,7 +353,8 @@ public class ContractForm extends Form {
 			    csvTail += addLine("Vehicle:", 0);
 			    csvTail += addLine(new String[] {""+o[veh],""+o[vin],"","",""});
 			    csvTail += addLine();
-			    csvTail += addLine(new String[] {"FP Pay Off","","","",""+st});
+			    csvTail += addLine(new String[] {"FP Pay Off","","","",frm(st)});
+			    floorAmount = st;
 			    sendReport();
 			    
 			    //! removed Title="+((int)o[tl]+2)+",

@@ -30,20 +30,22 @@ public class PayOff extends TablePage {
 
 	    Key inKey = custKey.add(contKey.cuts);
 		    
-	    g = new Grid(inKey, in); g.pull(); g.sort("Last Name", true);
+	    g = new Grid(inKey, in); g.pull();
 	    Key tableKey = new Key(
-		new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance"},
-		new Kind[]{STRING, DATE, STRING, INT, FLOAT});
+		new String[]{"Customer Name", "Start Date", "Terms", "Payments Made", "Remaining Balance", "ID"},
+		new Kind[]{STRING, DATE, STRING, INT, FLOAT, INT});
 
 	    g.clearView(tableKey.cuts, new Ent(inKey));
-	    pushTable();
+	    pushTable(true, "Customer Name", true);
 	    jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    jb.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 			int[] dx = jt.getSelectedRows();
 			if (dx.length > 0){
-			    new PayOffDialog(PayOff.this, g.data.get(dx[0]), inKey);
+			    Object[] slc = g.view.data.get(dx[0]);
+			    int lkup = g.search("ID", ""+slc[g.view.key.dex("ID")]);
+			    new PayOffDialog(PayOff.this, g.data.get(lkup), inKey);
 			}
 			else {
 			    new XcptDialog(PayOff.this, new InputXcpt("No contract selected"));
@@ -202,7 +204,7 @@ public class PayOff extends TablePage {
     }
 
     private class Ent implements Enterer{
-	int ln, fn, nop, aop, fpa, pf, pm, sd, grs, net, tc;
+	int ln, fn, nop, aop, fpa, pf, pm, sd, grs, net, tc, id;
 
 	public Ent(Key k){
 	    ln = k.dex("Last Name");
@@ -219,6 +221,8 @@ public class PayOff extends TablePage {
 	    grs = k.dex("Gross Amount");
 	    net = k.dex("Net Amount");
 	    tc = k.dex("Total Contract");
+
+	    id = k.dex("ID");
 	}
 
 	public Object[] editEntry(Object[] o){
@@ -244,7 +248,8 @@ public class PayOff extends TablePage {
 		o[sd],
 		terms(nopO, aopO, pfO, fpaO),
 		pmO,
-		tep - pmO*aopO
+		tep - pmO*aopO,
+		o[id]
 	    };
 	}
 	public String terms(int num, float amt, int freq, float fin){

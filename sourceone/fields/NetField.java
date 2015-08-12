@@ -39,7 +39,7 @@ public class NetField extends Field{
 		    hearing = false;
 		    try {
 			float f = StringIn.parseFloat(amt.getText())/gross;
-			per.setText(""+View.rnd(f));
+			per.setText(""+View.rnd(100*f));
 		    } catch (InputXcpt ix) {;}//amt.setText("---");}
 		    hearing = true;
 		}

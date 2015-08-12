@@ -26,7 +26,7 @@ public class TitlePage extends TablePage {
 
 	    g.addTable();
 	    g.pull();
-	    g.sort("VIN", true);
+	    g.sort("Date Bought", true);
 
 	    pushTable(false);
 
@@ -39,9 +39,12 @@ public class TitlePage extends TablePage {
 			try {
 			    int[] dx = jt.getSelectedRows();
 			    if (dx.length == 0) throw new InputXcpt("No car selected");
+
+			    int id = g.key.dex("ID");
+			    
 			    for (int i : dx){
 				Object[] datum = g.data.get(i);
-				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+datum[0]);
+				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+datum[id]);
 			    }
 			    kill();
 			} 	catch (Exception x)

@@ -14,6 +14,7 @@ import java.time.*;
 public class AReport extends FullnessPage{
 
     JButton jb;
+    JTextField balSum, totSum;
 
     @Override
     public void getTable(){
@@ -33,9 +34,24 @@ public class AReport extends FullnessPage{
 	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(reportDate));
 
 	JPanel cPan = new JPanel();
-	cPan.add(payDay.getJP());
-	cPan.add(jb = new JButton("Create Report"));
+	cPan.setLayout(new GridLayout(2, 0));
+	
+	JPanel bPan = new JPanel();
+	bPan.setBorder(new javax.swing.border.EmptyBorder(10,10,10,20));
+	bPan.setLayout(new GridLayout(0, 8));
+	addEmpties(5, bPan);
+	bPan.add(balSum = new JTextField());
+	addEmpties(1, bPan);
+	bPan.add(totSum = new JTextField());
+	cPan.add(bPan);
+
+	JPanel aPan = new JPanel();
+	aPan.add(payDay.getJP());
+	aPan.add(jb = new JButton("Create Report"));
+	cPan.add(aPan);
+	
 	jp.add(cPan, BorderLayout.SOUTH);
+	
 
 	payDay.addListener(new FieldListener() {
 		public void dew() {

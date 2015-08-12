@@ -9,8 +9,11 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.*;
 
 public class CarReport extends TablePage{
+
+    String jcost, jtotal;
 
     public CarReport(Page p){
 	super("Create Car Report", p);
@@ -26,25 +29,41 @@ public class CarReport extends TablePage{
 				 new Kind[]{DATE, STRING, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
 	    g.clearView(entKey.cuts, new Ent(inKey));
 	    pushTable();
+	    jcost = String.format("%.02f", g.view.floatSum("Item Cost"));
+	    jtotal = String.format("%.02f", g.view.floatSum("Subtotal"));
 //	    jt.setRowSelectionAllowed(false);
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); kill(); return;}
 
-	JPanel cPan = new JPanel();
+
 	
-	JButton jb = new JButton("Print Report");
+	JButton jb = new JButton("Create");
 	jb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae) {
 		    try {
 			g.view.addOut(new CSVOutput(g.view.key, SQLBot.bot.path+"Car_Report_"+LocalDate.now()+".csv"));
 			g.view.push();
+
 			kill();
 		    } catch (Exception e){
 			new XcptDialog(CarReport.this, e);
 			e.printStackTrace();
 		    }
 		}});
+	
+	JPanel cPan = new JPanel();
+	cPan.setLayout(new GridLayout(2, 10));
+	
+	addEmpties(5, cPan);
+	cPan.add(new JTextField(jcost));
 
+	addEmpties(3, cPan);	
+	cPan.add(new JTextField(jtotal));
+
+	addEmpties(5, cPan);
 	cPan.add(jb);
+
+	addEmpties(4, cPan);
+	
 	jp.add(cPan);
 	
 	tablePlace();
