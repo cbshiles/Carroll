@@ -14,8 +14,8 @@ import java.time.*;
 public class AReport extends FullnessPage{
 
     JButton jb;
-    JTextField balSum, totSum;
-    float thing1, thing2;
+
+
     boolean firstTable = true;
 
     @Override

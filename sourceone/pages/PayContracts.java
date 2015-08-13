@@ -22,17 +22,32 @@ public class PayContracts extends FullnessPage {
 	if (prd == null) {kill(); throw new InputXcpt("No record of any unpaid reports");}
 	reportDate = prd;
 	reload(); //# this is a redo(from fullness constructor), figure out a better way
-	getTable();
+
 	    
 //	jt.setRowSelectionAllowed(false);
-	    
+
 	JPanel cPan = new JPanel();
+	cPan.setLayout(new GridLayout(2, 0));
+	
+	JPanel bPan = new JPanel();
+	bPan.setBorder(new javax.swing.border.EmptyBorder(10,10,10,20));
+	bPan.setLayout(new GridLayout(0, 8));
+	addEmpties(5, bPan);
+	bPan.add(balSum = new JTextField());
+	addEmpties(1, bPan);
+	bPan.add(totSum = new JTextField());
+	cPan.add(bPan);
+	    
+	JPanel aPan = new JPanel();
 	sourceone.fields.TextField batchID;
 	batchID = new sourceone.fields.TextField("Batch ID: ", "");
-	cPan.add(batchID.getJP());
-	cPan.add(new JLabel("Posting payments up to "+reportDate));
-	cPan.add(jb = new JButton("Post Payments"));
+	aPan.add(batchID.getJP());
+	aPan.add(new JLabel("Posting payments up to "+reportDate));
+	aPan.add(jb = new JButton("Post Payments"));
+	cPan.add(aPan);
+
 	jp.add(cPan, BorderLayout.SOUTH);
+	getTable();
 
 	jb.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -93,8 +108,8 @@ public class PayContracts extends FullnessPage {
 
 	    int di = (int)g[id];
 
-	    System.err.println(v[nqme]);
-	    System.err.println(tot_due+" "+pays_due+" "+pay_amt+" "+fin_amt);
+	    // System.err.println(v[nqme]);
+	    // System.err.println(tot_due+" "+pays_due+" "+pay_amt+" "+fin_amt);
 
 	    if (fequal(tot_due, pays_due*pay_amt)){
 		last = false;

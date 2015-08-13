@@ -3,6 +3,7 @@ package sourceone;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.*;
+import java.util.*;
 
 public class PdfMaker{
     static BufferedReader br;
@@ -18,8 +19,6 @@ public class PdfMaker{
 	PdfWriter.getInstance(document,
 			      new FileOutputStream(fName+".pdf"));
 	} catch (Exception e) {System.err.println(e);}
-
-
 
 	boolean first = true; //# do funky with first line
 	String[] words;
@@ -57,11 +56,12 @@ public class PdfMaker{
 
     static String[] split(String str){
 	int i = 0, c = 0, n;
-	String[] arr = new String[5];
+	ArrayList<String> lzt = new ArrayList<String>();
 	while(-1 != (n = str.indexOf('~', i))){
-	    arr[c++] = str.substring(i, n);
+	    lzt.add(str.substring(i, n));
 	    i = n+1;
 	}
-	return arr;
+	lzt.add(str.substring(i));
+	return lzt.toArray(new String[lzt.size()]);
     }
 }

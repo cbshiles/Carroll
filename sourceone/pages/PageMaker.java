@@ -26,6 +26,6 @@ public class PageMaker implements ActionListener{
 		}
 	    }
 	    catch (Exception ie) {new XcptDialog(owner, ie); ie.printStackTrace();}
-	    catch (Throwable t) {System.err.println("What the heck is this?");}
+	    catch (Throwable t) {System.err.println("What the heck is this?"); t.printStackTrace();}
     }
 }

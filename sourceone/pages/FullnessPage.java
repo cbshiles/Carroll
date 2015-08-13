@@ -10,11 +10,12 @@ import java.awt.event.*;
 import java.time.*;
 
 public abstract class FullnessPage extends TablePage{
-    boolean full, ded=false;
+    boolean full, ded=false, firstTable = true;
     String sel;
-
+    float thing1, thing2;
     Key k, viewKey, custKey, contKey;
     LocalDate reportDate, prd;
+    JTextField balSum, totSum;
 
     public void reload() throws InputXcpt{
 	String z = full?">":"<";
@@ -73,12 +74,22 @@ public abstract class FullnessPage extends TablePage{
 
     protected void getTable() {
 	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
-	g.view.addTable();
+
 	try{ g.push1();
-	g.view.sort("Customer Name", true);
-	jsp.setViewportView(jt = (JTable)g.view.push());}
+
+	    g.view.addView(null, null, null);
+	    g.view.view.addTable();
+	    g.view.push1();
+	    g.view.view.sort("Customer Name", true);
+	    jsp.setViewportView(jt = (JTable)g.view.view.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
+
+	if (firstTable){
+	    balSum.setText(""+(thing1 = g.view.floatSum("Remaining Balance")));
+	    firstTable = false;
+	}
+	totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
     }
 
     private class FullnessDialog extends JDialog implements ActionListener{

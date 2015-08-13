@@ -41,7 +41,8 @@ public class CarReport extends TablePage{
 	jb.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae) {
 		    try {
-			g.view.addOut(new CSVOutput(g.view.key, SQLBot.bot.path+"Car_Report_"+LocalDate.now()+".csv"));
+			g.view.addOut(new CSVOutput(g.view.key, SQLBot.bot.path+"Car_Report_"+LocalDate.now()+".csv",
+					  "~~~~~"+jcost+"~~~~"+jtotal));
 			g.view.push();
 
 			kill();
