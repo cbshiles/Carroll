@@ -91,6 +91,8 @@ public class PayContracts extends FullnessPage {
 
 	    int di = (int)g[id];
 
+	    System.err.println(tot_due+" "+pays_due+" "+pay_amt+" "+fin_amt);
+
 	    if (fequal(tot_due, pays_due*pay_amt)){
 		last = false;
 	    }

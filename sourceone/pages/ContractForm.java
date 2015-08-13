@@ -20,7 +20,7 @@ public class ContractForm extends Form {
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
 
-	place(.15f, .15f, .25f, .8f);
+	place(.15f, .15f, .25f, .75f);
 	
 	setLayout(new java.awt.GridLayout(0, 1));
 

@@ -15,7 +15,7 @@ public class HelloIText {
 
             document.open();
 
-            PdfPTable table = new PdfPTable(3); // 3 columns.
+            PdfPTable table = new PdfPTable(1); // 3 columns.
 
             PdfPCell cell1 = new PdfPCell(new Paragraph("Cell 1"));
             PdfPCell cell2 = new PdfPCell(new Paragraph("Cell 2"));

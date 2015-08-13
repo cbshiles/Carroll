@@ -2,6 +2,7 @@ package sourceone.key;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import java.io.*;
 
 public class PdfDest implements StringDest{
 
