@@ -52,6 +52,7 @@ public class PayContracts extends FullnessPage {
     private class Click {
 
 	int id, fq, nd, pm, fpa, pd, tma, aop, rb, sd;
+	int nqme;
 	LocalDate tday;
 	String bid;
 	
@@ -70,6 +71,7 @@ public class PayContracts extends FullnessPage {
 	    tma = vk.dex("Total Amount Due");
 	    rb = vk.dex("Remaining Balance");
 	    sd = vk.dex("Start Date");
+	    nqme = vk.dex("Customer Name");
 	}
 
 	public boolean fequal(float a, float b){
@@ -91,6 +93,7 @@ public class PayContracts extends FullnessPage {
 
 	    int di = (int)g[id];
 
+	    System.err.println(v[nqme]);
 	    System.err.println(tot_due+" "+pays_due+" "+pay_amt+" "+fin_amt);
 
 	    if (fequal(tot_due, pays_due*pay_amt)){
