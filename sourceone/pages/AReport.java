@@ -15,11 +15,20 @@ public class AReport extends FullnessPage{
 
     JButton jb;
     JTextField balSum, totSum;
+    float thing1, thing2;
+    boolean firstTable = true;
 
     @Override
     public void getTable(){
 	super.getTable();
 //	jt.setRowSelectionAllowed(false);
+	g.view.floatSum("Remaining Balance");
+
+	if (firstTable){
+	    balSum.setText(""+(thing1 = g.view.floatSum("Remaining Balance")));
+	    firstTable = false;
+	}
+	totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
     }
     
     public AReport(Page p){
@@ -28,7 +37,7 @@ public class AReport extends FullnessPage{
 	if (ded) return;
 
 	reportDate = LocalDate.now();
-	getTable();
+
 
 	sourceone.fields.TextField payDay;
 	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(reportDate));
@@ -70,12 +79,8 @@ public class AReport extends FullnessPage{
 			View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
 
 			g.view.push1();
-			float thing1 = pView.floatSum("Remaining Balance");
-			float thing2 = pView.floatSum("Total Amount Due");
-			    
-			Key pKey = new Key(new Cut[]{new StringCut("Last name"), new StringCut("First name")});
-			pKey = pKey.add(pView.key.accept(new String[]{"Customer Name"}).cuts);
-			pView.addOut(new CustReport(pKey, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", ",,,,,"+thing1+",,"+thing2));
+
+			pView.addOut(new CustReport(pView.key, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", "~~~~"+thing1+"~~"+thing2));
 
 			boolean doit = true;
 			if (prd != null){
@@ -91,6 +96,8 @@ public class AReport extends FullnessPage{
 		    }catch (Exception x)
 		    {new XcptDialog(AReport.this, x); x.printStackTrace(); }
 		}});
+	
+	getTable();
 	wrap();
     }
     private class ConfirmDialog extends JDialog implements ActionListener{

@@ -134,7 +134,7 @@ public class ContractForm extends Form {
 	csv += addLine();
 	float gross = (float)co[tc];
 	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", frm(gross), "", ""});
-	csv += addLine(""+cu[pn], 0); //# format
+	csv += addLine(""+cu[pn], 0); //# format phone number?
 	csv += addLine(""+cu[add], 0);
 	csv += addLine(""+cu[add2], 0);
 	csv += addLine("Terms:", 0);
@@ -149,7 +149,8 @@ public class ContractForm extends Form {
 	csvFile = "reports/"+cu[fn]+'_'+cu[ln]+"_Contract.csv";
     }
 
-    private String frm(float ff) {return String.format("%.02f", ff);}
+    private java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#0.00");
+    private String frm(float ff) {return myFormatter.format(ff);}
 
     private void sendReport(){
 	csv += csvTail;

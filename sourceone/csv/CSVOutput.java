@@ -24,7 +24,7 @@ public class CSVOutput implements Output{
 	this.addon = addon;
 	fw = new FileWriter(fileName); //append option
 
-	text = k.names()+'\n';
+	text = k.csvnames()+'\n';
 //can make a new one or append to a template
 
     }
@@ -36,9 +36,12 @@ public class CSVOutput implements Output{
     public void put(int x){
 	pat(""+x);
     }
+
+    private java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#0.00");
+    private String frm(float ff) {return myFormatter.format(ff);}
     
     public void put(float x){
-	pat(String.format("%.2f", x));
+	pat(frm(x));
     }
     
     public void put(java.time.LocalDate x){

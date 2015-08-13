@@ -29,8 +29,9 @@ public class CarReport extends TablePage{
 				 new Kind[]{DATE, STRING, STRING, FLOAT, STRING, FLOAT, INT, FLOAT, FLOAT, FLOAT});
 	    g.clearView(entKey.cuts, new Ent(inKey));
 	    pushTable();
-	    jcost = String.format("%.02f", g.view.floatSum("Item Cost"));
-	    jtotal = String.format("%.02f", g.view.floatSum("Subtotal"));
+
+	    jcost = frm(g.view.floatSum("Item Cost"));
+	    jtotal = frm(g.view.floatSum("Subtotal"));
 //	    jt.setRowSelectionAllowed(false);
 	} catch (Exception e){System.err.println("***"+e); e.printStackTrace(); kill(); return;}
 
@@ -109,4 +110,7 @@ public class CarReport extends TablePage{
 	    };
 	}
     }
+
+    private java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#0.00");
+    private String frm(float ff) {return myFormatter.format(ff);}
 }

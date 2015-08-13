@@ -16,9 +16,12 @@ public class BasicFormatter extends Formatter {
     public String convert(int x){
 	return ""+x;
     }
+
+    private java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#0.00");
+    private String frm(float ff) {return myFormatter.format(ff);}
     
     public String convert(float x){
-	return String.format("%.02f", x);
+	return frm(x);
     }
 
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
