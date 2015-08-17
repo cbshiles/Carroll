@@ -31,13 +31,13 @@ public class AReport extends FullnessPage{
 	totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
     }
     
-    public AReport(Page p){
+    public AReport(Page p)throws InputXcpt{
 	super("Create AR Report", p);
 
 	if (ded) return;
 
 	reportDate = LocalDate.now();
-
+	reload();
 
 	sourceone.fields.TextField payDay;
 	payDay = new sourceone.fields.TextField("Report for:", BasicFormatter.cinvert(reportDate));

@@ -20,7 +20,7 @@ public class ContractForm extends Form {
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
 
-	place(.15f, .15f, .25f, .75f);
+	place(.15f, .1f, .25f, .75f);
 	
 	setLayout(new java.awt.GridLayout(0, 1));
 
@@ -95,7 +95,6 @@ public class ContractForm extends Form {
 		    }}});
 
 	add(submit);
-	pack();
 	setVisible(true);
     }
 
@@ -139,7 +138,7 @@ public class ContractForm extends Form {
 	csv += addLine(""+cu[add2], 0);
 	csv += addLine("Terms:", 0);
 	csv += addLine(terms((int)co[nop], (float)co[aop], (int)co[pf], (float)co[fpa])+
-		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0); //#! need to add the start day of contract
+		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0);
 	csv += addLine();
 	float rez = gross*-.1f;
 	csv += addLine(new String[]{"Reserve 10%", "", frm(rez),"",""});
@@ -216,7 +215,7 @@ public class ContractForm extends Form {
 
 	public Object[] editEntry(Object[] o){
 	    return new Object[]{
-		""+o[add]+"; "+o[add2]
+		""+o[add]+", "+o[add2]
 	    };
 	}
     }

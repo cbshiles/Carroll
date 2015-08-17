@@ -48,7 +48,7 @@ public class TablePage extends Page {
 	catch (Exception e){e.printStackTrace();}
     }
 
-    public void pushTable(){ //# assumes you have a view on your grid, should just ask for a matrix
+    public void pushTable(){
 	pushTable(true);
     }
 

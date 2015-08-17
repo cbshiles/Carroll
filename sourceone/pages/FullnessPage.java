@@ -27,13 +27,14 @@ public abstract class FullnessPage extends TablePage{
 	g = new Grid(k, in);
 	g.pull();
     }
-
-    //# ant implementation must take care of ded possibilities
+    
     public FullnessPage(String title, Page p){
 	super(title, p);
 	new FullnessDialog();
+    }
 
-	if (ded)  {kill(); return;}
+    private void init(){
+	if (ded)  {kill(); return;} // take care of ded possibilities (subclasses must also)
 	
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	
@@ -43,12 +44,9 @@ public abstract class FullnessPage extends TablePage{
 
 	sel = full?"Full":"Partial";
 
-	reportDate = LocalDate.now();
 	try{
-	    //# need to reload table??? (theres will be peeps w/o dues)
 	    prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
 	    SQLBot.bot.done();
-	    reload();
 	}catch(Exception e){System.err.println("@#: "+e); return;}
 	
 	viewKey = new Key(
@@ -123,6 +121,7 @@ public abstract class FullnessPage extends TablePage{
 		    public void windowClosing(WindowEvent we) {
 			if (! usedMyButtons)
 			    ded = true;
+			init();
 		    }
 		});
 		
@@ -143,7 +142,7 @@ public abstract class FullnessPage extends TablePage{
 	    String cmd = ae.getActionCommand();
 	    if (cmd.equals("exit")) {ded = true;}
 	    full = cmd.equals("full");
-	    dispose();
+	    kill();
 	}
     }
     public class ContractEnt implements Enterer{

@@ -13,24 +13,25 @@ public class TitlePage extends TablePage {
 
     JButton jb;
     
-    public TitlePage(Page p){
-	super("Pending Titles", p);
-	place(.3f, .1f, .3f, .65f);
+    public TitlePage(Page p, String title, String whereClause, String bName, int status){
+	super(title, p);
+	place(.9f/4, .1f, .45f, .7f);
 
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost"});
 
 	try{
-	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Title=0");
+	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE "+whereClause);
 
 	    g = new Grid(key, in);
 
-	    g.addTable();
 	    g.pull();
-	    g.sort("Date Bought", true);
+	    g.sort("VIN", true);
 
-	    pushTable(false);
+	    g.addView(new String[]{"ID"}, null, null);
 
-	    jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
+	    pushTable();
+
+	    jp.add(jb = new JButton(bName), BorderLayout.SOUTH);
 
 	    setContentPane(jp);
 
@@ -44,7 +45,7 @@ public class TitlePage extends TablePage {
 			    
 			    for (int i : dx){
 				Object[] datum = g.data.get(i);
-				SQLBot.bot.update("UPDATE Cars SET Title=1 WHERE ID="+datum[id]);
+				SQLBot.bot.update("UPDATE Cars SET Title="+status+" WHERE ID="+datum[id]);
 			    }
 			    kill();
 			} 	catch (Exception x)
@@ -56,5 +57,5 @@ public class TitlePage extends TablePage {
 	catch (InputXcpt e)
 	{System.err.println(e); return;}
 	setVisible(true);
-	}
     }
+}

@@ -21,11 +21,8 @@ public class PayContracts extends FullnessPage {
 
 	if (prd == null) {kill(); throw new InputXcpt("No record of any unpaid reports");}
 	reportDate = prd;
-	reload(); //# this is a redo(from fullness constructor), figure out a better way
-
-	    
-//	jt.setRowSelectionAllowed(false);
-
+	reload();
+	
 	JPanel cPan = new JPanel();
 	cPan.setLayout(new GridLayout(2, 0));
 	

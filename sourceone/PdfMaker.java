@@ -11,13 +11,15 @@ public class PdfMaker{
     static Document document = null;
     
     public static void main(String[] args){
-	String fName = args[0];
+	make(args[0], (args.length > 1 && "landscape".equals(args[1])));
+    }
 
+    public static void make(String fname, boolean landscape){
 	try{
-	    br = new BufferedReader(new FileReader(fName+".csv"));
-        document = new Document();
-	PdfWriter.getInstance(document,
-			      new FileOutputStream(fName+".pdf"));
+	    br = new BufferedReader(new FileReader(fname+".csv"));
+	    document =  landscape ? new Document(PageSize.A4.rotate(),0,0,0,0) : new Document();
+	    PdfWriter.getInstance(document,
+				  new FileOutputStream(fname+".pdf"));
 	} catch (Exception e) {System.err.println(e);}
 
 	boolean first = true; //# do funky with first line

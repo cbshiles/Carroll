@@ -16,7 +16,7 @@ public class CarForm extends Form{
     public CarForm(Page p) throws Exception{
 	super("Cars", p);
 
-	place(.3f, .1f, .25f, .35f);
+	place(.9f/4, .1f, .9f/4, .2f);
 	setLayout(new GridLayout(0, 1));
 
 	addF(new TextField("Date Bought"));
@@ -53,7 +53,6 @@ public class CarForm extends Form{
 	    });
 
 	add(submit);
-	pack();
 	setVisible(true);
     }
 }
