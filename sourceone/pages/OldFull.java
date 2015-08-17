@@ -5,7 +5,7 @@ import sourceone.sql.*;
 
 public class OldFull extends OldContracts{
 
-    public OldFull(Page p){
+    public OldFull(Page p) throws Exception{
 	super(p, true);
     }
 }

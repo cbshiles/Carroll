@@ -33,6 +33,16 @@ public class TablePage extends Page {
 	catch (Exception e){e.printStackTrace();}
     }
 
+    public void pushTable(Matrix m, String sortBy, boolean asc){ //#garbage hack, not recommended for reuse
+	try{
+	    m.sort(sortBy, asc);
+	    m.addTable();
+
+	    jsp.setViewportView(jt = (JTable)g.push());} //thats a g
+	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
+	catch (Exception e){e.printStackTrace();}
+    }
+
     public void pushTable(boolean hasView, String sortBy, boolean asc){ //push w/ sort
 
 	Matrix m;

@@ -10,22 +10,33 @@ public class RadioField extends Field{
 
     ButtonGroup group = new ButtonGroup();
 
-    public RadioField (String n, String[] butts){
+    public RadioField (String n, String[] butts, int s){
 	super(n);
 	init();	
 	addButtons(butts);
+	select(s);
     }
 
-    public RadioField (String n, String[] front, String[] back){
+    public RadioField (String n, String[] front, String[] back, int s){
 	super(n);
 	init();
 	addButtons(front, back);
+	select(s);
+    }
+
+    public void select(int n){
+	AbstractButton ab;
+	Enumeration<AbstractButton> butts = group.getElements();
+	for (int i=0; i<=n && butts.hasMoreElements(); i++){
+	    ab = butts.nextElement();
+	    if (i == n) ab.setSelected(true);
+	}
+	    
     }
 
     public void clear(){group.clearSelection();}
     
     public void init(){
-//	jp.setLayout(new GridLayout(0, 4));//new FlowLayout(FlowLayout.CENTER));
 	JLabel jl = newLabel(name);
 	jl.setPreferredSize(new Dimension(200, 30));
 	jp.add(jl);
@@ -33,8 +44,10 @@ public class RadioField extends Field{
     }
 
     private void addButtons(String[] butts){
-	for (String s : butts)
-	    addButton(s, s);
+	int m = butts.length;
+	for (int i=0; i<m; i++){
+	    addButton(butts[i], butts[i]);
+	}
     }
 
     private void addButtons(String[] front, String[] back){

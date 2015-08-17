@@ -36,7 +36,8 @@ public class PayOff extends TablePage {
 		new Kind[]{STRING, DATE, STRING, INT, FLOAT, INT});
 
 	    g.clearView(tableKey.cuts, new Ent(inKey));
-	    pushTable(true, "Customer Name", true);
+	    View you = g.view.addView(new String[]{"ID"}, null, null);
+	    pushTable(you, "Customer Name", true);
 	    jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    jb.addActionListener(new ActionListener() {

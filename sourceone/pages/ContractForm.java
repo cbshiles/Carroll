@@ -20,12 +20,17 @@ public class ContractForm extends Form {
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
 
-	place(.15f, .1f, .25f, .75f);
+	place(.15f, .1f, .35f, .75f);
 	
 	setLayout(new java.awt.GridLayout(0, 1));
 
-	TextField tot, res; Field type = null;
+	TextField tot, res, botDate; Field type = null;
 
+
+	botDate = new TextField("Date Bought", BasicFormatter.cinvert(LocalDate.now()));
+
+	add(botDate.getJP());
+	
 	addF(new TextField("First Name"));
 	addF(new TextField("Last Name"));
 	addF(new TextField("Address"));
@@ -37,9 +42,8 @@ public class ContractForm extends Form {
 	addF(new TextField("Amount"));
 	addF(new RadioField("Payment Frequency",
 			    new String[]{"Weekly", "Biweekly", "Monthly"},
-			    new String[]{"7", "14", "30"}));
+			    new String[]{"7", "14", "30"}, 0));
 	addF(new OptionField("Final Payment", "0", true));
-
 	addF(new TextField("Start Date"));
 	
 	//addF(new TextField("Reserve"));
@@ -52,12 +56,14 @@ public class ContractForm extends Form {
 
 	addF(new TextField("VIN"));
 
-	addF(new TextField("Date Bought"));
+	fields.add(botDate);
 
 	addF(type = new RadioField("Contract Type",
 				   new String[]{"Full", "Partial"},
-				   new String[]{"0", "1"}));
+				   new String[]{"0", "1"}, -1));
 
+
+	
 	JButton submit = new JButton("Submit");
 
 	Key custKey = Key.customerKey.just(new String[]{"First Name", "Last Name", "Address"}).add(new Cut[]{new StringCut("Address 2"), new StringCut("Phone Number")});
@@ -100,7 +106,7 @@ public class ContractForm extends Form {
 
     private void makeCSV(Grid custGrid, Grid contGrid){
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, fll, res, pf, nt;
+	int cust_id, vin, fll, res, pf, nt, db;
 
 	Object [] co = contGrid.data.get(0);
 	sd = contGrid.key.dex("Start Date");
@@ -113,6 +119,7 @@ public class ContractForm extends Form {
 	res = contGrid.key.dex("Reserve");
 	pf = contGrid.key.dex("Payment Frequency");
 	nt = contGrid.key.dex("Net Amount");
+	db = contGrid.key.dex("Date Bought");
 	
 	int add, add2, fn, ln, pn;
 
@@ -125,7 +132,7 @@ public class ContractForm extends Form {
 	
 	csv = "";
 	csv += addLine(3);
-	csv += addLine(BasicFormatter.cinvert(LocalDate.now()), 0);
+	csv += addLine(BasicFormatter.cinvert((LocalDate)co[db]), 0);
 	csv += 	addLine();
 	csv += addLine(new String[] {"A/R Purchase:", "", "Gross", "%", "Net"});
 	csv += addLine();

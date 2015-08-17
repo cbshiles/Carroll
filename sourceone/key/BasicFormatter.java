@@ -25,12 +25,18 @@ public class BasicFormatter extends Formatter {
     }
 
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
+    static final DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static String cinvert(LocalDate x){ //# make private
 	if (x == null) return "N/A";
 	else return x.format(dtf);
     }
 
+    public static String cxnvert(LocalDate x){ //# make private
+	if (x == null) return "N/A";
+	else return x.format(dtf2);
+    }
+    
     public static String today(){return cinvert(LocalDate.now());}
     
     public String convert(LocalDate x){
