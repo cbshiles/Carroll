@@ -43,7 +43,7 @@ public class TablePage extends Page {
 	catch (Exception e){e.printStackTrace();}
     }
 
-    public void pushTable(boolean hasView, String sortBy, boolean asc){ //push w/ sort
+    public void pushTable(boolean hasView, String sortBy, boolean asc){ //push w/ sort (this ones also pretty bad)
 
 	Matrix m;
 	try{

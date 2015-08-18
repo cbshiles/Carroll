@@ -262,7 +262,8 @@ public class Key{
 						    new FloatCut("Item Cost", "NOT NULL"),
 						    new IntCut("Title", "NOT NULL"),
 						    new DateCut("Date Paid"),
-						    new FloatCut("Pay Off Amount")
+						    new FloatCut("Pay Off Amount"),
+						    new IntCut("Curtailed")
 						});
 //    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount"});
     
@@ -288,4 +289,13 @@ public class Key{
     public static final Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
 								     "Payments Made", "Start Date",
 								     "Next Due", "Amount of Payment", "Number of Payments"});
+    public static final Key sumKey = new Key(new Cut[]{ //general key for any credit/debit report
+	    new DateCut("Date"),
+	    new StringCut("Trans Description"),
+	    new FloatCut("Debit Amt"),
+	    new FloatCut("Credit Amt"),
+	    new FloatCut("Balance")
+	});
+
+    
 }

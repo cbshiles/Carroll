@@ -13,6 +13,7 @@ public class FloorMenu extends Page {
 	addRed("Add Title", AddTitle.class);
 	addRed("Release Title", ReleaseTitle.class);
 	addRed("Pay Off", FloorPay.class);
+	addRed("Curtailments", Curtailments.class);
 	
 	//pack();
 	setVisible(true);

@@ -7,6 +7,11 @@ public class InsertDest implements StringDest{
     boolean ID_check, first = true;
     int id=-1;
 
+    public InsertDest(Key k){
+	stmt = "INSERT INTO "+k.name+" ("+k.sqlNames()+") VALUES (";
+	ID_check = false;
+    }
+    
     public InsertDest(Key k, String tableName){
 	stmt = "INSERT INTO "+tableName+" (";
 	stmt += k.sqlNames()+") VALUES (";

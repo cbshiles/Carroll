@@ -14,7 +14,7 @@ public class OldFloor extends TablePage {
     public OldFloor (Page p) throws Exception{
 	super("Old Floor", p);
 
-	inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount"}); //no id
+	inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount", "Curtailed"}); //no id
 
 	JPanel cPan = new JPanel();
 
@@ -61,7 +61,7 @@ public class OldFloor extends TablePage {
 
     private class Ent implements Enterer{
 	Key k;
-	int db, vin, veh, ic, ttl, dp, poa;
+	int db, vin, veh, ic, ttl, dp, poa, cd;
 
 	public Ent(Key kk){
 	    k = kk;
@@ -72,6 +72,7 @@ public class OldFloor extends TablePage {
 	    ttl = k.dex("Title");
 	    dp = k.dex("Date Paid");
 	    poa = k.dex("Pay Off Amount");
+	    cd = k.dex("Curtailed");
 	}
 
 	public String titleStatus(int t){
@@ -85,11 +86,13 @@ public class OldFloor extends TablePage {
 	}
 
 	public Object[] editEntry(Object[] o){
+	    float zic = ((int)o[cd] == 2)?0f:(float)o[ic];
 	    return new Object[]{
-		o[db], o[vin], o[veh], o[ic],
+		o[db], o[vin], o[veh],
+		zic,
 		titleStatus((int)o[ttl]),
 		o[dp], o[poa],
-		(float)o[poa] - (float)o[ic]
+		(float)o[poa] - zic
 	    };
 	}
     }

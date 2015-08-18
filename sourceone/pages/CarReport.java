@@ -18,7 +18,7 @@ public class CarReport extends TablePage{
     public CarReport(Page p){
 	super("Create Car Report", p);
 
-	Key inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title"}); 
+	Key inKey = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Curtailed"}); 
 
 	try {
 	    Input in = new QueryIn(inKey, "WHERE Pay_Off_Amount IS NULL"); //"WHERE Title<2;"
@@ -42,7 +42,7 @@ public class CarReport extends TablePage{
 		public void actionPerformed(ActionEvent ae) {
 		    try {
 			g.view.addOut(new CSVOutput(g.view.key, SQLBot.bot.path+"Car_Report_"+LocalDate.now()+".csv",
-					  "~~~~~"+jcost+"~~~~"+jtotal));
+						    "~~~~~"+jcost+"~~~~"+jtotal));
 			g.view.push();
 
 			kill();
@@ -74,7 +74,7 @@ public class CarReport extends TablePage{
 
     private class Ent implements Enterer{
 	Key k;
-	int db, vin, veh, ic, ttl;
+	int db, vin, veh, ic, ttl, cd;
 
 	public Ent(Key kk){
 	    k = kk;
@@ -83,6 +83,7 @@ public class CarReport extends TablePage{
 	    veh = k.dex("Vehicle");
 	    ic = k.dex("Item Cost");
 	    ttl = k.dex("Title");
+	    cd = k.dex("Curtailed");
 //	    System.err.println(db+" "+ vin+" "+ veh+" "+ ic+" "+ ttl);
 	}
 
@@ -93,10 +94,17 @@ public class CarReport extends TablePage{
 	    float dRate = View.rnd(cost*.0007f); 
 	    int days = (int)ChronoUnit.DAYS.between(bot, LocalDate.now());
 
-	    int min = (cost >= 5000)?65:35;
 	    float tmp = dRate*days;
-	    float interest = tmp>min?tmp:min;
-	    float fees = 25;
+	    float interest, fees;
+	    if ((int)o[cd] == 1){ //curtailed entry
+		interest = tmp;
+		fees = 0f;
+	    } else {
+		int min = (cost >= 5000)?65:35;
+		interest = tmp>min?tmp:min;
+		fees = 25f;
+	    }
+
 	    return new Object[]{
 		o[db],
 		o[vin],

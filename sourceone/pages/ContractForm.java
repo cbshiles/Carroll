@@ -289,17 +289,17 @@ public class ContractForm extends Form {
 
 
 
-	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title"});
+	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title", "Curtailed"});
 	JTable jt;
 	Grid g;
 	JPanel jp = new JPanel(new BorderLayout());
 	View v;
-	FloorPay.Ent ent;
+	FloorCalc ent;
 	JScrollPane jsp = new JScrollPane();
 
 	public void getTable(LocalDate ld){
 	    ent.setDay(ld);
-	    v = g.addView(new String[]{"Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	    v = g.addView(new String[]{"Title", "Curtailed"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 							   new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 		ent);
 
@@ -322,7 +322,7 @@ public class ContractForm extends Form {
 		Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE ID="+id+';');
 		g = new Grid(key, in);
 		g.pull();
-		ent = new FloorPay.Ent(key);
+		ent = new FloorCalc(key, date, true);
 		getTable(date);
 		
 	    } catch (Exception e){ new XcptDialog(ContractForm.this, e); return;}

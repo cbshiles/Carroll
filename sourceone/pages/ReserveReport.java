@@ -16,13 +16,7 @@ public class ReserveReport extends TablePage{
     View v;
     Key ko, kn;
     
-    Key reportKey = new Key( new Cut[]{
-	    new DateCut("Date"),
-	    new StringCut("Trans Description"),
-	    new FloatCut("Debit Amt"),
-	    new FloatCut("Credit Amt"),
-	    new FloatCut("Balance")
-	});
+    Key reportKey = Key.sumKey;
 
     public ReserveReport(Page p) throws Exception{
 	super("Reserve Sum", p);
@@ -39,6 +33,7 @@ public class ReserveReport extends TablePage{
 	lda  = LocalDate.of(2015, 5, 1);
 	ldb  = LocalDate.of(2015, 8, 2);
 
+	//# llop should be: start month, start year, # of months duration (and be in a function?!)
 
 	View vend = new View(reportKey, null, null);
 //BasicFormatter.cinvert(lda)
@@ -52,13 +47,13 @@ public class ReserveReport extends TablePage{
 
 // tip: you need to use a result set ( probably input) before making a new one
 
-	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Date_Bought >= '"+lda+"' AND Contracts.Date_Bought <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
+	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Date_Bought >= '"+lda+"' AND Contracts.Date_Bought <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;"));
 	    g.addOut(v);
 	    v.switchEnts(new Nnt(kn));
 	    g.go1();
 
 
-	    go = new Grid(ko, new QueryIn(custKey, contOKey, "WHERE Contracts.Paid_Off >= '"+lda+"' AND Contracts.Paid_Off <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID;"));
+	    go = new Grid(ko, new QueryIn(custKey, contOKey, "WHERE Contracts.Paid_Off >= '"+lda+"' AND Contracts.Paid_Off <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;"));
 	    go.addOut(v);	    
 	    v.switchEnts(new Ont(ko));
 	    go.go1();
@@ -103,11 +98,11 @@ public class ReserveReport extends TablePage{
 	Grid g;
 	try {
 	    g = new Grid(r, new QueryIn(r,
-					"WHERE Date_Bought < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off > '"+ld
+					"WHERE Date_Bought < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off >= '"+ld
 					+"' );"));
 	    g.pull();
 	} catch (Exception e) {new XcptDialog(this, e); return .1337f;}
-	return g.floatSum("Reserve");
+	return -g.floatSum("Reserve");
     }
 
     public static class Ont implements Enterer{

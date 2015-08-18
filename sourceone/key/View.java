@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class View extends Matrix{
 
-    Enterer ent;
+    Enterer ent = null; //# new change (aug 18)
     int[] remove;
     boolean clear;
     

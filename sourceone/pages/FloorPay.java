@@ -14,12 +14,12 @@ import java.time.temporal.ChronoUnit;
 
 public class FloorPay extends TablePage {
 
-    Ent ent;
+    FloorCalc ent;
     View v;
 
     public void getTable(LocalDate ld){
 	ent.setDay(ld);
-	v = g.addView(new String[]{"ID", "Title"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
+	v = g.addView(new String[]{"ID", "Title", "Curtailed"}, new Cut[]{new StringCut("Title"), new FloatCut("Daily Rate"), new IntCut("Days Active"),
 							    new FloatCut("Accrued Interest"), new FloatCut("Fees"), new FloatCut("Sub total")},
 	    ent);
 
@@ -31,14 +31,14 @@ public class FloorPay extends TablePage {
 	super("Floor Plan Payoffs", p);
 	tablePlace();
 
-	Key key = Key.floorKey.just(new String[]{"ID", "VIN", "Date Bought", "Vehicle", "Item Cost", "Title"});
+	Key key = Key.floorKey.just(new String[]{"ID", "VIN", "Date Bought", "Vehicle", "Item Cost", "Title", "Curtailed"});
 	try {
 	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Pay_Off_Amount IS NULL");
 
 	    g = new Grid(key, in);
 	    g.pull(); 
 	    
-	    ent = new Ent(key);
+	    ent = new FloorCalc(key, null, true); //null since itll be rewritten anywho
 
 	    getTable(LocalDate.now());
 
@@ -91,49 +91,5 @@ public class FloorPay extends TablePage {
 	jp.add(cPan);
 	
 	setVisible(true);
-    }
-
-    public static class Ent implements Enterer{
-
-	int db, ic, tl;
-	public LocalDate payday;
-
-	public Ent(Key k, LocalDate pd){
-	    this(k);
-	    payday = pd;
-	}
-	
-	public Ent(Key k){
-	    db = k.dex("Date Bought");
-	    ic = k.dex("Item Cost");
-	    tl = k.dex("Title");
-	}
-
-	public void setDay(LocalDate pd){
-	    payday = pd;
-	}
-
-	public Object[] editEntry(Object[] o){
-
-	    LocalDate bot = (LocalDate)o[db];
-	    float cost = (float)o[ic];
-
-	    float dRate = View.rnd(cost*.0007f); 
-	    int days = (int)ChronoUnit.DAYS.between(bot, payday);
-
-	    int min = (cost >= 5000)?65:35;
-	    float tmp = dRate*days;
-	    float interest = tmp>min?tmp:min;
-	    float fees = 25;
-	    return new Object[]{
-		((int)o[tl] == 0) ? "Pending":"Yes",
-		dRate,
-		days,
-		interest,
-		fees,
-		cost+interest+fees
-	    };
-
-	}
     }
 }
