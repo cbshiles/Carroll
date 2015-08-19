@@ -11,7 +11,7 @@ public class FrozeMenu extends Page {
 	addRed("Old Floor", OldFloor.class);
 	addRed("Old Full", OldFull.class);
 	addRed("Old Partial", OldPartial.class);
-//	pack();
+
 	setVisible(true);
     }
 }

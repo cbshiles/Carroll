@@ -2,24 +2,21 @@ package sourceone.pages;
 
 import sourceone.key.*;
 import sourceone.sql.*;
-import sourceone.csv.*;
+//import sourceone.csv.*;
 import java.time.*;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+//import javax.swing.*;
+//import java.awt.*;
+//import java.awt.event.*;
 
-public class ReserveReport extends TablePage{
+public class ReserveReport extends CenterFile{
 
-    Key custKey, contOKey, contNKey;
+    Key custKey, contOKey, contNKey, ko, kn;
     Grid go;
     View v;
-    Key ko, kn;
-    
-    Key reportKey = Key.sumKey;
 
     public ReserveReport(Page p) throws Exception{
-	super("Reserve Sum", p);
+	super("Reserve", p);
 
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	contOKey = Key.contractKey.just(new String[] {"Reserve", "Paid Off"});
@@ -28,72 +25,13 @@ public class ReserveReport extends TablePage{
 	ko = custKey.add(contOKey.cuts);
 	kn = custKey.add(contNKey.cuts);
 
-	//from beginning of month A to end of month B (A might == B) //itll have to be slightly greater for the while loop atm
-	LocalDate lda, ldb, lde = null;
-	lda  = LocalDate.of(2015, 5, 1);
-	ldb  = LocalDate.of(2015, 8, 2);
+	blobs.add(new BotTrax());
+	blobs.add(new SoldTrax());
 
-	//# llop should be: start month, start year, # of months duration (and be in a function?!)
-
-	View vend = new View(reportKey, null, null);
-//BasicFormatter.cinvert(lda)
-	vend.chunk(new Object[]{lda, "Beginning Balance", 0f, 0f, getStart(lda)});
-	
-	while (lda.compareTo(ldb) < 0){
-	    lde = lda.plusDays(lda.getMonth().maxLength() - lda.getDayOfMonth());
-
-	    v = new View(reportKey);
-	    v.addOut(vend);	
-
-// tip: you need to use a result set ( probably input) before making a new one
-
-	    g = new Grid(kn, new QueryIn(custKey, contNKey, "WHERE Contracts.Date_Bought >= '"+lda+"' AND Contracts.Date_Bought <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;"));
-	    g.addOut(v);
-	    v.switchEnts(new Nnt(kn));
-	    g.go1();
-
-
-	    go = new Grid(ko, new QueryIn(custKey, contOKey, "WHERE Contracts.Paid_Off >= '"+lda+"' AND Contracts.Paid_Off <= '"+lde+"' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;"));
-	    go.addOut(v);	    
-	    v.switchEnts(new Ont(ko));
-	    go.go1();
-
-	    v.sort("Date", true);
-
-	    float deb = v.floatSum("Debit Amt");
-	    float cred = v.floatSum("Credit Amt");
-	    v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
-
-	    v.push1();
-	    
-	    lda = lda.plusMonths(1);
-	}
-
-
-	vend.chunk(new Object[]{lde, "Ending Balance", 0f, 0f, vend.floatSum("Balance")});
-	vend.addTable();
-	try{ jsp.setViewportView(jt = (javax.swing.JTable)vend.push());}
-	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
-	catch (Exception e){e.printStackTrace();}
-
-	JButton jb = new JButton("Create Report");
-	jp.add(jb, BorderLayout.SOUTH);
-	jb.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent a) {
-		    try {
-//			vend.addOut(new CSVOutput(reportKey, SQLBot.bot.path+"ReserveReport_"+LocalDate.now()+".csv"));
-			vend.addOut(new ReserveFormatter(new CSVDest(SQLBot.bot.path+"ReserveReport_"+LocalDate.now()+".csv", reportKey.csvnames()+'\n')));
-			vend.push();
-		    } catch (Exception e){
-			System.err.println("RORRE: "+e);
-		    }
-		    kill();
-		}});
-	
-	    wrap();
+	dew(5, 2015, 4);
     }
 
-    float getStart(LocalDate ld) {//get beginning balance, starting at ld
+    public float getStart(LocalDate ld) {//get beginning balance, starting at ld
 	Key r = Key.contractKey.just("Reserve");
 	Grid g;
 	try {
@@ -104,6 +42,28 @@ public class ReserveReport extends TablePage{
 	} catch (Exception e) {new XcptDialog(this, e); return .1337f;}
 	return -g.floatSum("Reserve");
     }
+
+    private class BotTrax extends Blob{//bought contracts
+	public BotTrax(){super(kn);}
+	Enterer ent(){return new Nnt(kn);}
+	Input in(LocalDate a, LocalDate z)throws Exception{
+	    return new QueryIn
+		(custKey, contNKey,
+		 "WHERE Contracts.Date_Bought >= '"+a+
+		 "' AND Contracts.Date_Bought <= '"+z+
+		 "' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;");
+	}}
+
+    private class SoldTrax extends Blob{//bought contracts
+	public SoldTrax(){super(ko);}
+    	Enterer ent(){return new Ont(ko);}
+	Input in(LocalDate a, LocalDate z)throws Exception{
+	    return new QueryIn
+		(custKey, contOKey,
+		 "WHERE Contracts.Paid_Off >= '"+a+
+		 "' AND Contracts.Paid_Off <= '"+z+
+		 "' AND Contracts.Customer_ID = Customers.ID AND Reserve > 0.01;");
+	}}
 
     public static class Ont implements Enterer{
 	int ln, fn, res, po;
