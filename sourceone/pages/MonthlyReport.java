@@ -4,7 +4,7 @@ import sourceone.key.*;
 import sourceone.sql.*;
 import java.time.*;
 
-public class MonthlyReport extends TablePage{
+public class MonthlyReport extends CenterFile{
 
     Key fi = Key.floorKey.just(new String[]{"Date Bought", "VIN", "Vehicle", "Item Cost", "Curtailed"});
     
@@ -12,8 +12,16 @@ public class MonthlyReport extends TablePage{
 	super("Monthly", p);
     }
 
+    public float getStart(LocalDate d){return 0f;}
+    
     private class FloorIn extends Blob{
 	public FloorIn(){super(fi);}
+
+	public Enterer ent(){return new Ent();}
+
+	public Input in(LocalDate a, LocalDate z)throws Exception{
+	    return null;
+	}
 
 	int db, vin, veh, ic, cur;
 	private class Ent implements Enterer{
@@ -30,6 +38,7 @@ public class MonthlyReport extends TablePage{
 		    "Floor Purchase - "+o[vin],
 		    
 		    
+		};
 	    }
 	}
     }
