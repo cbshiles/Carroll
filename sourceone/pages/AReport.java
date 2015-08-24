@@ -15,7 +15,6 @@ public class AReport extends FullnessPage{
 
     JButton jb;
 
-
     boolean firstTable = true;
 
     @Override

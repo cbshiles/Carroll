@@ -23,6 +23,8 @@ public class TextField extends Field{
     public String text()
     {return tf.getText();}
 
+    public void set(String s){tf.setText(s);}
+
     public void addListener(FieldListener dl){
 	tf.getDocument().addDocumentListener(dl);
     }

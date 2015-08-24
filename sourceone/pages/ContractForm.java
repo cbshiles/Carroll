@@ -16,6 +16,25 @@ public class ContractForm extends Form {
     private String csv, csvFile, csvTail = "";
     private boolean stuck;
     private float floorAmount, net;
+    FloorPayDialog fpd; // = null;
+    String today = BasicFormatter.cinvert(LocalDate.now());
+    RadioField payFreq; TextField botDate;
+
+    @Override public void refresh() {
+	super.refresh();
+	fillFields();
+    }
+
+    public void fillFields(){ //fill in fields w. default values
+	botDate.set(today);
+	payFreq.select(0);
+	SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    revalidate();
+                }
+            });
+    }
     
     public ContractForm(Page p) throws Exception{
 	super("Contract", p);
@@ -24,10 +43,10 @@ public class ContractForm extends Form {
 	
 	setLayout(new java.awt.GridLayout(0, 1));
 
-	TextField tot, res, botDate; Field type = null;
+	TextField tot, res; Field type = null;
 
 
-	botDate = new TextField("Date Bought", BasicFormatter.cinvert(LocalDate.now()));
+	botDate = new TextField("Date Bought");
 
 	add(botDate.getJP());
 	
@@ -40,9 +59,9 @@ public class ContractForm extends Form {
 	addF(tot = new TextField("Total Amount"));
 	addF(new TextField("Number of Payments"));
 	addF(new TextField("Amount"));
-	addF(new RadioField("Payment Frequency",
+	addF(payFreq = new RadioField("Payment Frequency",
 			    new String[]{"Weekly", "Biweekly", "Monthly"},
-			    new String[]{"7", "14", "30"}, 0));
+				      new String[]{"7", "14", "30"}, 0));
 	addF(new OptionField("Final Payment", "0", true));
 	addF(new TextField("Start Date"));
 	
@@ -63,7 +82,7 @@ public class ContractForm extends Form {
 				   new String[]{"0", "1"}, -1));
 
 
-	
+	fillFields();
 	JButton submit = new JButton("Submit");
 
 	Key custKey = Key.customerKey.just(new String[]{"First Name", "Last Name", "Address"}).add(new Cut[]{new StringCut("Address 2"), new StringCut("Phone Number")});
@@ -88,13 +107,15 @@ public class ContractForm extends Form {
 	submit.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent ae){
 		    try {
-			ContractForm.this.refresh();
 			ent.set_id((int)custGrid.go()); //# causes crap entries into the customers table
-			if ((int)contGrid.go() == -1)
+			int cid; //contract id
+			if ( (cid = (int)contGrid.go()) == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
+			if (fpd != null) fpd.set_id(cid);
 			makeCSV(custGrid, contGrid);
 			if (!stuck) sendReport();
 			freshen();
+			ContractForm.this.refresh();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(getName(), ContractForm.this, ix);
 			//ix.printStackTrace();
@@ -222,7 +243,7 @@ public class ContractForm extends Form {
 
 	public Object[] editEntry(Object[] o){
 	    return new Object[]{
-		""+o[add]+", "+o[add2]
+		""+o[add]+"~ "+o[add2]
 	    };
 	}
     }
@@ -271,7 +292,7 @@ public class ContractForm extends Form {
 		    int id = rs.getInt(1);
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
-		    new FloorPayDialog(id, (LocalDate)o[db]);
+		    fpd = new FloorPayDialog(id, (LocalDate)o[db]);
 		} else floorAmount = 0f;
 	    } catch (SQLException e){throw new InputXcpt(e);}
 
@@ -287,7 +308,8 @@ public class ContractForm extends Form {
 
     public class FloorPayDialog extends JDialog{
 
-
+//so, if the car says that we have its floor plan, then we say that the contract has the title now (easy peasy??)
+	//itd be nice if we could say Contract title = floor title, just like that
 
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Title", "Curtailed"});
 	JTable jt;
@@ -296,6 +318,9 @@ public class ContractForm extends Form {
 	View v;
 	FloorCalc ent;
 	JScrollPane jsp = new JScrollPane();
+	int cont_id = 0;
+
+	public int set_id(int i){return cont_id=i;}
 
 	public void getTable(LocalDate ld){
 	    ent.setDay(ld);
@@ -354,7 +379,7 @@ public class ContractForm extends Form {
 			try {
 			    LocalDate d = date; 
 			    
-			    Object[] o = g.data.get(0); //# dangerouts buts its just getting the row
+			    Object[] o = g.data.get(0); // getting the onlt possible row (ideally)
 
 			    //{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
 			    csvTail += addLine("Vehicle:", 0);
@@ -366,6 +391,9 @@ public class ContractForm extends Form {
 			    
 			    //! removed Title="+((int)o[tl]+2)+",
 			    SQLBot.bot.update("UPDATE Cars SET Date_Paid='"+d+"', Pay_Off_Amount="+st+" WHERE ID="+o[id]);
+				
+			    if ((int)o[tl] == 1) // all right here
+				SQLBot.bot.update("UPDATE Contracts SET Title=1 WHERE ID="+cont_id);
 			    dispose();
 			} catch (Exception ix) {new XcptDialog(FloorPayDialog.this, ix);}
 		    }
@@ -378,7 +406,6 @@ public class ContractForm extends Form {
 			FloorPayDialog.this.dispose();
 		    }
 		});
-		  
 
 	    setBounds(300,300,1000,600);
 	    setVisible(true);

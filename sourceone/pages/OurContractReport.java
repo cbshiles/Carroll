@@ -9,53 +9,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 
-public abstract class FullnessPage extends BackPage{
-    boolean firstTable = true;
-    float thing1, thing2;
-    LocalDate reportDate, prd;
-    JTextField balSum, totSum;
+public class OurContractReport extends BackPage{
 
-    public FullnessPage(String title, Page p){
-	super(title, p);
+    public OurContractReport(Page p) throws InputXcpt{
+	super("Our AR Report", p);
+
+	if (ded) return;
+	reload();
+
+	getTable();
+	wrap();
     }
 
     protected void init(){
 	if (ded)  {kill(); return;} // take care of ded possibilities (subclasses must also)
-	
+
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
-	
+
 	contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
+		"Payment Frequency", "VIN", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
-	try{
-	    prd = SQLBot.bot.query1Date("SELECT "+sel+"_Report_Date FROM Meta WHERE ID=1;");
-	    SQLBot.bot.done();
-	}catch(Exception e){System.err.println("@#: "+e); return;}
-	
 	viewKey = new Key(
-	    new String[]{"Customer Name", "Terms", "Payments Made", "Start Date", "Due Date", "Remaining Balance",
-			 "Payments Due", "Total Amount Due"},
-	    new Kind[]{STRING, STRING, INT, DATE, DATE, FLOAT, STRING, FLOAT});
+	    new String[]{"Customer Name", "Terms", "VIN", "Remaining Balance", "Payout Date"},
+	    new Kind[]{STRING, STRING, STRING,  FLOAT, DATE});
     }
 
-    public static LocalDate next(LocalDate du, int freq, LocalDate st){
-	LocalDate due;
-	if (freq == 30) {
-	    due = du.plusMonths(1);
-	    int len = due.getMonth().length(Year.isLeap(due.getYear()));
-	    int sday = st.getDayOfMonth();
-	    int dday = due.getDayOfMonth();
-	    if (dday < sday && len > dday){
-		due = due.plusDays( (len<sday?len:sday) - dday);
-	    }
-	}
-	else due = du.plusDays(freq);
-	return due;
-    }
-
-    protected void getTable() {
-	g.clearView(viewKey.cuts, new ContractEnt(reportDate));
+        protected void getTable() {
+	g.clearView(viewKey.cuts, new OurEnt(LocalDate.now()));
 
 	try{ g.push1();
 
@@ -67,19 +48,21 @@ public abstract class FullnessPage extends BackPage{
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
 
-	if (firstTable){
-	    balSum.setText(""+(thing1 = g.view.floatSum("Remaining Balance")));
-	    firstTable = false;
-	}
-	totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
+	//NEED TO DO SUMMATION
+	// if (firstTable){
+	//     balSum.setText(""+(thing1 = g.view.floatSum("Remaining Balance")));
+	//     firstTable = false;
+	// }
+	// totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
     }
 
-    public class ContractEnt implements Enterer{
 
-	int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm, grs;
+    public class OurEnt implements Enterer{
+
+	int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm, grs, vin;
 	LocalDate till;
-	    
-	public ContractEnt(LocalDate t){
+	
+	public OurEnt(LocalDate t){
 	    till = t;
 	    
 	    ln = k.dex("Last Name");
@@ -95,7 +78,8 @@ public abstract class FullnessPage extends BackPage{
 	    sd = k.dex("Start Date");
 	    tc = k.dex("Total Contract");
 
-	    grs = k.dex("Gross Amount"); 
+	    grs = k.dex("Gross Amount");
+	    vin = k.dex("VIN");
 	}
 
 	public Object[] editEntry(Object[] o){
@@ -106,8 +90,11 @@ public abstract class FullnessPage extends BackPage{
 	    float finalPayment = (float)o[fp];
 	    int fin = (finalPayment > 0.01)?1:0;
 
-	    int tmp = numPays((LocalDate)o[sd], freq, due);
-	    int maxStd = (int)o[nop] - (int)o[pm];
+	    LocalDate sdO = (LocalDate)o[sd];
+	    
+	    int tmp = numPays(sdO, freq, due);
+	    int nopO = (int)o[nop];
+	    int maxStd = nopO - (int)o[pm];
 	    int maxPays = maxStd + fin;
 	    nPays = (tmp<maxPays)?tmp:maxPays;
 
@@ -128,15 +115,12 @@ public abstract class FullnessPage extends BackPage{
 	    return new Object[] {
 		""+o[ln]+", "+o[fn],
 		terms((int)o[nop], amt, freq, finalPayment),
-		o[pm],
-		o[sd],
-		due,
+		o[vin],
 		tep - (int)o[pm]*amt, //# *assumes no other(non-standard) payment has been made*
-		nPays,
-		amtDue
+		nexti(sdO, freq, nopO + fin)
 	    };
 	}
-
+	
 	public boolean fequal(float a, float b){
 	    return 0.01 > Math.abs(a-b);}
     
@@ -149,7 +133,6 @@ public abstract class FullnessPage extends BackPage{
 	    return pays;
 	}
 
-
 	public String terms(int num, float amt, int freq, float fin){
 	    char c;
 	    if (freq==7) c='W';
@@ -161,7 +144,12 @@ public abstract class FullnessPage extends BackPage{
 	    return trms;
 	}
 
+	public LocalDate nexti(LocalDate st, int freq, int i){
+	    if (freq == 30) 
+		return st.plusMonths(i);
+	    else
+		return st.plusDays(freq*i);
+	}
 
     }
-
 }
