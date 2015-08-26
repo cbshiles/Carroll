@@ -79,7 +79,7 @@ public class AReport extends FullnessPage{
 
 			g.view.push1();
 
-			pView.addOut(new CustReport(pView.key, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", "~~~~"+thing1+"~~"+thing2));
+			pView.addOut(new CustReport(pView.key, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", "\nTotals:~~~~"+thing1+"~~"+thing2));
 
 			boolean doit = true;
 			if (prd != null){

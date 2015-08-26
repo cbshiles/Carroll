@@ -118,6 +118,7 @@ public class ContractForm extends Form {
 			ContractForm.this.refresh();
 		    } catch (InputXcpt ix) {
 			new XcptDialog(getName(), ContractForm.this, ix);
+			ContractForm.this.refresh();
 			//ix.printStackTrace();
 		    }}});
 

@@ -22,7 +22,7 @@ public class FloorCalc implements Enterer {
 	float cost = (float)o[ic];
 
 	float dRate = View.rnd(cost*.0007f); 
-	int days = (int)ChronoUnit.DAYS.between(bot, LocalDate.now());
+	int days = (int)ChronoUnit.DAYS.between(bot, theDay);
 
 	float tmp = dRate*days;
 	float interest, fees;
@@ -40,7 +40,7 @@ public class FloorCalc implements Enterer {
 	    days,
 	    interest,
 	    fees,
-	    interest+fees+(total?cost:cost*.1f) //hard coded 10%
+	    interest+fees+(total?cost:cost*.1f) //# hard coded 10%
 	};
     }
     public String titleStatus(int t){

@@ -33,7 +33,7 @@ public class FloorPay extends TablePage {
 
 	Key key = Key.floorKey.just(new String[]{"ID", "VIN", "Date Bought", "Vehicle", "Item Cost", "Title", "Curtailed"});
 	try {
-	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Pay_Off_Amount IS NULL");
+	    Input in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE Pay_Off_Amount IS NULL ORDER BY VIN");
 
 	    g = new Grid(key, in);
 	    g.pull(); 

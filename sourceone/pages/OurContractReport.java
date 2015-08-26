@@ -11,11 +11,23 @@ import java.time.*;
 
 public class OurContractReport extends BackPage{
 
+    JTextField balText;
+    float balSum;
+
     public OurContractReport(Page p) throws InputXcpt{
 	super("Our AR Report", p);
 
 	if (ded) return;
 	reload();
+
+	JPanel bPan = new JPanel();
+	bPan.setBorder(new javax.swing.border.EmptyBorder(0,10,10,20));
+	bPan.setLayout(new GridLayout(0, 5));
+	addEmpties(3, bPan);
+	bPan.add(balText = new JTextField());
+	addEmpties(1, bPan);
+	
+	jp.add(bPan, BorderLayout.SOUTH);
 
 	getTable();
 	wrap();
@@ -48,12 +60,7 @@ public class OurContractReport extends BackPage{
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
 
-	//NEED TO DO SUMMATION
-	// if (firstTable){
-	//     balSum.setText(""+(thing1 = g.view.floatSum("Remaining Balance")));
-	//     firstTable = false;
-	// }
-	// totSum.setText(""+(thing2 = g.view.floatSum("Total Amount Due")));
+	balText.setText(""+(balSum = g.view.floatSum("Remaining Balance")));
     }
 
 

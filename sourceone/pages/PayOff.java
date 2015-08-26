@@ -26,7 +26,7 @@ public class PayOff extends TablePage {
 		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount", "Reserve"});
 
 	try{
-	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID");
+	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID ORDER BY Customers.Last_Name, Customers.First_Name");
 
 	    Key inKey = custKey.add(contKey.cuts);
 		    
@@ -200,6 +200,7 @@ public class PayOff extends TablePage {
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
 		    dispose();
+		    PayOff.this.kill();
 		} catch (Exception e){new XcptDialog(PayOff.this, e);}
 	    }
 	    else {System.err.println("Kentucky derby");
