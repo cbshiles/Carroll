@@ -22,7 +22,7 @@ public class SQLBot {
 	String password = props.getProperty("password", "");
 	String host = props.getProperty("hostname", "localhost");
 	String db = props.getProperty("database");
-	System.out.println("connecting to "+db);
+	System.out.println("connecting to "+host+db);
 	path = props.getProperty("csvPath", "");
 	
 	String url = "jdbc:mysql://"+host+"/"+db;
