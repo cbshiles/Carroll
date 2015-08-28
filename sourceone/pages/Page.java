@@ -90,6 +90,6 @@ public class Page extends JFrame {
     }
 
     public void tablePlace(){
-	place(.05f, .15f, .7f, .7f);
+	place(.05f, .15f, .7f, .8f);
     }
 }
