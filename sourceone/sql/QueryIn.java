@@ -79,5 +79,7 @@ public class QueryIn implements Input{
     public void done(){
 	SQLBot.bot.done();
     }
+
+    public void clear(){rs = null;}
     
 }
