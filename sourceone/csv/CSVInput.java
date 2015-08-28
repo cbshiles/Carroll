@@ -37,6 +37,6 @@ public class CSVInput implements StringSource{
 	i++;
 	if (n < strs.length)
 	    return strs[n++];
-	else throw new InputXcpt("CSV line "+i+" out of entries: "+fName);
+	else throw new InputXcpt("CSV line "+(i/n)+" out of entries: "+fName);
     }
 }

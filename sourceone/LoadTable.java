@@ -41,7 +41,7 @@ public class LoadTable{
     }
 
     private static void load(){
-	add(new Model(Key.floorKey.except(new int[]{0,5,6,7}), null, new Cut[]{new IntCut("Title")},
+	add(new Model(Key.floorKey.just("Date Bought", "VIN", "Vehicle", "Item Cost"), null, new Cut[]{new IntCut("Title")},
 		      new Enterer(){
 			  public Object[] editEntry(Object[] objs){
 			      return new Object[] {0};
