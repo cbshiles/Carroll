@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public abstract class CenterFile extends TablePage{
 
     View vend = new View(Key.sumKey, null, null); //view going to csv
-    protected ArrayList<Blob> blobs = new ArrayList<Blob>();
+    protected Account[] accounts;
 
     public CenterFile(String name, Page p) {
 	super(name, p);
@@ -36,71 +36,53 @@ public abstract class CenterFile extends TablePage{
 	wrap();
     }
 
-    public void dew(int months, int year, int x){//do x months
-	if (x < 1) return;
-	LocalDate dz = null, di = LocalDate.of(year, months, 1);
-
-	for (Blob b : blobs){// tip: you need to use a result set ( probably input) before making a new one
-	    View v = new View(Key.sumKey);
-	    v.addOut(vend);
-
-	    v.chunk(new Object[]{di, "Beginning Balance", 0f, 0f, b.getStart(di)});
-	    
-	    try {
-	    for(int i=0; i<x; i++){
-		
-		dz = di.plusDays(di.getMonth().maxLength() - 1);
-
-		Grid g = new Grid(b.key, b.in(di, dz));
-		g.addOut(v);
-		v.switchEnts(b.ent()); //yehhh (cuz each in is for a certqain time period
-		g.go1();
-
-		float deb = v.floatSum("Debit Amt");
-		float cred = v.floatSum("Credit Amt");
-		v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
-
-		di = di.plusMonths(1);
-	    }
-	    v.chunk(new Object[]{dz, "Ending Balance", 0f, 0f, vend.floatSum("Balance")});
-	    
-	    v.push1();
-	    } catch (Exception e) {System.out.println("delete thsis stupid try block");}
+    public void dew(LocalDate a, LocalDate z){
+	try{
+	    for (Account act: accounts)
+		act.span(a, z);
+	    vend.addTable();
+	    jsp.setViewportView(jt = (javax.swing.JTable)vend.push());
 	}
-
-	 vend.addTable();
-	try{ jsp.setViewportView(jt = (javax.swing.JTable)vend.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}
     }
-}
 
+    public abstract class Account {
 
+	private Blob[] blobs;
 
-	// vend.chunk(new Object[]{di, "Beginning Balance", 0f, 0f, getStart(di)});
+	public Account(Blob[] bs){blobs = bs;}
+
+	public abstract float getStart(LocalDate ld);
+
+	public void span(LocalDate a, LocalDate z) throws Exception{//can return null
+	    if (z.isAfter(a)) return;
+
+	    View v = new View(Key.sumKey);
+	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, getStart(a)});
 	
-	// for(int i=0; i<x; i++){
-	//     View v = new View(Key.sumKey);
-	//     v.addOut(vend);
+	    for(LocalDate n=a; n.isBefore(z); n = n.plusMonths(1)){
+		LocalDate nz = n.plusDays(n.getMonth().maxLength() - 1);
+		nz = nz.isBefore(z)?nz:z;
 
-	//     dz = di.plusDays(di.getMonth().maxLength() - 1);
+		View vi = new View(Key.sumKey);
+		vi.addOut(v);
+		for (Blob b: blobs){// tip: you need to use an input before making a new one
+		    Grid g = new Grid(b.k, b.in(n, nz));
+		    g.addOut(vi);
+		    v.switchEnts(b.ent());
+		    g.go1();
+		}
+		vi.push1();
+	    
+		float deb = vi.floatSum("Debit Amt");
+		float cred = vi.floatSum("Credit Amt");
+		v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
+	    }
+	    v.chunk(new Object[]{z, "Ending Balance", 0f, 0f, v.floatSum("Balance")});
 
-	//     try {
-	// 	for (Blob b : blobs){// tip: you need to use a result set ( probably input) before making a new one
-	// 	    Grid g = new Grid(b.key, b.in(di, dz));
-	// 	    g.addOut(v);
-	// 	    v.switchEnts(b.ent());
-	// 	    g.go1();
-	// 	}
-
-	// 	v.sort("Date", true);
-
-	// 	float deb = v.floatSum("Debit Amt");
-	// 	float cred = v.floatSum("Credit Amt");
-	// 	v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
-
-	// 	v.push1();
-	//     } catch (Exception e) {System.out.println("ERROR in blobbing:\n"+e); return;}
-	//     di = di.plusMonths(1);
-	// }
-	// vend.chunk(new Object[]{dz, "Ending Balance", 0f, 0f, vend.floatSum("Balance")});
+	    v.addOut(vend);
+	    v.push1();
+	}
+    }
+}

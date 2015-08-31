@@ -1,0 +1,10 @@
+package sourceone.pages.blobs;
+
+import java.time.*;
+import sourceone.key.*;
+import sourceone.sql.*;
+
+public class ResBlob extends Blob{//bought contracts
+
+}
+    

@@ -1,0 +1,43 @@
+package sourceone.pages.blobs;
+
+import java.time.*;
+import sourceone.key.*;
+
+public abstract class Account {
+
+    private Blob[] blobs;
+
+    public Account(Blob[] bs){blobs = bs;}
+
+    public abstract float getStart(LocalDate ld);
+
+    public void span(LocalDate a, LocalDate z){
+	if (z.isAfter(a)) return;
+
+	View v = new View(Key.sumKey);
+	v.addOut(vend);
+
+	v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, getStart(a)});
+	
+	for(LocalDate n=a; n.isBefore(z); n = n.plusMonths(1)){
+	    LocalDate nz = n.plusDays(n.getMonth().maxLength() - 1);
+	    nz = nz.isBefore(z)?nz:z;
+
+	    View vi = new View(Key.sumKey);
+	    vi.addOut(v);
+	    for (Blob b: blobs){// tip: you need to use an input before making a new one
+		Grid g = new Grid(b.k, b.in(n, nz));
+		g.addOut(vi);
+		v.switchEnts(b.ent());
+		g.go1();
+	    }
+	    vi.push1();
+	    
+	    float deb = vi.floatSum("Debit Amt");
+	    float cred = vi.floatSum("Credit Amt");
+	    v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
+	}
+	v.chunk(new Object[]{dz, "Ending Balance", 0f, 0f, vend.floatSum("Balance")});
+	v.push1();
+    }
+}

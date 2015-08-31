@@ -19,8 +19,8 @@ public class ReserveReport extends CenterFile{
     public ReserveReport(Page p) throws Exception{
 	super("Reserve", p);
 
-	blobs.add(new BotTrax());
-	blobs.add(new SoldTrax());
+	blobs.add(new ResBlob(true));
+	blobs.add(new ResBlob(false));
 
 	dew(3, 2015, 6);
     }
