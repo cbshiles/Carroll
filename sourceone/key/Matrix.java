@@ -122,7 +122,7 @@ public class Matrix{
     }
 
     public float floatSum(String name){
-	int i = key.dex(name);
+	int i = key.dex(name); 
 	rownd(i);
 	BigDecimal f = new BigDecimal(0);
 	for (Object[] larr : data){

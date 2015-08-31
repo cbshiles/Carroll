@@ -41,6 +41,7 @@ public class ResBlob extends Blob{//reserve blob
 	}
 	
 	public Object[] editEntry(Object[] o){
+	    
 	    return new Object[] {
 		o[dt],
 		""+o[ln]+", "+o[fn],

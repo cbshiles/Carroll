@@ -13,4 +13,6 @@ public abstract class Blob {
     public abstract Input in(LocalDate a, LocalDate z)throws Exception;
 
     public abstract Enterer ent();
+
+    protected String sql(String b4){return b4.trim().replaceAll("\\s", "_");}
 }

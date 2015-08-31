@@ -17,23 +17,24 @@ public class ReserveReport extends CenterFile{
     View v;
     
     public ReserveReport(Page p) throws Exception{
-	super("Reserve", p);
+	super("Reserve", p, new Account[]{new ResAccount()});
 
-	blobs.add(new ResBlob(true));
-	blobs.add(new ResBlob(false));
-
-	dew(3, 2015, 6);
+	dew(LocalDate.of(2015,3,1), LocalDate.now());
     }
 
-    public float getStart(LocalDate ld) {//get beginning balance, starting at ld
-	Key r = Key.contractKey.just("Reserve");
-	Grid g;
-	try {
+    public static class ResAccount extends Account{
+
+	public ResAccount(){super("Reserve Account", new Blob[]{new ResBlob(true), new ResBlob(false)});}
+
+	public float getStart(LocalDate ld) throws Exception{//get beginning balance, starting at ld
+	    Key r = Key.contractKey.just("Reserve");
+	    Grid g;
 	    g = new Grid(r, new QueryIn(r,
 					"WHERE Date_Bought < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off >= '"+ld
 					+"' );"));
 	    g.pull();
-	} catch (Exception e) {new XcptDialog(this, e); return .1337f;}
-	return -g.floatSum("Reserve");
+	    return -g.floatSum("Reserve");
+	}
+
     }
- }
+}
