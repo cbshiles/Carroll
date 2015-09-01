@@ -72,10 +72,30 @@ public class SQLBot {
 	return QueryIn.convertDate(rs.getDate(1));
     }
 
+    public float query1Float(String sql) throws SQLException{
+	ResultSet rs = query(sql);
+	if (rs.next()){
+	    return rs.getFloat(1);
+	} else {
+	    System.err.println(sql);
+	    return 0f;
+	}
+    }
+    
     public int query1Int(String sql) throws SQLException{
 	ResultSet rs = query(sql);
 	rs.next();
 	return rs.getInt(1);
+    }
+
+    public String query1Name(String  sql) throws SQLException{
+	ResultSet rs = query(sql);
+	if (rs.next()){
+	    return rs.getString(2)+", "+rs.getString(1);
+	} else {
+	    System.err.println(sql);
+	    return "";
+	}
     }
 
     public void printSet(ResultSet rs) throws SQLException{

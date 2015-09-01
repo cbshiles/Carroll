@@ -65,6 +65,7 @@ public abstract class CenterFile extends TablePage{
 
     public static abstract class Account {
 
+	protected PayInFact pif;
 	private Blob[] blobs;
 	public String name;
 	
@@ -73,6 +74,8 @@ public abstract class CenterFile extends TablePage{
 	public void loadBlobs(Blob[] bs){blobs = bs;} //enter a new set of blobs
 
 	public abstract float getStart(LocalDate ld)throws Exception;
+
+	public void addPif(PayInFact pif){this.pif = pif;}
 
 	public View span(LocalDate a, LocalDate z) throws Exception{//can return null
 	    if (a.isAfter(z)) return null;
@@ -93,6 +96,7 @@ public abstract class CenterFile extends TablePage{
 		    vi.switchEnts(b.ent());
 		    g.go1();
 		}
+		vi.sort("Date", true);
 		vi.push1();
 		
 		float deb = vi.floatSum("Debit Amt");

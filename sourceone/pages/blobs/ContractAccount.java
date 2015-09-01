@@ -4,6 +4,7 @@ import java.time.*;
 import sourceone.key.*;
 import sourceone.sql.*;
 import sourceone.pages.*;
+import java.util.ArrayList;
 
 public class ContractAccount extends CenterFile.Account{
 
@@ -11,15 +12,17 @@ public class ContractAccount extends CenterFile.Account{
 
     private Key r;
 
-    private String date, summer, op, clz, tc = "Total Contract";
-
-    private PayInFact pif = new PayInFact();
+    private String date, summer, clz, tc = "Total Contract";
     
     public ContractAccount(boolean f){
-	super("Contract Account", null);
+	super((f?"Full":"Partial")+" Contract Account", null);
+
+	String op;
 	full=f;
-	if (full){summer=tc; op=">"; date="Date Bought";}
-	else{summer="Gross Amount"; op="<"; date="Paid Off";}
+	date="Date Bought";
+	summer="Net Amount";
+	if (full){/*summer=tc;*/ op=">";}
+	else{/*summer="Gross Amount";*/ op="<";}
 	r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
 	clz = ""+sql(tc)+" "+op+" 0.01";
 	loadBlobs(new Blob[]{new PurBlob(), new PayBlob()});
@@ -32,6 +35,7 @@ public class ContractAccount extends CenterFile.Account{
 
 	//new clearview, holds names and current balance
 	View v = new View(new Key(new Cut[]{new FloatCut("Remaining balance")}), new Znt());
+	g.addOut(v);
 	g.go1();
 	return v.floatSum("Remaining balance");
     }
@@ -63,11 +67,12 @@ public class ContractAccount extends CenterFile.Account{
 	public Enterer ent(){return this;}
 
 	public Input in(LocalDate a, LocalDate z)throws Exception{
+	    String x = sql(date);
 	    return new QueryIn
 		(custKey, r,
-		 "WHERE Contracts."+sql(date)+" >= '"+a+
-		 "' AND Contracts."+sql(date)+" <= '"+z+
-		 "' AND Contracts.Customer_ID = Customers.ID AND "+clz);
+		 "WHERE Contracts."+x+" >= '"+a+
+		 "' AND Contracts."+x+" <= '"+z+
+		 "' AND Contracts.Customer_ID = Customers.ID AND "+clz+" ORDER BY "+x);
 	}
 
 	public Object[] editEntry(Object[] o){
@@ -94,67 +99,70 @@ public class ContractAccount extends CenterFile.Account{
 	    return pif.in(a, z, full);
 	}
 
-	public Object[] editEntry(Object[] o){return null;}
-
-
+	public Object[] editEntry(Object[] o){return o;}
     }
 
-    private static class PayInFact{
-	
-	LocalDate a, z;
-	BuildIn fullIn, partIn;
-	
-	public PayInFact(){
-	    a=z=null;
-	    fullIn=partIn=null;
-	}
 
-	public Input in(LocalDate ao, LocalDate zo, boolean full)throws Exception{//no nulls
-
-	    Input ni = full?fullIn:partIn;
-	    
-	    if (!(ao.equals(a) && zo.equals(z))){
-		a=ao; z=zo;
-		Grid g = new Grid(Key.paymentKey, new QueryIn
-				  (Key.paymentKey, "WHERE Day >= '"+a+"' AND Day <= '"+z+"'"));
-		g.pull();
-
-		fullIn = new BuildIn(true);
-		partIn = new BuildIn(false);
-		
-		for (Object[] i: g.data){
-
-		    String bid = i[4];
-		    //#should never be a problem, but batch cant be someone's name
-		    //bckwrds search quicker
-		    System.out.println(i[4]);
-		    //if it belongs to an already existing batch
-		    //is it a full or part
-		    //what data do we need
-		    //put it where we need it
-		    //in?.chunk();
-		}
-		
-		
-		//fill up the views		
-	    }
-	    return new ViewInput(ni);		
-	}
-	
-    }
-
-    private static class BuildIn extends View{
+    public static class BuildIn extends View{
 	boolean full;
+	ArrayList<Quail> ids=new ArrayList<Quail>();
+	LocalDate a,z;
 
-	public BuildIn(boolean f){
+	public BuildIn(boolean f, LocalDate ao, LocalDate zo){
 	    super(Key.sumKey);
 	    full = f;
+	    a=ao; z=zo;
 	}
 
-	public boolean add //try to had to an old one
+	public boolean sameTime(LocalDate ao, LocalDate zo){
+	    return ao.equals(a) && zo.equals(z);
+	}
 
-	    public int has //check if the batch is already here
+	public boolean add(Quail q){ //try to had to an old one
+	    int c = has(q);
+	    boolean t = c > -1;
+	    if (t) ids.get(c).add(q);
+	    return t;
+	}
 
-	    public void gnu //add a gnu one, takes a possibly null batch id
+	private int has(Quail q){ //check if the batch is already here
+	    for (int x=ids.size()-1; x>=0; x--){
+		if (q.match(ids.get(x))) return x;
+	    }
+	    return -1;
+	}
+	public void gnu(Quail q){ //add a gnu one, takes a NON NULL batch id
+	    ids.add(q);
+	}
 
+	public void load(){
+	    for (Quail q : ids){
+		chunk(new Object[]{q.date, q.id, 0f, q.amount, 0f});
+	    }
+	}
+    }
+
+	public static class Quail{
+
+	LocalDate date;
+	String id;
+	float amount;
+
+	    public Quail(LocalDate d, float a, String i){
+		amount=a;
+		date=d;
+		id=i;
+	    }
+
+	public boolean match(Quail b){
+	    return id.equals(b.id);
+	}
+
+
+	public void add(Quail b){
+	    amount += b.amount;
+	}
+
+
+    }
 }
