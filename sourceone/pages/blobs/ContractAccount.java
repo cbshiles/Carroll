@@ -12,6 +12,8 @@ public class ContractAccount extends CenterFile.Account{
     private Key r;
 
     private String date, summer, op, clz, tc = "Total Contract";
+
+    private PayInFact pif = new PayInFact();
     
     public ContractAccount(boolean f){
 	super("Contract Account", null);
@@ -20,7 +22,7 @@ public class ContractAccount extends CenterFile.Account{
 	else{summer="Gross Amount"; op="<"; date="Paid Off";}
 	r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
 	clz = ""+sql(tc)+" "+op+" 0.01";
-	loadBlobs(new Blob[]{new PurBlob()}); //payblub
+	loadBlobs(new Blob[]{new PurBlob(), new PayBlob()});
     }
 
     public float getStart(LocalDate ld) throws Exception{
@@ -82,15 +84,77 @@ public class ContractAccount extends CenterFile.Account{
 
     public class PayBlob extends Blob implements Enterer{
 
+	public PayBlob(){
+	    k = Key.sumKey;
+	}
+
 	public Enterer ent(){return this;}
 	
 	public Input in(LocalDate a, LocalDate z)throws Exception{
-	    return new QueryIn
-		(Key.paymentKey,
-		 "WHERE Day >= '"+a+"' AND Day <= '"+z);
+	    return pif.in(a, z, full);
 	}
 
 	public Object[] editEntry(Object[] o){return null;}
+
+
     }
+
+    private static class PayInFact{
+	
+	LocalDate a, z;
+	BuildIn fullIn, partIn;
+	
+	public PayInFact(){
+	    a=z=null;
+	    fullIn=partIn=null;
+	}
+
+	public Input in(LocalDate ao, LocalDate zo, boolean full)throws Exception{//no nulls
+
+	    Input ni = full?fullIn:partIn;
+	    
+	    if (!(ao.equals(a) && zo.equals(z))){
+		a=ao; z=zo;
+		Grid g = new Grid(Key.paymentKey, new QueryIn
+				  (Key.paymentKey, "WHERE Day >= '"+a+"' AND Day <= '"+z+"'"));
+		g.pull();
+
+		fullIn = new BuildIn(true);
+		partIn = new BuildIn(false);
+		
+		for (Object[] i: g.data){
+
+		    String bid = i[4];
+		    //#should never be a problem, but batch cant be someone's name
+		    //bckwrds search quicker
+		    System.out.println(i[4]);
+		    //if it belongs to an already existing batch
+		    //is it a full or part
+		    //what data do we need
+		    //put it where we need it
+		    //in?.chunk();
+		}
+		
+		
+		//fill up the views		
+	    }
+	    return new ViewInput(ni);		
+	}
+	
+    }
+
+    private static class BuildIn extends View{
+	boolean full;
+
+	public BuildIn(boolean f){
+	    super(Key.sumKey);
+	    full = f;
+	}
+
+	public boolean add //try to had to an old one
+
+	    public int has //check if the batch is already here
+
+	    public void gnu //add a gnu one, takes a possibly null batch id
 
 }

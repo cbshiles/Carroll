@@ -10,10 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.util.ArrayList;
-
 public abstract class CenterFile extends TablePage{
 
+    //hackathon
     Key strKey = new Key(new Cut[]{new StringCut("A"), new StringCut("B"), new StringCut("C"), new StringCut("D"), new StringCut("E")});
 
     private class StrEnt implements Enterer{
