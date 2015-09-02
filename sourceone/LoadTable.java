@@ -34,6 +34,7 @@ public class LoadTable{
 	gain(new String[]{"partial", "spreadsheets/partContracts.csv"});
 	gain(new String[]{"Customers", "spreadsheets/partNames.csv"});
 	gain(new String[]{"Cars", "spreadsheets/floor.csv"});
+
     }
 
     private static void add(Model m){
@@ -57,6 +58,7 @@ public class LoadTable{
 	add(new Model("partial", Key.pKey, null, new Cut[]{new FloatCut("Reserve"), new FloatCut("Final Payment Amount"), new StringCut("VIN"),
 							   new IntCut("Customer ID"), new FloatCut("Total Contract"), new DateCut("Date Bought")},
 		new PartEnt(Key.pKey)));
+
     }
 
     private static class PartEnt implements Enterer{

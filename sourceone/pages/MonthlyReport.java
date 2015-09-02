@@ -19,12 +19,12 @@ public class MonthlyReport extends CenterFile{
 	((ContractAccount)accounts[i]).addPif(pif);
     }
 
-    public class PurchaseAccount extends Account{
-//starting balance 0
-	//includes floorplan & contract purchases
-	    public float getStart(LocalDate ld) throws Exception{
-		return 0f;
-	    }
-    }
+//     public class PurchaseAccount extends Account{
+// //starting balance 0
+// 	//includes floorplan & contract purchases
+// 	    public float getStart(LocalDate ld) throws Exception{
+// 		return 0f;
+// 	    }
+//     }
     
  }

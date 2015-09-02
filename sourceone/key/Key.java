@@ -230,7 +230,8 @@ public class Key{
 						      new IntCut("Payments Made"),
 						      new IntCut("Customer ID", "NOT NULL"),
 						      new DateCut("Date Bought"),
-						      new IntCut("Title")
+						      new IntCut("Title"),
+						      new StringCut(31, "AR Num")
 						      //Date bought is assumed to be the start date, if not explicitly given
 						  });
 

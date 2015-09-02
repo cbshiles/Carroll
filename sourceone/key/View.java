@@ -69,6 +69,7 @@ public class View extends Matrix{
 
 	if (ent != null){
 	    gnu = ent.editEntry(objs);
+	    if (gnu==null){System.err.println("WARNING: NULL CHUNKS"); return;}
 	    System.arraycopy(gnu, 0, arr, n, gnu.length);
 	}
 
