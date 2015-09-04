@@ -174,7 +174,7 @@ public class ContractForm extends Form {
 	float mid = gross+rez; net = (float)co[nt];
 	csv += addLine(new String[]{"", "", frm(mid), frm(net/mid*100), frm(net)});
 
-	csvFile = "reports/"+cu[fn]+'_'+cu[ln]+"_Contract.csv";
+	csvFile = SQLBot.bot.path+cu[fn]+'_'+cu[ln]+"_Contract.csv";
     }
 
     private java.text.DecimalFormat myFormatter = new java.text.DecimalFormat("#0.00");

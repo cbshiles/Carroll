@@ -4,7 +4,7 @@ import java.awt.*;
 import sourceone.key.*;
 
 public class NetField extends Field{
-    protected JTextField per = newText("72"), amt = newText("---");
+    protected JTextField per = newText("72"), amt = newText("---"), pro=newText();
 
     float gross; boolean hearing=true; TextField tot, res;
     public NetField (TextField tot, TextField res){
@@ -16,6 +16,11 @@ public class NetField extends Field{
 	jp.add(newLabel("Amount"));
 	jp.add(amt);
 
+	jp.add(newLabel("Profit"));
+	jp.add(pro);
+
+	pro.setEditable(false);
+	
 	FieldListener outl = new NetListener();
 	tot.addListener(outl);
 	res.addListener(outl);
@@ -27,6 +32,7 @@ public class NetField extends Field{
 		    try {
 			float f = getPer()*gross;
 			amt.setText(""+View.rnd(f));
+			pro.setText(""+View.rnd(gross-f));
 		    } catch (InputXcpt ix) {amt.setText("---");}
 		    hearing = true;
 		}
@@ -38,8 +44,10 @@ public class NetField extends Field{
 		    if (! hearing) return;
 		    hearing = false;
 		    try {
-			float f = StringIn.parseFloat(amt.getText())/gross;
+			float am = StringIn.parseFloat(amt.getText());
+			float f = am/gross;
 			per.setText(""+View.rnd(100*f));
+			pro.setText(""+View.rnd(gross-am));
 		    } catch (InputXcpt ix) {;}//amt.setText("---");}
 		    hearing = true;
 		}
@@ -52,7 +60,9 @@ public class NetField extends Field{
 	    hearing = false;
 	    try {
 		gross = StringIn.parseFloat(tot.text()) - StringIn.parseFloat(res.text());
-		amt.setText(""+View.rnd(gross*getPer()));
+		float f = gross*getPer();
+		amt.setText(""+View.rnd(f));
+		pro.setText(""+View.rnd(gross-f));
 	    } catch (InputXcpt ix) {amt.setText("---");}
 	    hearing = true;
 	}

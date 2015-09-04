@@ -199,7 +199,7 @@ public class Key{
 
     //All keys must have an ID column (cut).
 
-    public static final Key customerKey = new Key("Customers",
+    public static final Key customerKey = new Key("customers",
 						  new Cut[]{
 						      new IntCut("ID"),
 						      new StringCut(63, "First Name", "NOT NULL"),
@@ -209,7 +209,7 @@ public class Key{
 						      new StringCut(63, "email")
 						  });
     
-    public static final Key contractKey = new Key("Contracts",
+    public static final Key contractKey = new Key("contracts",
 						  new Cut[]{
 						      new IntCut("ID"),
 						      new IntCut("Number of Payments", "NOT NULL"),
@@ -255,7 +255,7 @@ public class Key{
 						      "Customer ID",
     */
 
-    public static final Key floorKey =  new Key("Cars",
+    public static final Key floorKey =  new Key("cars",
 						  new Cut[]{
 						    new IntCut("ID"),
 						    new DateCut("Date Bought", "NOT NULL"),
@@ -269,7 +269,7 @@ public class Key{
 						});
 //    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount"});
     
-    public static final Key paymentKey = new Key("Payments",
+    public static final Key paymentKey = new Key("payments",
 						 new Cut[]{
 						     new IntCut("ID"),
 						     new IntCut("Contract ID", "NOT NULL"),
@@ -278,7 +278,7 @@ public class Key{
 						     new StringCut(63, "Batch ID")
 						 });
 
-    public static final Key metaKey = new Key("Meta",
+    public static final Key metaKey = new Key("meta",
 					      new Cut[]{
 						  new IntCut("ID"),
 						  new DateCut("Full Report Date"),

@@ -20,7 +20,7 @@ public class OldContracts extends TablePage{
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	contKey = Key.contractKey.just(new String[] {
-		"Number of Payments", "Amount of Payment", "Final Payment Amount",
+		"Number of Payments", "Amount of Payment", //"Final Payment Amount",
 		"Payment Frequency", "Total Contract", "Start Date", "VIN", "Payments Made", "Gross Amount",
 		"Reserve", "Net Amount", "Other Payments", "Paid Off", "Payments Made", "Customer ID"
 	    });

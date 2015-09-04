@@ -12,7 +12,8 @@ public class MonthlyReport extends CenterFile{
 
 	 PayInFact pif = new PayInFact();
 	 doPif(0, pif); doPif(1, pif);
-	dew(LocalDate.of(2015,1,1), LocalDate.now());
+//	dew(LocalDate.of(2015,1,1), LocalDate.now());
+	 	dew(LocalDate.of(2015, 9, 1),LocalDate.now());
     }
 
     public void doPif(int i, PayInFact pif){
