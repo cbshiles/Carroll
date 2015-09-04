@@ -1,5 +1,5 @@
 package sourceone.pages;
-
+import sourceone.fields.*;
 import sourceone.key.*;
 import sourceone.sql.*;
 import sourceone.csv.*;
@@ -7,7 +7,7 @@ import sourceone.pages.blobs.*;
 import java.time.*;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 
 public abstract class CenterFile extends TablePage{
@@ -23,12 +23,48 @@ public abstract class CenterFile extends TablePage{
 	}
     }
     
-    View vend = new View(strKey, new StrEnt()); //view going to csv
+    View vend;
     protected Account[] accounts;
+    LocalDate startD, endD;
+    TextField aDate, bDate;
+    private void datem(){
+	boolean changed = false; 
+	try{ startD = StringIn.parseDate(aDate.text()); changed = true;}
+	catch (InputXcpt ix) {;}
+	try{ endD = StringIn.parseDate(bDate.text()); changed = true;}
+	catch (InputXcpt ix) {;}
+	if (changed) dew();
+    }
 
     public CenterFile(String name, Page p, Account[] acts) {
 	super(name, p);
 	accounts = acts;
+
+	JPanel cPan = new JPanel();
+
+	LocalDate tday = LocalDate.now();
+	
+	aDate = new TextField("Start Date");
+	aDate.set(BasicFormatter.cinvert(tday.withDayOfMonth(1)));
+	bDate = new TextField("End Date");
+	bDate.set(BasicFormatter.cinvert(tday.withDayOfMonth(tday.getMonth().maxLength() - 1)));
+	datem();
+
+	cPan.add(aDate.getJP());
+	cPan.add(bDate.getJP());
+
+	FieldListener fl = new FieldListener() {
+		public void dew() {
+		    System.out.println("tryin");
+		    datem();
+//		    catch (Exception e) {new XcptDialog(CenterFile.this, e);}
+		}};
+
+	aDate.addListener(fl);
+	bDate.addListener(fl);
+
+
+	jp.add(cPan, BorderLayout.CENTER);
 
 	JButton jb = new JButton("Create Report");
 	jp.add(jb, BorderLayout.SOUTH);
@@ -46,7 +82,12 @@ public abstract class CenterFile extends TablePage{
 	wrap();
     }
 
+    public void dew(){
+	dew(startD, endD);
+    }
+
     public void dew(LocalDate a, LocalDate z){
+	vend = new View(strKey, new StrEnt()); //view going to csv
 	try{
 	    for (Account act: accounts){
 		View v = act.span(a, z);

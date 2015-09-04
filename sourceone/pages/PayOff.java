@@ -10,6 +10,7 @@ import sourceone.fields.*;
 import static sourceone.key.Kind.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.io.*;
 
 public class PayOff extends TablePage {
     JButton jb;
@@ -62,6 +63,7 @@ public class PayOff extends TablePage {
 
     private class PayOffDialog extends JDialog implements ActionListener{
 
+	String ret;
 	Object[] o;
 	Container pane;
 	LocalDate sdO, payDate;
@@ -83,17 +85,17 @@ public class PayOff extends TablePage {
 		tep = tcO;
 
 	    float balance = tep - pmO*aopO;
-	    String ret = "Balance: "+balance+'\n';
+	    ret = "Balance~ "+balance+'\n';
 
 	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
 	    long days = ChronoUnit.DAYS.between(sdO, endDate);
 	    float dailyInt =  (grsO-netO)/days;
 	    float discount = dailyInt * ChronoUnit.DAYS.between(payDate, endDate);
 
-	    ret += "Discount: -"+discount+'\n';
-	    ret += "Fees: "+fees+'\n';
-	    ret += "Reserve: -"+resO+'\n';
-	    ret += "Pay Off: "+(payoff = balance-discount+fees-resO);
+	    ret += "Discount~ -"+discount+'\n';
+	    ret += "Fees~ "+fees+'\n';
+	    ret += "Reserve~ -"+resO+'\n';
+	    ret += "Pay Off~ "+(payoff = balance-discount+fees-resO);
 	    jta.setText(ret);
 	}
 
@@ -199,6 +201,10 @@ public class PayOff extends TablePage {
 		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
+
+		    FileWriter fw = new FileWriter(SQLBot.bot.path+getTitle()+".csv");
+		    fw.write(getTitle()+'\n'+ret); fw.close();
+
 		    dispose();
 		    PayOff.this.kill();
 		} catch (Exception e){new XcptDialog(PayOff.this, e);}
