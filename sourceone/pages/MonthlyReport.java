@@ -9,21 +9,33 @@ public class MonthlyReport extends CenterFile{
     
     public MonthlyReport(Page p) throws Exception{
 	super("Monthly", p, new Account[]{
-		// new ContractAccount(false),
-		// new ContractAccount(true),
 		new PurchaseAccount(),
-//		new FloorAccount(),
+		new FPayAccount(),
 		new ReserveReport.ResAccount()});
 
 //	 PayInFact pif = new PayInFact();
 //	 doPif(0, pif);
 //	 System.out.println("OWWW");
 //	 doPif(1, pif);
-	 dew();
+	dew();
     }
 
-    // public void doPif(int i, PayInFact pif){
-    // 	((ContractAccount)accounts[i]).addPif(pif);
-    // }
-    
- }
+    public static class FPayAccount extends Account{	
+	FPayAccount(){super("Floor Plan Payoffs", new Blob[]{new FloorBlob(false)});}
+
+	
+	public float getStart(LocalDate ld) throws Exception{
+	    Key r = Key.floorKey.just("Item Cost");
+	    Grid g;
+	    g = new Grid(r, new QueryIn(r,
+					"WHERE Date_Bought < '"+ld+"' AND ( Date_Paid IS NULL OR Date_Paid >= '"+ld
+					+"' );"));
+	    g.pull();
+	    return g.floatSum("Item Cost");
+	}
+
+
+	
+    }
+}
+

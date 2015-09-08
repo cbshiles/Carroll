@@ -12,6 +12,8 @@ public class ReportMenu extends Page {
 	addRed("Monthly Report", MonthlyReport.class, false);
 	addRed("SourceOne Contract Report", OurContractReport.class, false);
 
+	addRed("Payments Report", PaymentsReport.class, false);
+	
 	setVisible(true);
     }
 }

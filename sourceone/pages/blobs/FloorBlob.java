@@ -36,6 +36,8 @@ public class FloorBlob extends Blob{
 	    sm = k.dex(summer);
 	    dt = k.dex(dater);
 	    vin = k.dex("VIN");
+		// veh = key.dex("Vehicle");
+		// cur = key.dex("Curtailed");
 	}
 
 	public Object[] editEntry(Object[] o){
