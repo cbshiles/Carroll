@@ -19,6 +19,6 @@ public class Driver {
 	Page.dim = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
 	new HomePage();
-	EventDispatchThreadHangMonitor.initMonitoring();
+	//EventDispatchThreadHangMonitor.initMonitoring();
     }
 }

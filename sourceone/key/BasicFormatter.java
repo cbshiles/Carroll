@@ -26,12 +26,18 @@ public class BasicFormatter extends Formatter {
 
     static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
     static final DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    static final DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("MM_dd_yy");
+    
     public static String cinvert(LocalDate x){ //# make private
 	if (x == null) return "N/A";
 	else return x.format(dtf);
     }
 
+    public static String finvert(LocalDate x){ //# make private
+	if (x == null) return "N/A";
+	else return x.format(dtf3);
+    }
+    
     public static String cxnvert(LocalDate x){ //# make private
 	if (x == null) return "N/A";
 	else return x.format(dtf2);

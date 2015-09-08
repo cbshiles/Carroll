@@ -25,7 +25,7 @@ public class ContractAccount extends CenterFile.Account{
 	else{/*summer="Gross Amount";*/ op="<";}
 	r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
 	clz = ""+sql(tc)+" "+op+" 0.01";
-	loadBlobs(new Blob[]{new PurBlob(), new PayBlob()});
+	loadBlobs(new Blob[]{new PurBlob(false), new PayBlob()});
     }
 
     public float getStart(LocalDate ld) throws Exception{
@@ -53,39 +53,6 @@ public class ContractAccount extends CenterFile.Account{
 	}
     }
 
-    public class PurBlob extends Blob implements Enterer{
-
-	int ln, fn, sm, dt;
-	public PurBlob(){
-	    k = custKey.add(r.cuts);
-	    ln = k.dex("Last Name");
-	    fn = k.dex("First Name");
-	    sm = k.dex(summer);
-	    dt = k.dex(date);
-	}
-
-	public Enterer ent(){return this;}
-
-	public Input in(LocalDate a, LocalDate z)throws Exception{
-	    String x = sql(date);
-	    return new QueryIn
-		(custKey, r,
-		 "WHERE Contracts."+x+" >= '"+a+
-		 "' AND Contracts."+x+" <= '"+z+
-		 "' AND Contracts.Customer_ID = Customers.ID AND "+clz+" ORDER BY "+x);
-	}
-
-	public Object[] editEntry(Object[] o){
-	    
-	    return new Object[] {
-		o[dt],
-		"New contract: "+o[ln]+", "+o[fn],
-		o[sm],
-		0f,
-		0f
-	    };
-	}
-    }
 
     public class PayBlob extends Blob implements Enterer{
 

@@ -6,7 +6,7 @@ import sourceone.pages.blobs.*;
 import static sourceone.pages.blobs.ContractAccount.*;
 import java.time.*;
 import java.util.ArrayList;
-public class PayInFact{
+public class PayInFact{ //returns different inputs, but using same data
 	
     ArrayList<BuildIn[]> bins = new ArrayList();
     BuildIn fullIn, partIn;

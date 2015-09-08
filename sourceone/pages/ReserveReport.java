@@ -18,9 +18,7 @@ public class ReserveReport extends CenterFile{
     
     public ReserveReport(Page p) throws Exception{
 	super("Reserve", p, new Account[]{new ResAccount()});
-
-//	dew(LocalDate.of(2015,3,1), LocalDate.now());
-	dew(LocalDate.of(2015, 9, 1),LocalDate.now());
+	dew();
     }
 
     public static class ResAccount extends Account{

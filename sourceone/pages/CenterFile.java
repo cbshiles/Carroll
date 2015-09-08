@@ -47,7 +47,7 @@ public abstract class CenterFile extends TablePage{
 	aDate = new TextField("Start Date");
 	aDate.set(BasicFormatter.cinvert(tday.withDayOfMonth(1)));
 	bDate = new TextField("End Date");
-	bDate.set(BasicFormatter.cinvert(tday.withDayOfMonth(tday.getMonth().maxLength() - 1)));
+	bDate.set(BasicFormatter.cinvert(tday.withDayOfMonth(tday.getMonth().maxLength())));
 	datem();
 
 	cPan.add(aDate.getJP());
@@ -55,7 +55,6 @@ public abstract class CenterFile extends TablePage{
 
 	FieldListener fl = new FieldListener() {
 		public void dew() {
-		    System.out.println("tryin");
 		    datem();
 //		    catch (Exception e) {new XcptDialog(CenterFile.this, e);}
 		}};
