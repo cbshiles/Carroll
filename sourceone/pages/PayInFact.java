@@ -7,7 +7,7 @@ import sourceone.pages.blobs.*;
 import java.time.*;
 import java.util.ArrayList;
 public class PayInFact{ //returns different inputs, but using same data
-	
+//src1, bebe	
     ArrayList<BuildIn[]> bins = new ArrayList();
     BuildIn fullIn, partIn;
 	
@@ -44,9 +44,9 @@ public class PayInFact{ //returns different inputs, but using same data
 
 		//#should never be a problem, but batch cant be someone's name
 		//bckwrds search quicker
-		if (i[4] != null){
-		    Quail qq = new Quail((LocalDate)i[2], (float)i[3], (String)i[4]);
 
+		Quail qq = new Quail((LocalDate)i[2], (float)i[3], (String)i[4]);
+		if (i[4] != null){
 		    if (! fullIn.add(qq)){
 			if (! partIn.add(qq)){
 			    which((int)i[1]).gnu(qq);
@@ -54,7 +54,8 @@ public class PayInFact{ //returns different inputs, but using same data
 		    }
 		} else {
 		    String zename = SQLBot.bot.query1Name("SELECT Customers.First_Name, Customers.Last_Name FROM Customers, Contracts WHERE Contracts.ID="+(int)i[1]+" AND Customers.ID=Contracts.Customer_ID");
-		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", 0f, (float)i[3], 0f});
+		    qq.figure();
+		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, 0f});
 		}
 
 	    }
@@ -63,7 +64,7 @@ public class PayInFact{ //returns different inputs, but using same data
 	}
 	return new ViewInput(full?fullIn:partIn);		
     }
-    public static class BuildIn extends View{
+    public static class BuildIn extends View{//instead of credit debit, principle intrest
 	boolean full;
 	ArrayList<Quail> ids=new ArrayList<Quail>();
 	LocalDate a,z;
@@ -97,16 +98,17 @@ public class PayInFact{ //returns different inputs, but using same data
 
 	public void load(){
 	    for (Quail q : ids){
-		chunk(new Object[]{q.date, q.id, 0f, q.amount, 0f});
+		q.figure();
+		chunk(new Object[]{q.date, q.id, q.principle, q.interest, 0f});
 	    }
 	}
     }
 
-    public static class Quail{
+    public static class Quail{ //aka Batch
 
 	LocalDate date;
 	String id;
-	float amount;
+	float amount, principle, interest;
 
 	public Quail(LocalDate d, float a, String i){
 	    amount=a;
@@ -114,12 +116,16 @@ public class PayInFact{ //returns different inputs, but using same data
 	    id=i;
 	}
 
+	public void figure(){
+//	    if (id == "")
+	}
+
 	public boolean match(Quail b){
 	    return id.equals(b.id);
 	}
 
 
-	public void add(Quail b){
+	public void add(Quail b){//this must be changed to principle and intrest
 	    amount += b.amount;
 	}
 

@@ -6,7 +6,7 @@ import sourceone.pages.blobs.*;
 import java.time.*;
 
 public class PaymentsReport extends CenterFile{
-    
+//this is the old payments report, where full & part were 2 blobs in 1 account    
     public PaymentsReport(Page p) throws Exception{
 	super("Payments", p, new Account[]{
 		new PayAccount(true),
@@ -16,23 +16,22 @@ public class PaymentsReport extends CenterFile{
     public static class PayAccount extends Account{	
 	boolean full;
 	Key r;
-	String summer, date, clz;
+	String summer, date;
 	PayBlob pb;
+
 	
 	PayAccount(boolean f){
-	    super("Contract Payments", new Blob[]{new PayBlob(f)});
+	    super("Contract Payments", new Blob[]{new PayBlob(true), new PayBlob(false)}); 
 	    full = f;
 	    summer = "Net Amount";
 	    date = "Date Bought";
 	    r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
-	    String op = full?">":"<";
-	    clz = "Total_Contract "+op+" 0.01";
 	}
 
 	public float getStart(LocalDate ld) throws Exception{
 	    Grid g = new Grid(r, new QueryIn(r,
 					     "WHERE Date_Bought < '"+ld+"' AND ( Paid_Off IS NULL OR Paid_Off >= '"+ld
-					     +"') AND "+clz));
+					     +"')"));  // AND "+clz));
 
 	    //new clearview, holds names and current balance
 	    View v = new View(new Key(new Cut[]{new FloatCut("Remaining balance")}), new Znt());
@@ -46,7 +45,7 @@ youll want different report for full & part
 the clz clause will be reintroduced
 	 */
 
-	public class Znt implements Enterer{ //just for figuring remaining balance, could be replaced with for loop
+	public class Znt implements Enterer{
 	    int tep, aop, pm;
 	    public Znt(){
 		tep = r.dex(summer);

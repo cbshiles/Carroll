@@ -22,6 +22,8 @@ public class OurContractReport extends BackPage{
 
 	JPanel bPan = new JPanel();
 	bPan.setBorder(new javax.swing.border.EmptyBorder(0,10,10,20));
+
+	//this are a will change
 	bPan.setLayout(new GridLayout(0, 5));
 	addEmpties(3, bPan);
 	bPan.add(balText = new JTextField());
@@ -42,6 +44,7 @@ public class OurContractReport extends BackPage{
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
 		"Payment Frequency", "VIN", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
+	//this area will obviously change
 	viewKey = new Key(
 	    new String[]{"Customer Name", "Terms", "VIN", "Remaining Balance", "Payout Date"},
 	    new Kind[]{STRING, STRING, STRING,  FLOAT, DATE});
