@@ -13,6 +13,7 @@ public class SQLBot {
     Connection conn;
     public String path;
     Statement stmt;
+    String ttl;
     
     public SQLBot(String pFile) throws Exception{
 
@@ -22,15 +23,18 @@ public class SQLBot {
 	String password = props.getProperty("password", "");
 	String host = props.getProperty("hostname", "localhost");
 	String db = props.getProperty("database");
-	System.out.println("connecting to "+host+":"+db);
+	ttl = host+"/"+db;
+	System.out.println("connecting to "+ttl);
 	path = props.getProperty("csvPath", "");
 	
-	String url = "jdbc:mysql://"+host+"/"+db;
+	String url = "jdbc:mysql://"+ttl;
 	Class.forName ("com.mysql.jdbc.Driver").newInstance();
 
 	conn = DriverManager.getConnection (url, user, password);
 	done();
     }
+
+    public String title(){return ttl;}
 
     public void dbInfo() throws SQLException{
 	DatabaseMetaData databaseMetaData = conn.getMetaData();

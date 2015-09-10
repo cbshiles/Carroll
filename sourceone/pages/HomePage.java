@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class HomePage extends Page {
 
-    public HomePage(){
-	super("Home Page", null);
+    public HomePage(String s){
+	super(s, null);
 	place(0f, 0f, .9f, .1f);
 //	setBounds(550, 300, 400, 300);
 	setLayout(new GridLayout(1, 0));

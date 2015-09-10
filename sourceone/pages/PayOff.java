@@ -198,7 +198,7 @@ public class PayOff extends TablePage {
 	    else if (cmd.equals("pay")){
 		try {
 		    if (! valid) throw new InputXcpt("Invalid fields");
-		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
+		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL, Reserve=0 WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
 

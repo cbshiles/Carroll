@@ -11,8 +11,8 @@ import java.time.*;
 
 public class OurContractReport extends BackPage{
 
-    JTextField balText;
-    float balSum;
+    JTextField balText, dueText;
+    float balSum, dueSum;
 
     public OurContractReport(Page p) throws InputXcpt{
 	super("Our AR Report", p);
@@ -23,11 +23,11 @@ public class OurContractReport extends BackPage{
 	JPanel bPan = new JPanel();
 	bPan.setBorder(new javax.swing.border.EmptyBorder(0,10,10,20));
 
-	//this are a will change
-	bPan.setLayout(new GridLayout(0, 5));
-	addEmpties(3, bPan);
+	bPan.setLayout(new GridLayout(0, 7));
+	addEmpties(4, bPan);
 	bPan.add(balText = new JTextField());
 	addEmpties(1, bPan);
+	bPan.add(dueText = new JTextField());
 	
 	jp.add(bPan, BorderLayout.SOUTH);
 
@@ -41,13 +41,13 @@ public class OurContractReport extends BackPage{
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	contKey = Key.contractKey.just(new String[] {
-		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
+		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount", "AR Num",
 		"Payment Frequency", "VIN", "Total Contract", "Start Date", "Payments Made", "Next Due", "Gross Amount"});
 
 	//this area will obviously change
 	viewKey = new Key(
-	    new String[]{"Customer Name", "Terms", "VIN", "Remaining Balance", "Payout Date"},
-	    new Kind[]{STRING, STRING, STRING,  FLOAT, DATE});
+	    new String[]{"Account #", "Customer Name", "Terms", "VIN", "Remaining Balance", "Payout Date", "Amount Due"},
+	    new Kind[]{STRING, STRING, STRING, STRING,  FLOAT, DATE, FLOAT});
     }
 
         protected void getTable() {
@@ -64,16 +64,19 @@ public class OurContractReport extends BackPage{
 	catch (Exception e){e.printStackTrace();}
 
 	balText.setText(""+(balSum = g.view.floatSum("Remaining Balance")));
+	dueText.setText(""+(dueSum = g.view.floatSum("Amount Due")));
     }
 
 
     public class OurEnt implements Enterer{
 
-	int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm, grs, vin;
+	int ln, fn, aop, nop, fp, pf, sd, tc, nd, pm, grs, vin, arn;
 	LocalDate till;
 	
 	public OurEnt(LocalDate t){
 	    till = t;
+
+	    arn = k.dex("AR Num");
 	    
 	    ln = k.dex("Last Name");
 	    fn = k.dex("First Name");
@@ -123,11 +126,13 @@ public class OurContractReport extends BackPage{
 
 
 	    return new Object[] {
+		o[arn],
 		""+o[ln]+", "+o[fn],
 		terms((int)o[nop], amt, freq, finalPayment),
 		o[vin],
 		tep - (int)o[pm]*amt, //# *assumes no other(non-standard) payment has been made*
-		nexti(sdO, freq, nopO + fin)
+		nexti(sdO, freq, nopO + fin),
+		amtDue
 	    };
 	}
 	

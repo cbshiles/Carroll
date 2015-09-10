@@ -99,6 +99,10 @@ public class Matrix{
 	addOut(new BasicFormatter(new TableDest(key)));
     }
 
+    public void addTable2(){//throws InputXcpt{
+	addOut(new ReserveFormatter(new TableDest(key)));
+    }
+    
     public Object get(String name, int dx){
 	return data.get(dx)[key.dex(name)];
     }

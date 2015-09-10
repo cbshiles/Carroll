@@ -20,5 +20,5 @@ public class StringCut extends Cut{
     {return ip.getString();}
 
     public void out(Object o)
-    {op.put(o.toString());}
+    {op.put(""+o);}
 }

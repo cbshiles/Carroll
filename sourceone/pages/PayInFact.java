@@ -44,8 +44,8 @@ public class PayInFact{ //returns different inputs, but using same data
 
 		//#should never be a problem, but batch cant be someone's name
 		//bckwrds search quicker
+		Quail qq = new Quail(i);
 
-		Quail qq = new Quail((LocalDate)i[2], (float)i[3], (String)i[4]);
 		if (i[4] != null){
 		    if (! fullIn.add(qq)){
 			if (! partIn.add(qq)){
@@ -54,8 +54,7 @@ public class PayInFact{ //returns different inputs, but using same data
 		    }
 		} else {
 		    String zename = SQLBot.bot.query1Name("SELECT Customers.First_Name, Customers.Last_Name FROM Customers, Contracts WHERE Contracts.ID="+(int)i[1]+" AND Customers.ID=Contracts.Customer_ID");
-		    qq.figure();
-		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, 0f});
+		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, qq.amount});
 		}
 
 	    }
@@ -98,8 +97,7 @@ public class PayInFact{ //returns different inputs, but using same data
 
 	public void load(){
 	    for (Quail q : ids){
-		q.figure();
-		chunk(new Object[]{q.date, q.id, q.principle, q.interest, 0f});
+		chunk(new Object[]{q.date, q.batch_id, q.principle, q.interest, q.amount});
 	    }
 	}
     }
@@ -107,25 +105,47 @@ public class PayInFact{ //returns different inputs, but using same data
     public static class Quail{ //aka Batch
 
 	LocalDate date;
-	String id;
+	String batch_id;
+	int contract_id;
 	float amount, principle, interest;
 
-	public Quail(LocalDate d, float a, String i){
-	    amount=a;
-	    date=d;
-	    id=i;
-	}
+	public Quail(Object[] i){ //getrs a payment entry //LocalDate d, float a, String i){
+	    contract_id = (int)i[1];
+	    date=(LocalDate)i[2];
+	    amount=(float)i[3];
+	    batch_id=(String)i[4];
+	    if (batch_id == null) {//payoff
+		principle = amount;
+		interest = 0f;
+	    } else { //group
+//lookup up contract, find
+		Key k = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount"});
+		try {
+		Grid gr = new Grid(k, new QueryIn(k, "WHERE ID="+contract_id));
+		gr.pull();
+		float tot, gro, net, per;
+		Object[] fo = gr.data.get(0);
+		tot = (float)fo[0];
+		gro = (float)fo[1];
+		net = (float)fo[2];
 
-	public void figure(){
-//	    if (id == "")
+		per = net/((tot > .01)?tot:gro);
+		principle = amount*per;
+		interest = amount*(1f-per);
+		} catch (Exception e) {System.out.println("gnu errorr "+contract_id+' '+e);}
+//			"FROM Contracts SELECT Total Contract, Gross Amount, Net Amount 
+	    }
+
 	}
 
 	public boolean match(Quail b){
-	    return id.equals(b.id);
+	    return batch_id.equals(b.batch_id);
 	}
 
 
 	public void add(Quail b){//this must be changed to principle and intrest
+	    principle += b.principle;
+	    interest += b.interest;
 	    amount += b.amount;
 	}
 

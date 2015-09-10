@@ -13,18 +13,19 @@ public class PayBlob extends Blob implements Enterer{
     
     public PayBlob(boolean f){
 	full = f;
-	summer = "Net Amount";
-	date = "Date Bought";
-	// Key r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
-	// k = custKey.add(r.cuts);
+	// summer = "Net Amount";
+	// date = "Date Bought";
+	// // Key r = Key.contractKey.just(new String[]{summer, "Amount of Payment", "Payments Made", date});
+	// // k = custKey.add(r.cuts);
+	// k = Key.sumKey;
+	// ln = k.dex("Last Name");
+	// fn = k.dex("First Name");
+	// sm = k.dex(summer);
+	// dt = k.dex(date);
 	k = Key.sumKey;
-	ln = k.dex("Last Name");
-	fn = k.dex("First Name");
-	sm = k.dex(summer);
-	dt = k.dex(date);
 
-	String op = full?">":"<";
-	clz = "Total_Contract "+op+" 0.01";
+	// String op = full?">":"<";
+	// clz = "Total_Contract "+op+" 0.01";
     }
 
     public Enterer ent(){return this;}

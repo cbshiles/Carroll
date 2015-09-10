@@ -299,5 +299,10 @@ public class Key{
 	    new FloatCut("Balance")
 	});
 
+    public static final Key reserveKey = new Key("reserve", new Cut[]{
+	    new DateCut("Date", "NOT NULL"),
+	    new StringCut(63, "Trans Description"),
+	    new FloatCut("Amount", "NOT NULL")
+	});
     
 }

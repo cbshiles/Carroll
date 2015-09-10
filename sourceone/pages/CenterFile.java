@@ -17,8 +17,16 @@ public abstract class CenterFile extends TablePage{
 
     private class StrEnt implements Enterer{
 	public Object[] editEntry(Object[] o){
+
+	    String[] f = new String[3];
+	    String d= BasicFormatter.cinvert((LocalDate)o[0]);
+
+	    for (int x=0; x<3;x++){
+		float z = (float)o[x+2];
+		f[x] = (Math.abs(z)>.01)?""+z:"";
+	    }	
 	    return new Object[]{
-		""+o[0], ""+o[1], ""+o[2], ""+o[3], ""+o[4]
+		d, ""+o[1], ""+f[0], ""+f[1], ""+f[2]
 	    };
 	}
     }
@@ -96,7 +104,7 @@ public abstract class CenterFile extends TablePage{
 		v.push1();
 		vend.chunk(new Object[]{"", "", "", "", ""});
 	    }
-	    vend.addTable();
+	    vend.addTable2();
 	    jsp.setViewportView(jt = (javax.swing.JTable)vend.push());
 	}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
@@ -106,7 +114,7 @@ public abstract class CenterFile extends TablePage{
     public static abstract class Account {
 
 	protected PayInFact pif;
-	private Blob[] blobs;
+	protected Blob[] blobs;
 	public String name;
 	
 	public Account(String name, Blob[] bs){this.name = name; blobs = bs;}
