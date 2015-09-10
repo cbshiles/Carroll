@@ -13,7 +13,7 @@ public class ReportMenu extends Page {
 	addRed("SourceOne Contract Report", OurContractReport.class, false);
 
 	addRed("Payments Report", PaymentsReport.class, false);
-	
+	addRed("Purchase Report", PurchaseReport.class, false);	
 	setVisible(true);
     }
 }
