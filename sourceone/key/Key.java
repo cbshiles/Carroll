@@ -159,6 +159,11 @@ public class Key{
     }
 
     public int dex(String cName){
+	//uncomment this for interesting debugging
+	// System.err.println("_______________");
+	// for (String ky : map.keySet()){
+	//     System.err.println(ky);
+	// }
 	Integer i = map.get(cName);
 	if (i == null){
 	    System.err.println(cName+" is not found in the key mapping!");

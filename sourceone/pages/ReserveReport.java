@@ -31,9 +31,16 @@ public class ReserveReport extends CenterFile{
 	    g = new Grid(r, new QueryIn(r,
 					"WHERE Date_Bought < '"+ld+"'")); //AND ( Paid_Off IS NULL OR Paid_Off >= '"+ld+"' );"));
 	    g.pull();
-	    return -g.floatSum("Reserve");
+	    return resSum()-g.floatSum("Reserve");
+	}
+
+	private float resSum(){
+	    try{
+	    return SQLBot.bot.query1Float("SELECT SUM(Amount) FROM reserve");
+	    } catch (Exception e){System.out.println("#$%: "+e); return 0;}
 	}
     }
+    
 	@Override
 	public Key sendKey(){ return new Key(new Cut[]{new StringCut("Date"), new StringCut("Transaction"), new StringCut("Debit"), new StringCut("Credit"), new StringCut("Balance")});}
 

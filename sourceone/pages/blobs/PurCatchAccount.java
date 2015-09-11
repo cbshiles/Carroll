@@ -17,9 +17,9 @@ public class PurCatchAccount extends CenterFile.Account{
     	public View span(LocalDate a, LocalDate z) throws Exception{//can return null
 	    if (a.isAfter(z)) return null;
 
-	    View v = new View(Key.sumKey, null, null);
+	    View v = new View(PurchaseReport.protKey, null, null); // will need to change if ++ columns
 
-	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, 0f});
+//	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, 0f});
 	
 	    for(LocalDate n=a; n.isBefore(z); n = n.plusMonths(1)){
 		LocalDate nz = n.plusDays(n.getMonth().maxLength() - 1);

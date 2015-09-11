@@ -21,8 +21,13 @@ public class PurchaseReport extends CenterFile{
 
 
     public PurchaseReport (Page p){
-	super("Purchase Report", p, new Account[]{new PurCatchAccount()}); //change this 
-	Key k = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount", "Date Bought", "Reserve"});
+	super("Purchase Report", p, new Account[]{new PurCatchAccount()}); 
+
+
+    }
+
+}
+
 
 	// try{
 	//     Input in = new QueryIn(k, " WHERE "); //Date bought is in between the numbers
@@ -38,7 +43,3 @@ public class PurchaseReport extends CenterFile{
 	//     jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
 
 	//     setContentPane(jp);
-
-    }
-
-}
