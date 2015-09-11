@@ -33,12 +33,16 @@ public class ChaseBlob extends Blob implements Enterer{
 
     public Object[] editEntry(Object[] o){
 	float tot = (float)o[tc];
+	float tep = (tot > .01)?tot:(float)o[ga];
+	float Ores =  (float)o[res];
+	float Ona = (float)o[na];
 	return new Object[]{
 	    o[db],
 	    ""+o[ln]+", "+o[fn],
-	    (tot > .01)?tot:o[ga],
-	    o[res],
-	    o[na]
+	    tep,
+	    Ores,
+	    Ona,
+	    tep - (Ores+Ona)
 	};
     }
 }

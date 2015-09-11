@@ -43,7 +43,7 @@ public class PurCatchAccount extends CenterFile.Account{
 	    }
 		float deb = v.floatSum("Total Contract");
 		float cred = v.floatSum("Reserve");
-	    v.chunk(new Object[]{z, "Ending Balance", deb, cred, v.floatSum("Purchase Amount")});
+		v.chunk(new Object[]{z, "Ending Balance", deb, cred, v.floatSum("Purchase Amount"), v.floatSum("Gross Profit")});
 
 	    return v;
 	}
