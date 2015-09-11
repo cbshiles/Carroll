@@ -10,15 +10,19 @@ public class MonthlyReport extends CenterFile{
     public MonthlyReport(Page p) throws Exception{
 	super("Monthly", p, new Account[]{
 		new PurchaseAccount(),
-		new FPayAccount(),
+		//	new FPayAccount(),
 		new ReserveReport.ResAccount()});
+	dew();
+    }
 
+    	@Override
+	    public Key sendKey(){ return new Key(new Cut[]{new StringCut("Date"), new StringCut("Transaction"), new StringCut("Debit"), new StringCut("Credit"), new StringCut("Balance")});}
+
+	
 //	 PayInFact pif = new PayInFact();
 //	 doPif(0, pif);
 //	 System.out.println("OWWW");
 //	 doPif(1, pif);
-	dew();
-    }
 
     public static class FPayAccount extends Account{	
 	FPayAccount(){super("Floor Plan Payoffs", new Blob[]{new FloorBlob(false)});}

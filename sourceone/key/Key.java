@@ -67,6 +67,13 @@ public class Key{
 	    c.ip = i;
     }
 
+    public Object[] chunky(){
+	String[] ret = new String[cuts.length];
+	for (int i=0; i<cuts.length; i++)
+	    ret[i] = cuts[i].name;
+	return ret;
+    }
+
     public void setOutput(Output o){
 	for (Cut c : cuts)
 	    c.op = o;

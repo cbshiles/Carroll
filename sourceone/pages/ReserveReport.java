@@ -33,6 +33,9 @@ public class ReserveReport extends CenterFile{
 	    g.pull();
 	    return -g.floatSum("Reserve");
 	}
-
     }
+	@Override
+	public Key sendKey(){ return new Key(new Cut[]{new StringCut("Date"), new StringCut("Transaction"), new StringCut("Debit"), new StringCut("Credit"), new StringCut("Balance")});}
+
+    
 }

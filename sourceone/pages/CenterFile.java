@@ -79,7 +79,7 @@ public abstract class CenterFile extends TablePage{
 		public void actionPerformed(ActionEvent a) {
 		    try {
 			vend.addOut(new ReserveFormatter(new CSVDest(SQLBot.bot.path+name+"Report_"+LocalDate.now()+".csv",
-								     Key.sumKey.csvnames()+'\n')));
+								     /*Key.sumKey.csvnames()+*/"\n")));
 			vend.push();
 		    } catch (Exception e){
 			System.err.println("RORRE: "+e);
@@ -89,26 +89,40 @@ public abstract class CenterFile extends TablePage{
 	wrap();
     }
 
+    public Key sendKey(){return strKey;}
+    protected Enterer sendEnt(){return new StrEnt();}
+
     public void dew(){
-	dew(startD, endD);
+    	dew(startD, endD, sendKey(), sendEnt());
     }
 
-    public void dew(LocalDate a, LocalDate z){
-	vend = new View(strKey, new StrEnt()); //view going to csv
+    private Object[] obber(int len, String name){
+	//either header or blank line
+	Object[] arr = new Object[len];
+	java.util.Arrays.fill(arr, "");
+	if (name != null){
+	    arr[0]=name;
+	}
+	return arr;
+    }
+    
+    public void dew(LocalDate a, LocalDate z, Key yek, Enterer e){//yek & accounts must align
+	vend = new View(yek, e); //view going to csv
 	try{
 	    for (Account act: accounts){
 		View v = act.span(a, z);
 		if (v == null) break;
-		vend.chunk(new Object[]{"~~~", act.name, "", "", ""});
+		vend.chunk(obber(yek.length, act.name));
+		vend.chunk(yek.chunky());
 		v.addOut(vend);
 		v.push1();
-		vend.chunk(new Object[]{"", "", "", "", ""});
+		vend.chunk(obber(yek.length, null));
 	    }
 	    vend.addTable2();
 	    jsp.setViewportView(jt = (javax.swing.JTable)vend.push());
 	}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
-	catch (Exception e){e.printStackTrace();}
+	catch (Exception ex){ex.printStackTrace();}
     }
 
     public static abstract class Account {

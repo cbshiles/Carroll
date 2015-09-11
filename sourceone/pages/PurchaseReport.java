@@ -5,25 +5,40 @@ import sourceone.sql.*;
 import sourceone.pages.blobs.*;
 import java.time.*;
 
-public class PurchaseReport extends TablePage{
-    public PurchaseReport extends TablePage(Page p){
-	super("Payments Report", p);
-	Key k = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount", "Date Bought"});
+public class PurchaseReport extends CenterFile{
 
-	try{
-	    Input in = new QueryIn(k, " WHERE Title=1 AND Pay_Off_Amount IS NOT NULL");
+    public static Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Total Contract"), new StringCut("Reserve"), new StringCut("Purchase Amount")});
 
-	    g = new Grid(key, in);
+    	@Override
+	public Key sendKey(){return protKey;}
 
-	    g.addTable();
-	    g.pull();
-	    g.sort("VIN", true);
+    @Override
+    public Enterer sendEnt(){ return new Enterer(){
+	    public Object[] editEntry(Object[] o){
+		return o;
+	    }
+	};}
 
-	    pushTable(false);
 
-	    jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
+    public PurchaseReport (Page p){
+	super("Purchase Report", p, new Account[]{new PurCatchAccount()}); //change this 
+	Key k = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount", "Date Bought", "Reserve"});
 
-	    setContentPane(jp);
+	// try{
+	//     Input in = new QueryIn(k, " WHERE "); //Date bought is in between the numbers
+
+	//     g = new Grid(key, in);
+
+	//     g.addTable();
+	//     g.pull();
+	//     g.sort("VIN", true);
+
+	//     pushTable(false);
+
+	//     jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
+
+	//     setContentPane(jp);
 
     }
+
 }
