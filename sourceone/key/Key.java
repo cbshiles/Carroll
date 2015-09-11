@@ -277,7 +277,8 @@ public class Key{
 						    new IntCut("Title", "NOT NULL"),
 						    new DateCut("Date Paid"),
 						    new FloatCut("Pay Off Amount"),
-						    new IntCut("Curtailed")
+						    new IntCut("Curtailed"),
+						    new StringCut(63, "Auction")
 						});
 //    .just(new String[]{"ID", "Date Bought","VIN", "Vehicle", "Item Cost", "Title", "Date Paid", "Pay Off Amount"});
     

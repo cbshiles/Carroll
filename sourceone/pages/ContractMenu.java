@@ -12,6 +12,10 @@ public class ContractMenu extends Page {
 	addRed("Create Report", AReport.class);
 	addRed("Routine Payments", PayContracts.class);
 	addRed("Pay Off", PayOff.class);
+
+	addRed("Add Contract Title", ContAddTitle.class);
+	addRed("Release Contract Title", ContDropTitle.class);
+
 	
 	//pack();
 	setVisible(true);
