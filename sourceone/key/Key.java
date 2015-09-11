@@ -312,8 +312,9 @@ public class Key{
 	});
 
     public static final Key reserveKey = new Key("reserve", new Cut[]{
-	    new DateCut("Date", "NOT NULL"),
+	    new IntCut("ID"),
 	    new StringCut(63, "Trans Description"),
+	    new DateCut("Date", "NOT NULL"),
 	    new FloatCut("Amount", "NOT NULL")
 	});
     
