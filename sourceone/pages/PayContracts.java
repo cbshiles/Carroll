@@ -16,9 +16,8 @@ public class PayContracts extends FullnessPage {
     
     public PayContracts(Page p) throws InputXcpt{
 	super("Pay Contracts", p);
-
 	if (ded) return;
-
+	
 	if (prd == null) {kill(); throw new InputXcpt("No record of any unpaid reports");}
 	reportDate = prd;
 	reload();
@@ -54,7 +53,7 @@ public class PayContracts extends FullnessPage {
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
 			kill();
 		    } catch (Exception x)
-		    {new InputXcpt(x); //System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
+		    {//System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
 			x.printStackTrace();}
 		}});
 

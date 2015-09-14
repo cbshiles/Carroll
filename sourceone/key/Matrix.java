@@ -34,7 +34,8 @@ public class Matrix{
 	return -1;
     }
 
-    public void sort(String name, boolean asc){ //what column and order (doesnt support null)
+    public void sort(String name, boolean asc){ //what column and order (doesnt support sorting null data)
+	//sorts by converting to a string and then string sorting, not optimum but usable in a fix (should be ordering queries when possible)
 	int col = key.dex(name);
 	String[] tings = new String[data.size()];
 	for (int i=0; i<tings.length; i++){
@@ -74,13 +75,6 @@ public class Matrix{
 	    return view.push();
 	}
     }
-
-    // public Object appendPush() throws InputXcpt{
-    // 	if (view == null) throw new Error("Matrix cant use append push without a view");
-    // 	for (Object[] objs : data)
-    // 	    view.receiveEntry(objs);
-    // 	return view.push();
-    // }
 
     public View clearView(Cut[] gnu, Enterer ent){
 	View v = new View(new Key(gnu), ent);

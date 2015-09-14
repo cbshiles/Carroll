@@ -11,7 +11,7 @@ public class CustReport extends CSVOutput {
 	super (k, fileName, addon);
     }
 
-    //works by having last name as the first thing on the line
+    //lines should be sorted before they reach this class
     public void endEntry(){
 	lzt.add(line);
 	line = "";
@@ -19,7 +19,6 @@ public class CustReport extends CSVOutput {
     }
 
     public Object close(){
-	Collections.sort(lzt);
 	for (String s : lzt)
 	    text += s+'\n';
 	text += addon;

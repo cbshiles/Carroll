@@ -32,9 +32,8 @@ public class AReport extends FullnessPage{
     
     public AReport(Page p)throws InputXcpt{
 	super("Create AR Report", p);
-
 	if (ded) return;
-
+	
 	reportDate = LocalDate.now();
 	reload();
 
@@ -74,12 +73,6 @@ public class AReport extends FullnessPage{
 	jb.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 		    try {
-			reportDate = StringIn.parseDate(payDay.text());
-			View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
-
-			g.view.push1();
-
-			pView.addOut(new CustReport(pView.key, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", "\nTotals:~~~~"+thing1+"~~"+thing2));
 
 			boolean doit = true;
 			if (prd != null){
@@ -88,10 +81,19 @@ public class AReport extends FullnessPage{
 			}
 
 			if (doit){
+			    reportDate = StringIn.parseDate(payDay.text());
+			    View pView = g.view.addView(new String[]{"Payments Made"}, null, null);
+
+			    g.view.push1();
+
+			    pView.addOut(new CustReport(pView.key, SQLBot.bot.path+"AR_Report_"+sel+'_'+reportDate+".csv", "\nTotals:~~~~"+thing1+"~~"+thing2));
+
+
 			    pView.push();
 			    SQLBot.bot.update("UPDATE Meta SET "+sel+"_Report_Date='"+reportDate+"' WHERE ID=1;");
+			    kill();
 			}
-			kill();
+
 		    }catch (Exception x)
 		    {new XcptDialog(AReport.this, x); x.printStackTrace(); }
 		}});

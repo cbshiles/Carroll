@@ -29,7 +29,6 @@ public class ContTitle extends TablePage {
 	    g = new Grid(key, in);
 
 	    g.pull();
-//	    g.sort("VIN", true);
 
 	    g.addView(new String[]{"ID", "Paid Off"}, new Cut[]{new StringCut("Name")}, new Gent());
 

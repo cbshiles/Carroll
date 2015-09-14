@@ -12,14 +12,14 @@ import java.time.*;
 public abstract class BackPage extends TablePage{
     boolean full, ded=false;
     String sel;
-    Key k, viewKey, custKey, contKey;
+    Key k, custKey, contKey;
 
 
     public void reload() throws InputXcpt{
 	String z = full?">":"<";
 	Input in;
 	try {
-	    in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01;");
+	    in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID AND Contracts.Total_Contract "+z+" 0.01 ORDER BY Customers.Last_Name, Customers.First_Name;");
 	} catch (Exception e) {throw new InputXcpt(e);}
 	k  = custKey.add(contKey.cuts);
 	g = new Grid(k, in);
@@ -79,6 +79,9 @@ public abstract class BackPage extends TablePage{
 	    addWindowListener(new WindowAdapter() {
 		    @Override
 		    public void windowClosing(WindowEvent we) {
+
+			// if (usedMyButtons && (!ded)) init();
+			// else BackPage.this.kill();
 			if (! usedMyButtons)
 			    ded = true;
 			else init();

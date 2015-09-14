@@ -158,7 +158,7 @@ public abstract class CenterFile extends TablePage{
 		    vi.switchEnts(b.ent());
 		    g.go1();
 		}
-		vi.sort("Date", true);
+		vi.sort("Date", true); //might be the only place we need in-house sort
 		vi.push1();
 		
 		float deb = vi.floatSum("Debit Amt");

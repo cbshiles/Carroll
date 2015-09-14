@@ -13,7 +13,8 @@ public class OurContractReport extends BackPage{
 
     JTextField balText, dueText;
     float balSum, dueSum;
-
+    Key viewKey;
+    
     public OurContractReport(Page p) throws InputXcpt{
 	super("Our AR Report", p);
 
@@ -36,8 +37,6 @@ public class OurContractReport extends BackPage{
     }
 
     protected void init(){
-	if (ded)  {kill(); return;} // take care of ded possibilities (subclasses must also)
-
 	custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 
 	contKey = Key.contractKey.just(new String[] {
@@ -58,7 +57,6 @@ public class OurContractReport extends BackPage{
 	    g.view.addView(null, null, null);
 	    g.view.view.addTable();
 	    g.view.push1();
-	    g.view.view.sort("Customer Name", true);
 	    jsp.setViewportView(jt = (JTable)g.view.view.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}

@@ -22,21 +22,15 @@ public class TitlePage extends TablePage {
 	Key key = Key.floorKey.just(new String[]{"ID", "Date Bought", "VIN", "Vehicle", "Item Cost", "Date Paid"});
 
 	try{
-	    in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE "+whereClause);
-
+	    in = new QueryIn("SELECT "+key.sqlNames()+" FROM Cars WHERE "+whereClause+" ORDER BY VIN");
 	    g = new Grid(key, in);
-
 	    g.pull();
-	    g.sort("VIN", true);
 
 	    g.addView(new String[]{"ID", "Date Paid"}, null, null);
-
 	    pushTable();
 
 	    jp.add(jb = new JButton(bName), BorderLayout.SOUTH);
-
 	    setContentPane(jp);
-
 	    jb.addActionListener(new ActionListener() {
 	    	    public void actionPerformed(ActionEvent e) {
 			try {
@@ -77,7 +71,7 @@ public class TitlePage extends TablePage {
 	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
 	Key contKey = Key.contractKey.just(new String[] {"ID"});
 	Input nin = new QueryIn(custKey, contKey,
-	    "WHERE Contracts.VIN LIKE '"+vin+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Paid_Off IS NULL");
+				"WHERE Contracts.VIN LIKE '"+vin+"' AND Contracts.Customer_ID = Customers.ID AND Contracts.Paid_Off IS NULL");
 	Key k  = custKey.add(contKey.cuts);
 	Grid g = new Grid(k, nin);
 	g.pull();

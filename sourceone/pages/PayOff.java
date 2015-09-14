@@ -38,7 +38,7 @@ public class PayOff extends TablePage {
 
 	    g.clearView(tableKey.cuts, new Ent(inKey));
 	    View you = g.view.addView(new String[]{"ID"}, null, null);
-	    pushTable(you, "Customer Name", true);
+	    pushTable();
 	    jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 	    jb.addActionListener(new ActionListener() {
@@ -187,7 +187,7 @@ public class PayOff extends TablePage {
 	    gbc.gridy = y;
 	    gbc.gridwidth = width;
 	    gbc.gridheight = height;
-	    pane.add(jc, gbc);
+ 	    pane.add(jc, gbc);
 	}
 
 	@Override

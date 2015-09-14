@@ -9,7 +9,7 @@ public class TableMaker{
 	try{
 	return SQLBot.bot.update("DROP TABLE "+key.name+';');
 	}
-	catch (Exception e){System.err.println(e); return -1;}
+	catch (Exception e){System.err.println("TABLE "+key.name+" not dropped."); return -1;}
     }
     
     //A assumes all tables have an ID field (or rather assumes they want one)
@@ -33,10 +33,11 @@ public class TableMaker{
 	recreate(Key.floorKey);
 	recreate(Key.paymentKey);
 	meta();
+	recreate(Key.reserveKey);
     }
 
     public static void meta() throws Exception{
-	recreate(Key.metaKey); //change back to re
+	recreate(Key.metaKey);
 	SQLBot.bot.update("INSERT INTO Meta (Full_Report_Date, Partial_Report_Date) VALUES(NULL, NULL)");
     }
 }

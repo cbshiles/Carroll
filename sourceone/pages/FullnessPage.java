@@ -14,7 +14,8 @@ public abstract class FullnessPage extends BackPage{
     float thing1, thing2;
     LocalDate reportDate, prd;
     JTextField balSum, totSum;
-
+    Key viewKey;
+    
     public FullnessPage(String title, Page p){
 	super(title, p);
     }
@@ -62,7 +63,6 @@ public abstract class FullnessPage extends BackPage{
 	    g.view.addView(null, null, null);
 	    g.view.view.addTable();
 	    g.view.push1();
-	    g.view.view.sort("Customer Name", true);
 	    jsp.setViewportView(jt = (JTable)g.view.view.push());}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception e){e.printStackTrace();}

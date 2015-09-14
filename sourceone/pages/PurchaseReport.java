@@ -9,8 +9,8 @@ public class PurchaseReport extends CenterFile{
 
     public static Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Total Contract"), new StringCut("Reserve"), new StringCut("Purchase Amount"), new StringCut("Gross Profit")});
 
-    	@Override
-	public Key sendKey(){return protKey;}
+    @Override
+    public Key sendKey(){return protKey;}
 
     @Override
     public Enterer sendEnt(){ return new Enterer(){
@@ -19,27 +19,7 @@ public class PurchaseReport extends CenterFile{
 	    }
 	};}
 
-
     public PurchaseReport (Page p){
 	super("Purchase Report", p, new Account[]{new PurCatchAccount()}); 
-
-
     }
-
 }
-
-
-	// try{
-	//     Input in = new QueryIn(k, " WHERE "); //Date bought is in between the numbers
-
-	//     g = new Grid(key, in);
-
-	//     g.addTable();
-	//     g.pull();
-	//     g.sort("VIN", true);
-
-	//     pushTable(false);
-
-	//     jp.add(jb = new JButton("Title Em"), BorderLayout.SOUTH);
-
-	//     setContentPane(jp);
