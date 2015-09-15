@@ -7,7 +7,7 @@ import java.time.*;
 
 public class PurchaseReport extends CenterFile{
 
-    public static Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Total Contract"), new StringCut("Reserve"), new StringCut("Purchase Amount"), new StringCut("Gross Profit")});
+    public static Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"),  new StringCut("Reserve"), new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
 
     @Override
     public Key sendKey(){return protKey;}

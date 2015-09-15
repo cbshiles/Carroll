@@ -39,10 +39,11 @@ public class ChaseBlob extends Blob implements Enterer{
 	return new Object[]{
 	    o[db],
 	    ""+o[ln]+", "+o[fn],
-	    tep,
-	    Ores,
 	    Ona,
-	    tep - (Ores+Ona)
+	    Ores,
+	    tep - (Ores+Ona),
+	    tep,
+	    0f
 	};
     }
 }

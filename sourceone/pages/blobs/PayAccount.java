@@ -55,15 +55,16 @@ public class PayAccount extends CenterFile.Account{
 	public View span(LocalDate a, LocalDate z) throws Exception{//can return null
 	    if (a.isAfter(z)) return null;
 
-	    View v = new View(Key.sumKey, null, null);
-
-	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, getStart(a)});
+	    View v = new View(InvReport.cba, null, null);
+	    System.out.println(getStart(a));
+	    
+	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, 0f, 0f, getStart(a)});
 	
 	    for(LocalDate n=a; n.isBefore(z); n = n.plusMonths(1)){
 		LocalDate nz = n.plusDays(n.getMonth().maxLength() - 1);
 		nz = nz.isBefore(z)?nz:z;
 
-		View vi = new View(Key.sumKey);
+		View vi = new View(InvReport.cba);
 		vi.addOut(v);
 		for (Blob b: blobs){// tip: you need to use an input before making a new one
 		    Grid g = new Grid(b.k, b.in(n, nz));
@@ -74,12 +75,12 @@ public class PayAccount extends CenterFile.Account{
 		vi.sort("Date", true);
 		vi.push1();
 		
-		float deb = vi.floatSum("Debit Amt");
-		float cred = vi.floatSum("Credit Amt");
+		float deb = vi.floatSum("Principle");
+		float cred = vi.floatSum("Interest");
 //		v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb+cred});
-		v.chunk(new Object[]{null, "End of "+n.getMonth(), 0f, 0f, 0f}); //not sure wat tado here
+		v.chunk(new Object[]{null, "End of "+n.getMonth(), 0f, 0f, 0f, 0f, 0f}); //# not sure wat tado here
 	    }
-	    v.chunk(new Object[]{z, "Ending Balance", v.floatSum("Debit Amt"), v.floatSum("Credit Amt"), v.floatSum("Balance")});
+	    v.chunk(new Object[]{z, "Ending Balance", v.floatSum("Principle"), v.floatSum("Interest"), v.floatSum("Total Amount"), 0f ,0f});
 
 	    return v;
 	}

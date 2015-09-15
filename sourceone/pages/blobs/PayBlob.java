@@ -34,6 +34,17 @@ public class PayBlob extends Blob implements Enterer{
 	return pif.in(a, z, full);
     }
 
-    public Object[] editEntry(Object[] o){return o;}
+    public Object[] editEntry(Object[] o){
+	int x = 0;
+	return new Object[]{
+	    o[x++],
+	    o[x++],
+	    o[x++],
+	    o[x++],
+	    o[x++],
+	    0f,
+	    0f
+	};
+    }
 }
 
