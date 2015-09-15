@@ -80,7 +80,8 @@ public class PayAccount extends CenterFile.Account{
 //		v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb+cred});
 		v.chunk(new Object[]{null, "End of "+n.getMonth(), 0f, 0f, 0f, 0f, 0f}); //# not sure wat tado here
 	    }
-	    v.chunk(new Object[]{z, "Ending Balance", v.floatSum("Principle"), v.floatSum("Interest"), v.floatSum("Total Amount"), 0f ,0f});
+	    float tt = v.floatSum("A");
+	    v.chunk(new Object[]{z, "Ending Balance", v.floatSum("Principle"), v.floatSum("Interest"), v.floatSum("Total Amount"), tt, -tt});
 
 	    return v;
 	}

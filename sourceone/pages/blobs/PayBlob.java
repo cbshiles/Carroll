@@ -22,7 +22,7 @@ public class PayBlob extends Blob implements Enterer{
 	// fn = k.dex("First Name");
 	// sm = k.dex(summer);
 	// dt = k.dex(date);
-	k = Key.sumKey;
+	k = Key.zumKey;
 
 	// String op = full?">":"<";
 	// clz = "Total_Contract "+op+" 0.01";
@@ -42,7 +42,7 @@ public class PayBlob extends Blob implements Enterer{
 	    o[x++],
 	    o[x++],
 	    o[x++],
-	    0f,
+	    o[x++],
 	    0f
 	};
     }

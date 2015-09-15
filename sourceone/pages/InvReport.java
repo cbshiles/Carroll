@@ -16,16 +16,38 @@ public class InvReport extends CenterFile{
 	    new FloatCut("A"),
 	    new FloatCut("Balance")
 	});
-    
-    public static Key abc = new Key(new Cut[]{new StringCut("A"), new StringCut("B"), new StringCut("C"), new StringCut("D"), new StringCut("E"), new StringCut("F"), new StringCut("G")});
+
+        public static Key zba = new Key(new Cut[]{ //general key for any credit/debit report
+	    new StringCut("Date"),
+	    new StringCut("Trans Description"),
+	    new StringCut("Principle"),
+	    new StringCut("Interest"),
+	    new StringCut("Total Amount"),
+	    new StringCut("Inventory Reduction"),
+	    new StringCut("Balance")
+	});
+
+    public static Key abc = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"), new StringCut("Reserve"),  new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
     
     public InvReport (Page p){
 	super("Inventory Report", p, new Account[]{
-		new PayAccount(true), new PayAccount(false), new PurCatchAccount()}); 
+		new PayAccount(true), new PayAccount(false), new PurCatchAccount()});
+
+	vend.chunk(new Object[]{0f, 0f, 0f, 0f, 0f, 0.1f, 0f});
     }
 
+    private int frst;
+    
     @Override
-    public Key sendKey(){ return abc;}
+    public Key sendKey(){
+	System.out.println(frst+" :frst");
+	if (frst < 2){
+	    frst++;
+	    return zba;
+	}
+	else
+	    return abc;
+    }
 
     @Override
     protected Enterer sendEnt(){return new StrZnt();}

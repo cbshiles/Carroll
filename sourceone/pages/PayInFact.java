@@ -54,7 +54,8 @@ public class PayInFact{ //returns different inputs, but using same data
 		    }
 		} else {
 		    String zename = SQLBot.bot.query1Name("SELECT Customers.First_Name, Customers.Last_Name FROM Customers, Contracts WHERE Contracts.ID="+(int)i[1]+" AND Customers.ID=Contracts.Customer_ID");
-		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, qq.amount});
+		    System.out.println("cmon discount "+qq.discount);
+		    which((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, qq.amount, qq.discount});
 		}
 
 	    }
@@ -69,7 +70,7 @@ public class PayInFact{ //returns different inputs, but using same data
 	LocalDate a,z;
 
 	public BuildIn(boolean f, LocalDate ao, LocalDate zo){
-	    super(Key.sumKey);
+	    super(Key.zumKey);
 	    full = f;
 	    a=ao; z=zo;
 	}
@@ -97,7 +98,7 @@ public class PayInFact{ //returns different inputs, but using same data
 
 	public void load(){
 	    for (Quail q : ids){
-		chunk(new Object[]{q.date, q.batch_id, q.principle, q.interest, q.amount});
+		chunk(new Object[]{q.date, q.batch_id, q.principle, q.interest, q.amount, q.amount});
 	    }
 	}
     }
@@ -107,9 +108,40 @@ public class PayInFact{ //returns different inputs, but using same data
 	LocalDate date;
 	String batch_id;
 	int contract_id;
-	float amount, principle, interest;
+	float amount, principle, interest, discount=0f;
+	int tc,ga,pm,aop;
+
+	Key dk = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Payments Made", "Amount of Payment"});
+	
+	private float getDiscount(){
+	    System.out.println( "dis mon");
+		try {
+		Grid gr = new Grid(dk, new QueryIn(dk, "WHERE ID="+contract_id));
+		gr.pull();
+		Object[] o = gr.data.get(0);
+		float tep; //total expected to pay
+		float tcO = (float)o[tc];
+		if (tcO < .001)
+		    tep = (float)o[ga];
+		else
+		    tep = tcO;
+
+		System.out.println(""+tep+" - "+(float)o[aop]+"*"+(int)o[pm]);
+		return tep - (float)o[aop]*(int)o[pm];
+
+		
+		} catch (Exception e) {System.out.println("diss errorr "+contract_id+' '+e); return 0;}
+//			"FROM Contracts SELECT Total Contract, Gross Amount, Net Amount 
+	}
 
 	public Quail(Object[] i){ //getrs a payment entry //LocalDate d, float a, String i){
+
+	    /*discount init*/
+	    tc = dk.dex("Total Contract");
+	    ga = dk.dex("Gross Amount");
+	    pm = dk.dex("Payments Made");
+	    aop = dk.dex("Amount of Payment");
+
 	    contract_id = (int)i[1];
 	    date=(LocalDate)i[2];
 	    amount=(float)i[3];
@@ -117,6 +149,7 @@ public class PayInFact{ //returns different inputs, but using same data
 	    if (batch_id == null) {//payoff
 		principle = amount;
 		interest = 0f;
+		discount = getDiscount();
 	    } else { //group
 //lookup up contract, find
 		Key k = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount"});

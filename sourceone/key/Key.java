@@ -307,6 +307,16 @@ public class Key{
 	    new FloatCut("Balance")
 	});
 
+    public static final Key zumKey = new Key(new Cut[]{ //general key for any credit/debit report
+	    new DateCut("Date"),
+	    new StringCut("Trans Description"),
+	    new FloatCut("Debit Amt"),
+	    new FloatCut("Credit Amt"),
+	    new FloatCut("Balance"),
+	    new FloatCut("Discount")
+	});
+
+    
     public static final Key reserveKey = new Key("reserve", new Cut[]{
 	    new IntCut("ID"),
 	    new StringCut(63, "Trans Description"),

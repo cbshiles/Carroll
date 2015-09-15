@@ -10,7 +10,7 @@ public class MonthlyReport extends CenterFile{
     public MonthlyReport(Page p) throws Exception{
 	super("Monthly", p, new Account[]{
 		new PurchaseAccount(),
-		//	new FPayAccount(),
+		new FPayAccount(),
 		new ReserveReport.ResAccount()});
 	dew();
     }

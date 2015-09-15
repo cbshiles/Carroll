@@ -93,7 +93,7 @@ public abstract class CenterFile extends TablePage{
     protected Enterer sendEnt(){return new StrEnt();}
 
     public void dew(){
-    	dew(startD, endD, sendKey(), sendEnt());
+    	dew(startD, endD, sendEnt());
     }
 
     private Object[] obber(int len, String name){
@@ -106,7 +106,8 @@ public abstract class CenterFile extends TablePage{
 	return arr;
     }
     
-    public void dew(LocalDate a, LocalDate z, Key yek, Enterer e){//yek & accounts must align
+    public void dew(LocalDate a, LocalDate z, Enterer e){//yek & accounts must align
+	Key yek = sendKey();
 	vend = new View(yek, e); //view going to csv
 	try{
 	    for (Account act: accounts){
@@ -117,6 +118,7 @@ public abstract class CenterFile extends TablePage{
 		v.addOut(vend);
 		v.push1();
 		vend.chunk(obber(yek.length, null));
+		yek = sendKey();	
 	    }
 	    vend.addTable2();
 	    jsp.setViewportView(jt = (javax.swing.JTable)vend.push());
