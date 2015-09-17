@@ -1,4 +1,4 @@
-package sourceone.pages.blobs;
+package sourceone.pages.reports;
 
 import java.time.*;
 import sourceone.key.*;
@@ -10,9 +10,13 @@ public abstract class Blob {
 
     public Key k; //need to set k for all instantial subclasses
     
-    public abstract Input in(LocalDate a, LocalDate z)throws Exception;
+    protected abstract Input in(LocalDate a, LocalDate z)throws Exception;
 
-    public abstract Enterer ent();
+    protected abstract Enterer ent();
+
+    public Grid grid(LocalDate a, LocalDate z)throws Exception{
+	return new Grid(k, in(a, z));
+    }
 
     protected String sql(String b4){return b4.trim().replaceAll("\\s", "_");}
 }

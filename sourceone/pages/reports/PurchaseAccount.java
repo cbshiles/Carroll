@@ -1,11 +1,11 @@
-package sourceone.pages.blobs;
+package sourceone.pages.reports;
 
 import sourceone.key.*;
 import sourceone.sql.*;
 import sourceone.pages.*;
 import java.time.*;
 
-public class PurchaseAccount extends CenterFile.Account{
+public class PurchaseAccount extends Account{
 
     public PurchaseAccount(){super("Purchases", new Blob[]{/*new FloorBlob(true),*/ new PurBlob(true), new PurBlob(false)});} 
 

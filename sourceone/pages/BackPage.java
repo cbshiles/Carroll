@@ -10,9 +10,9 @@ import java.awt.event.*;
 import java.time.*;
 
 public abstract class BackPage extends TablePage{
-    boolean full, ded=false;
+    protected boolean full, ded=false;
     String sel;
-    Key k, custKey, contKey;
+protected     Key k, custKey, contKey;
 
 
     public void reload() throws InputXcpt{

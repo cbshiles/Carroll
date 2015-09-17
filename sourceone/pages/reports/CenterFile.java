@@ -1,11 +1,11 @@
-package sourceone.pages;
+package sourceone.pages.reports;
+
 import sourceone.fields.*;
 import sourceone.key.*;
 import sourceone.sql.*;
 import sourceone.csv.*;
-import sourceone.pages.blobs.*;
-import java.time.*;
 
+import java.time.*;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.event.*;
@@ -35,12 +35,14 @@ public abstract class CenterFile extends TablePage{
     protected Account[] accounts;
     LocalDate startD, endD;
     TextField aDate, bDate;
-    private void datem(){
+    private void datem(){ //doesnt change table unless both valid dates, and one has changed
 	boolean changed = false; 
-	try{ startD = StringIn.parseDate(aDate.text()); changed = true;}
-	catch (InputXcpt ix) {;}
-	try{ endD = StringIn.parseDate(bDate.text()); changed = true;}
-	catch (InputXcpt ix) {;}
+	try{ 
+	    LocalDate newSt = StringIn.parseDate(aDate.text());
+	    if (! startD.equals(newSt)){startD = newSt; changed = true;}
+	    LocalDate newNd = StringIn.parseDate(bDate.text());
+	    if (! endD.equals(newNd)){endD = newNd; changed = true;}
+	} catch (InputXcpt ix) {changed = false;}
 	if (changed) dew();
     }
 
@@ -69,7 +71,6 @@ public abstract class CenterFile extends TablePage{
 
 	aDate.addListener(fl);
 	bDate.addListener(fl);
-
 
 	jp.add(cPan, BorderLayout.CENTER);
 
@@ -107,12 +108,12 @@ public abstract class CenterFile extends TablePage{
     }
     
     public void dew(LocalDate a, LocalDate z, Enterer e){//yek & accounts must align
-	Key yek = sendKey();
+	Key yek = sendKey();//~ dun like it
 	vend = new View(yek, e); //view going to csv
 	try{
 	    for (Account act: accounts){
 		View v = act.span(a, z);
-		if (v == null) break;
+		if (v == null) {System.err.println("WARNING: Account "+act.name+" returned null"; break;}
 		vend.chunk(obber(yek.length, act.name));
 		vend.chunk(yek.chunky());
 		v.addOut(vend);
@@ -125,52 +126,5 @@ public abstract class CenterFile extends TablePage{
 	}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
 	catch (Exception ex){ex.printStackTrace();}
-    }
-
-    public static abstract class Account {
-
-	protected PayInFact pif;
-	protected Blob[] blobs;
-	public String name;
-	
-	public Account(String name, Blob[] bs){this.name = name; blobs = bs;}
-
-	public void loadBlobs(Blob[] bs){blobs = bs;} //enter a new set of blobs
-
-	public abstract float getStart(LocalDate ld)throws Exception;
-
-	public void addPif(PayInFact pif){this.pif = pif;}
-
-	public View span(LocalDate a, LocalDate z) throws Exception{//can return null
-	    if (a.isAfter(z)) return null;
-
-	    View v = new View(Key.sumKey, null, null);
-
-	    v.chunk(new Object[]{a, "Beginning Balance", 0f, 0f, getStart(a)});
-	
-	    for(LocalDate n=a; n.isBefore(z); n = n.plusMonths(1)){
-		LocalDate nz = n.plusDays(n.getMonth().maxLength() - 1);
-		nz = nz.isBefore(z)?nz:z;
-
-		View vi = new View(Key.sumKey);
-		vi.addOut(v);
-		for (Blob b: blobs){// tip: you need to use an input before making a new one
-		    Grid g = new Grid(b.k, b.in(n, nz));
-		    g.addOut(vi);
-		    vi.switchEnts(b.ent());
-		    g.go1();
-		}
-		vi.sort("Date", true); //might be the only place we need in-house sort
-		vi.push1();
-		
-		float deb = vi.floatSum("Debit Amt");
-		float cred = vi.floatSum("Credit Amt");
-		v.chunk(new Object[]{null, "Current Period Change", deb, cred, deb-cred});
-	    }
-	    v.chunk(new Object[]{z, "Ending Balance", 0f, 0f, v.floatSum("Balance")});
-
-	    return v;
-	}
-	protected String sql(String b4){return b4.trim().replaceAll("\\s", "_");}
     }
 }

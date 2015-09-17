@@ -1,5 +1,6 @@
-package sourceone.pages;
+package sourceone.pages.reports;
 
+import sourceone.pages.*;
 import sourceone.key.*;
 import sourceone.sql.*;
 import static sourceone.key.Kind.*;

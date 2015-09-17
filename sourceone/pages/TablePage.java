@@ -11,10 +11,10 @@ import java.time.*;
 
 public class TablePage extends Page {
 
-    JPanel jp = new JPanel(new BorderLayout());
-    JScrollPane jsp = new JScrollPane();
-    Grid g;
-    JTable jt;
+    protected JPanel jp = new JPanel(new BorderLayout());
+    protected JScrollPane jsp = new JScrollPane();
+    protected Grid g;
+    protected JTable jt;
     
     public TablePage(String title, Page p){
 	super(title, p);

@@ -1,5 +1,7 @@
 package sourceone.pages;
+
 import java.awt.*;
+import sourceone.pages.reports.*;
 
 public class ReportMenu extends Page {
 
@@ -12,9 +14,9 @@ public class ReportMenu extends Page {
 	addRed("Monthly Report", MonthlyReport.class, false);
 	addRed("SourceOne Contract Report", OurContractReport.class, false);
 
-	addRed("Payments Report", PaymentsReport.class, false);
-	addRed("Purchase Report", PurchaseReport.class, false);
-	addRed("WIP", InvReport.class, false);
+	// addRed("Payments Report", PaymentsReport.class, false);
+	// addRed("Purchase Report", PurchaseReport.class, false);
+	// addRed("WIP", InvReport.class, false);
 	setVisible(true);
     }
 }

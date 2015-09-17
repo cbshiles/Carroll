@@ -1,8 +1,9 @@
-package sourceone.pages.blobs;
+package sourceone.pages.reports;
 
 import java.time.*;
 import sourceone.key.*;
 import sourceone.sql.*;
+import sourceone.pages.*;
 
 public class ResBlob extends Blob{//reserve blob
 

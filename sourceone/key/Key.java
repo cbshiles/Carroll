@@ -68,8 +68,9 @@ public class Key{
     }
 
     public Object[] chunky(){
-	String[] ret = new String[cuts.length];
-	for (int i=0; i<cuts.length; i++)
+	Object[] ret = new Object[cuts.length];
+	int i;
+	for (i=0; i<cuts.length; i++)
 	    ret[i] = cuts[i].name;
 	return ret;
     }
@@ -323,5 +324,8 @@ public class Key{
 	    new DateCut("Date", "NOT NULL"),
 	    new FloatCut("Amount", "NOT NULL")
 	});
-    
+
+    public static final Key resKey  =  new Key(new Cut[]{
+	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Debit"),
+	    new StringCut("Credit"), new StringCut("Balance")});   
 }
