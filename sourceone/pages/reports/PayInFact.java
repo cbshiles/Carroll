@@ -1,13 +1,15 @@
-package sourceone.pages;
+package sourceone.pages.reports;
 
 import sourceone.key.*;
 import sourceone.sql.*;
-import sourceone.pages.blobs.*;
-//import static sourceone.pages.blobs.ContractAccount.*;
+import sourceone.pages.*;
+
 import java.time.*;
 import java.util.ArrayList;
+
 public class PayInFact{ //returns different inputs, but using same data
-//src1, bebe	
+//src1, bebe
+    //~ GOT TO REFACTOR THISSSSS
     ArrayList<BuildIn[]> bins = new ArrayList();
     BuildIn fullIn, partIn;
 	
@@ -64,6 +66,7 @@ public class PayInFact{ //returns different inputs, but using same data
 	}
 	return new ViewInput(full?fullIn:partIn);		
     }
+
     public static class BuildIn extends View{//instead of credit debit, principle intrest
 	boolean full;
 	ArrayList<Quail> ids=new ArrayList<Quail>();

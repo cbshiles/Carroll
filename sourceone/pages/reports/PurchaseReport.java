@@ -1,25 +1,15 @@
-package sourceone.pages;
+package sourceone.pages.reports;
 
 import sourceone.key.*;
 import sourceone.sql.*;
-import sourceone.pages.blobs.*;
+import sourceone.pages.*;
 import java.time.*;
 
-public class PurchaseReport extends CenterFile{
-
-    public static Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"),  new StringCut("Reserve"), new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
-
-    @Override
-    public Key sendKey(){return protKey;}
-
-    @Override
-    public Enterer sendEnt(){ return new Enterer(){
-	    public Object[] editEntry(Object[] o){
-		return o;
-	    }
-	};}
+public class PurchaseReport extends Report{
 
     public PurchaseReport (Page p){
 	super("Purchase Report", p, new Account[]{new PurCatchAccount()}); 
+	rKey = Key.protKey;
+	init();
     }
 }

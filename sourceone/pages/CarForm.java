@@ -13,17 +13,21 @@ import java.time.*;
 import java.sql.*;
 
 public class CarForm extends Form{
+
+//have variables to remember date & auction of previous entry
+    String date="", auction="";
+    TextField db, au;
     public CarForm(Page p) throws Exception{
 	super("Cars", p);
 
 	place(.9f/4, .1f, .9f/4, .2f);
 	setLayout(new GridLayout(0, 1));
 
-	addF(new TextField("Date Bought"));
+	addF(db = new TextField("Date Bought"));
 	addF(new TextField("VIN"));
 	addF(new TextField("Vehicle"));
 	addF(new TextField("Cost"));
-	addF(new TextField("Auction"));
+	addF(au = new TextField("Auction"));
 	
 	Key key = Key.floorKey.just(new String[]{"Date Bought","VIN", "Vehicle", "Item Cost", "Auction"});
 	Grid g = new Grid(key, new StringIn(CarForm.this));
@@ -43,10 +47,14 @@ public class CarForm extends Form{
 		public void actionPerformed(ActionEvent ae){
 		    CarForm.this.refresh();
 
+		    date = db.text();
+		    auction = au.text();
 		    try {
 			if ((int)g.go() == -1)
 			    throw new InputXcpt("SQL insertion unsuccessful");
 			freshen();
+			db.set(date);
+			au.set(auction);
 		    } catch (InputXcpt ix){
 			new XcptDialog(getName(), CarForm.this, ix);
 		    } 

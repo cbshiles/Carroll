@@ -1,4 +1,4 @@
-package sourceone.pages.blobs;
+package sourceone.pages.reports;
 
 import sourceone.key.*;
 import sourceone.sql.*;
@@ -17,7 +17,7 @@ public class FloorBlob extends Blob{
 	    summer = "Pay Off Amount";
 	    dater = "Date Paid";
 	}
-	k = Key.floorKey.just(new String[]{"VIN", summer, dater});
+	k = Key.floorKey.just(new String[]{"VIN", summer, dater, "Vehicle"});
     }
 
     public Input in(LocalDate a, LocalDate z)throws Exception{
@@ -30,19 +30,20 @@ public class FloorBlob extends Blob{
     }
 
     private class Fnt implements Enterer{
-	int sm, dt, vin;
+	int sm, dt, vin, veh;
 
 	public Fnt(){
 	    sm = k.dex(summer);
 	    dt = k.dex(dater);
 	    vin = k.dex("VIN");
-		// veh = key.dex("Vehicle");
+	    
+	    veh = k.dex("Vehicle");
 		// cur = key.dex("Curtailed");
 	}
 
 	public Object[] editEntry(Object[] o){
 
-	    String desc = incoming?"purchase":"sale";
+	    String desc = (incoming?"p":"s")+" - "+o[veh];
 	    return new Object[] {
 		o[dt],
 		""+o[vin]+" - "+desc,

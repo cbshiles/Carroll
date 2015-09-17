@@ -328,4 +328,36 @@ public class Key{
     public static final Key resKey  =  new Key(new Cut[]{
 	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Debit"),
 	    new StringCut("Credit"), new StringCut("Balance")});   
+
+    public static final Key purKey  =  new Key(new Cut[]{
+	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Debit (Purchase Amount)"),
+	    new StringCut("Credit"), new StringCut("Balance")});
+
+    public static final Key flKey  =  new Key(new Cut[]{
+	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Purchase Amount"),
+	    new StringCut("Sale Amount"), new StringCut("")});
+
+    public static final Key payKey = new Key(new Cut[]{ 
+	    new DateCut("Date"),
+	    new StringCut("Trans Description"),
+	    new FloatCut("Principle"),
+	    new FloatCut("Interest"),
+	    new FloatCut("Total Amount"),
+	    new FloatCut("Inventory Reduction"),
+	    new FloatCut("Inventory Balance")
+	});
+
+    public static final Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"),  new StringCut("Reserve"), new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
+
+    public static final Key invKey = new Key(new Cut[]{ 
+	    new DateCut("Date"),
+	    new StringCut("Trans Description"),
+	    new FloatCut(""),
+	    new FloatCut(""),
+	    new FloatCut(""),
+	    new FloatCut(""),
+	    new FloatCut("Inventory Balance")
+	});
+
 }
+

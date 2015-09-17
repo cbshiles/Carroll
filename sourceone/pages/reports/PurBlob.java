@@ -1,4 +1,4 @@
-package sourceone.pages.blobs;
+package sourceone.pages.reports;
 
 import sourceone.key.*;
 import sourceone.sql.*;
@@ -45,4 +45,5 @@ public class PurBlob extends Blob implements Enterer{
 	    0f
 	};
     }
+
 }

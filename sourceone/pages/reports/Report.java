@@ -19,9 +19,15 @@ public abstract class Report extends TablePage{
     TextField aDate, bDate;
     Key rKey, sKey; //account key, string key
     Enterer sent;
+    boolean grand;
+    float total;
     
     public Report(String name, Page p, Account[] acts) {
+	this(name, p, acts, false);
+    }
+    public Report(String name, Page p, Account[] acts, boolean gr) {
 	super(name, p);
+	grand = gr;
 	accounts = acts;
 
 	JPanel cPan = new JPanel();
@@ -82,6 +88,15 @@ public abstract class Report extends TablePage{
     	dew(startD, endD);
     }
 
+    protected Object[] tutle(){//puts grand total on jtable
+	int ln = rKey.length;
+	Object[] arr = new Object[ln];
+	java.util.Arrays.fill(arr, "");
+	arr[ln-1] = total;
+	return arr;
+
+    }
+
     private Object[] robber(int len, String name){
 	//report's object array factory (ask me)
 	//produces either a header or a blank line
@@ -96,7 +111,7 @@ public abstract class Report extends TablePage{
     public void dew(LocalDate a, LocalDate z){//rKey & accounts must align
 	vend = new View(sKey, sent); //view going to csv
 	try{
-	    float total = 0f;
+	    total = 0f;
 	    for (Account act: accounts){
 		Key tKey = act.aKey;
 		View v = act.span(a, z);
@@ -109,7 +124,7 @@ public abstract class Report extends TablePage{
 		total += act.total;
 	    }
 	    vend.addTable2();
-	    System.out.println(vend);
+	    if (grand) vend.chunk(tutle());
 	    jsp.setViewportView(jt = (javax.swing.JTable)vend.push());
 	}
 	catch (InputXcpt ix){System.err.println("Error in outputting data to table:\n"+ix);}
@@ -142,11 +157,11 @@ public abstract class Report extends TablePage{
 	public Object[] editEntry(Object[] o){
 	    Object[] ret = new Object[len];
 
-	    ret[0] = BasicFormatter.cinvert((LocalDate)o[0]);
+	    ret[0] = ((o[0] == null) ? "":BasicFormatter.cinvert((LocalDate)o[0]));
 	    
 	    int i;
 	    for (i=1; i<des+1; i++)
-		ret[i] = o[i];
+		ret[i] = ((o[i] == null) ? "":o[i]);
 
 	    for(; i<len; i++){
 		float z = (float)o[i];

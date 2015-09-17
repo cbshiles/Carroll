@@ -44,10 +44,10 @@ public class ReserveReport extends Report{
 	}
 
 	@Override
-	public Object[] makeChunk(View tv){
+	public Object[] makeChunk(View tv, String m){
 	    float deb = tv.floatSum("Debit");
 	    float cred = tv.floatSum("Credit");
-	    return new Object[]{null, "Current Period Change", deb, cred, deb-cred};
+	    return new Object[]{null, "Current Period Change: "+m, deb, cred, deb-cred};
 	}
     }
 }
