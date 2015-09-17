@@ -32,7 +32,7 @@ public class ReserveReport extends Report{
 	    Key r = Key.contractKey.just("Reserve");
 	    Grid g;
 	    g = new Grid(r, new QueryIn(r,
-					"WHERE Date_Bought < '"+ld+"'")); //AND ( Paid_Off IS NULL OR Paid_Off >= '"+ld+"' );"));
+					"WHERE Date_Bought < '"+ld+"'")); 
 	    g.pull();
 	    return resSum()-g.floatSum("Reserve");
 	}
