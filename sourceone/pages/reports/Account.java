@@ -7,7 +7,6 @@ import java.time.*;
 
 public abstract class Account {
 
-    //  protected PayInFact pif;
     protected Blob[] blobs;
     public String name;
     public Key aKey;
@@ -22,8 +21,6 @@ public abstract class Account {
     public void loadBlobs(Blob[] bs){blobs = bs;} //~enter a new set of blobs
 
     public abstract float getStart(LocalDate ld)throws Exception;
-
-//    public void addPif(PayInFact pif){this.pif = pif;} //~ dun like it
 
     public View span(LocalDate a, LocalDate z) throws Exception{//can return null
 	if (a.isAfter(z)) return null;

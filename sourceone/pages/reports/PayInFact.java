@@ -35,8 +35,7 @@ public class PayInFact{ //returns different inputs, but using same data
 	BuildIn b = find(ao, zo, full);
 	if (b != null) return new ViewInput(b);
 	else {
-	    Grid g = new Grid(Key.paymentKey, new QueryIn
-			      (Key.paymentKey, "WHERE Day >= '"+ao+"' AND Day <= '"+zo+"' ORDER BY Day"));
+	    Grid g = new Grid(Key.paymentKey, new QueryIn(Key.paymentKey, "WHERE Day >= '"+ao+"' AND Day <= '"+zo+"' ORDER BY Day"));
 	    g.pull();
 
 	    fullIn = new BuildIn(true,ao,zo);
