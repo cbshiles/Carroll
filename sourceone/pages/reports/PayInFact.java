@@ -34,9 +34,8 @@ public class PayInFact{ //returns different inputs, but using same data
 
     //only thing called outside class
     public Input in(LocalDate ao, LocalDate zo, boolean full)throws Exception{//no nulls
-	System.out.println("called ");
 	BuildIn b = find(ao, zo, full);
-	if (b != null) {System.out.println("reuse!"); return new ViewInput(b);}
+	if (b != null) {/*System.out.println("reuse!");*/ return new ViewInput(b);}
 	else {
 	    Grid g = new Grid(Key.paymentKey, new QueryIn(Key.paymentKey, "WHERE Day >= '"+ao+"' AND Day <= '"+zo+"' ORDER BY Day"));
 	    g.pull();
