@@ -308,7 +308,7 @@ public class Key{
 	    new FloatCut("Balance")
 	});
 
-    public static final Key zumKey = new Key(new Cut[]{ //general key for any credit/debit report
+    public static final Key zumKey = new Key(new Cut[]{ //key for PayInFact
 	    new DateCut("Date"),
 	    new StringCut("Trans Description"),
 	    new FloatCut("Debit Amt"),

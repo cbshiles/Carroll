@@ -182,6 +182,7 @@ public class ContractForm extends Form {
 
     private void sendReport(){
 	csv += csvTail;
+	csvTail = "";
 	csv += addLine();	csv += addLine(); 	csv += addLine();
 	csv += addLine(new String[]{"Net"," ","","",frm(net-floorAmount)});
 	try {
@@ -294,7 +295,7 @@ public class ContractForm extends Form {
 		    //# move this to verification area
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
 		    fpd = new FloorPayDialog(id, (LocalDate)o[db]);
-		} else floorAmount = 0f;
+		} else {floorAmount = 0f;}
 	    } catch (SQLException e){throw new InputXcpt(e);}
 
 	    return new Object[]{

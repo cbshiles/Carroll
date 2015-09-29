@@ -49,17 +49,16 @@ public class PayInFact{ //returns different inputs, but using same data
 		//#should never be a problem, but batch cant be someone's name
 		//bckwrds search quicker
 		Quail qq = new Quail(i);
-		int z = (int)i[1];
+
 		if (i[4] != null){ //~ need to force ID
 		    if (! fullIn.add(qq)){
 			if (! partIn.add(qq)){
-			    
-			    which(z).gnu(qq);
+			    which((int)i[1]).gnu(qq);
 			}
 		    }
 		} else {
 		    String zename = SQLBot.bot.query1Name("SELECT Customers.First_Name, Customers.Last_Name FROM Customers, Contracts WHERE Contracts.ID="+(int)i[1]+" AND Customers.ID=Contracts.Customer_ID");
-		    which(z).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, qq.amount, qq.discount});
+		    ((int)i[1]).chunk(new Object[]{(LocalDate)i[2], zename+" - Payoff", qq.principle, qq.interest, qq.amount, qq.discount});
 		}
 
 	    }

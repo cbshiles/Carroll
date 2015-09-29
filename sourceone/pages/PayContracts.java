@@ -48,11 +48,17 @@ public class PayContracts extends FullnessPage {
 	jb.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 		    try {
-			Click ec = new Click(g.key, g.view.key, batchID.text());
+			String bid = batchID.text();
+			if (bid.trim().equals("")) throw new InputXcpt("Batch ID cannot be blank");
+			java.sql.ResultSet rs = SQLBot.bot.query("SELECT ID FROM Payments WHERE Batch_ID LIKE '"+bid+"'");
+			if (rs.next()) throw new InputXcpt("Batch ID already used");
+			Click ec = new Click(g.key, g.view.key, bid);
 			for (int i=0; i<jt.getRowCount(); i++)
 			    ec.editEntry(g.data.get(i), g.view.data.get(i));
 			kill();
-		    } catch (Exception x)
+		    }
+		    catch (InputXcpt ix) {new XcptDialog(PayContracts.this, ix);}
+		    catch (Exception x)
 		    {//System.err.println("Buttons, YO: "+x.getCause()+x.getClass().getName());
 			x.printStackTrace();}
 		}});
