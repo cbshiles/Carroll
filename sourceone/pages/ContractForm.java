@@ -257,7 +257,7 @@ public class ContractForm extends Form {
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, res, db, r1, r2;
+	int cust_id, vin, db, r1, r2;
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -267,8 +267,8 @@ public class ContractForm extends Form {
 	    tc = k.dex("Total Contract");
 	    vin = k.dex("VIN");
 	    db = k.dex("Date Bought");
-	    // r1 = k.dex("srcreserve");
-	    // r2 = k.dex("lnkreserve");
+	    r1 = k.dex("srcreserve");
+	     r2 = k.dex("lnkreserve");
 	    
 	}
 
@@ -281,7 +281,7 @@ public class ContractForm extends Form {
 	    float tc, grs;
 
 	    tc = tep;
-	    grs = tep - (float)o[res];
+	    grs = tep - (float)o[r1] - (float)o[r2];
 	    
 	    float  sum;
 	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
@@ -306,10 +306,7 @@ public class ContractForm extends Form {
 		0f, //Other payments
 		cust_id,
 		grs,
-		tc// ,
-		// o[r1],
-		// o[r2]
-
+		tc
 	    };
 	}
     }
@@ -428,6 +425,7 @@ public class ContractForm extends Form {
 	    fl = new FieldListener(){
 		    public void dew(){
 			try {
+			    System.out.println(""+StringIn.parseFloat(t.amt.getText())+" - "+git(r1)+" - "+git(r2));
 			    tf.setText(""+View.rnd(StringIn.parseFloat(t.amt.getText()) - git(r1) - git(r2)));
 			} catch (InputXcpt ix) {;}
 		    }

@@ -7,6 +7,12 @@ public class NetField extends TextField{
     public JTextField amt = newText("---"), pro=newText();
 
     float gross; boolean hearing=true; TextField tot;
+
+    @Override
+    public void addListener(javax.swing.event.DocumentListener dl){
+	amt.getDocument().addDocumentListener(dl);
+    }
+    
     public NetField (TextField tot){
 	super("% of Gross:");
 	tf.setText("72");
