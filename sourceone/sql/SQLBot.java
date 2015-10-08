@@ -56,10 +56,12 @@ public class SQLBot {
     }
 
     public int update(String sql) throws SQLException{
+
 	return stmt.executeUpdate(sql);
     }
 
     public int updateGetID(String sql) throws SQLException{
+	System.out.println(sql);
 	stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 	ResultSet rs = stmt.getGeneratedKeys();
 	rs.next();
@@ -67,6 +69,7 @@ public class SQLBot {
     }
     
     public ResultSet query(String sql) throws SQLException{
+
 	return stmt.executeQuery(sql);
     }
 

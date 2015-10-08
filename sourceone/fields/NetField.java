@@ -3,16 +3,16 @@ import javax.swing.*;
 import java.awt.*;
 import sourceone.key.*;
 
-public class NetField extends Field{
-    protected JTextField per = newText("72"), amt = newText("---"), pro=newText();
+public class NetField extends TextField{
+    public JTextField amt = newText("---"), pro=newText();
 
-    float gross; boolean hearing=true; TextField tot, res;
-    public NetField (TextField tot, TextField res){
-	super("Net:");
-	this.tot = tot; this.res= res;
+    float gross; boolean hearing=true; TextField tot;
+    public NetField (TextField tot){
+	super("% of Gross:");
+	tf.setText("72");
+	this.tot = tot;
 	jp.setLayout(new GridLayout(1, 4));
-	jp.add(newLabel(name+" % of Gross"));
-	jp.add(per);
+
 	jp.add(newLabel("Amount"));
 	jp.add(amt);
 
@@ -21,16 +21,15 @@ public class NetField extends Field{
 
 	pro.setEditable(false);
 	
-	FieldListener outl = new NetListener();
+	javax.swing.event.DocumentListener outl = new NetListener();
 	tot.addListener(outl);
-	res.addListener(outl);
 
-	per.getDocument().addDocumentListener(new FieldListener(){
+	tf.getDocument().addDocumentListener(new FieldListener(){
 		public void dew(){
 		    if (! hearing) return;
 		    hearing = false;
 		    try {
-			float f = getPer()*gross;
+			float f = getTf()*gross;
 			amt.setText(""+View.rnd(f));
 			pro.setText(""+View.rnd(gross-f));
 		    } catch (InputXcpt ix) {amt.setText("---");}
@@ -46,7 +45,7 @@ public class NetField extends Field{
 		    try {
 			float am = StringIn.parseFloat(amt.getText());
 			float f = am/gross;
-			per.setText(""+View.rnd(100*f));
+			tf.setText(""+View.rnd(100*f));
 			pro.setText(""+View.rnd(gross-am));
 		    } catch (InputXcpt ix) {;}//amt.setText("---");}
 		    hearing = true;
@@ -54,23 +53,24 @@ public class NetField extends Field{
 	    });
     }
 
-    private class NetListener extends FieldListener{
-	public void dew(){
+    private class NetListener extends FancyListener{
+	public void dew(javax.swing.event.DocumentEvent e){
 	    if (! hearing) return;
 	    hearing = false;
 	    try {
-		gross = StringIn.parseFloat(tot.text()) - StringIn.parseFloat(res.text());
-		float f = gross*getPer();
+		gross = StringIn.parseFloat(tot.text());
+		float f = gross*getTf();
 		amt.setText(""+View.rnd(f));
 		pro.setText(""+View.rnd(gross-f));
+		tf.setText(tf.getText());
 	    } catch (InputXcpt ix) {amt.setText("---");}
 	    hearing = true;
 	}
 	
     }
 
-    private float getPer() throws InputXcpt{
-	return StringIn.parseFloat(per.getText())/100f;
+    private float getTf() throws InputXcpt{
+	return StringIn.parseFloat(tf.getText())/100f;
     }
 
     public String text(){
@@ -78,7 +78,7 @@ public class NetField extends Field{
     }
 
     public void clear(){
-	per.setText("72");
+	tf.setText("72");
 	amt.setText("---");
     }
 }

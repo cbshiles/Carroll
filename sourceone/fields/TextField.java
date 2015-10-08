@@ -25,7 +25,7 @@ public class TextField extends Field{
 
     public void set(String s){tf.setText(s);}
 
-    public void addListener(FieldListener dl){
+    public void addListener(javax.swing.event.DocumentListener dl){
 	tf.getDocument().addDocumentListener(dl);
     }
 }

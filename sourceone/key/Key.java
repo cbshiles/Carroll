@@ -163,7 +163,9 @@ public class Key{
 	Integer i = map.get(cName);
 	if (i == null){
 	    System.err.println(cName+" is not found in the key mapping!");
-	    System.exit(0);
+	    System.err.println(name);
+	    throw new Error();
+//	    System.exit(0);
 	}
 	return i;
     }
@@ -229,7 +231,6 @@ public class Key{
 //						      new StringCut(127, "Vehicle"),
 						      new StringCut(31, "VIN", "NOT NULL"),
 
-						      new FloatCut("Reserve", "NOT NULL"),
 						      new FloatCut("Gross Amount", "NOT NULL"),
 						      new FloatCut("Net Amount", "NOT NULL"),
 						      new FloatCut("Other Payments"),
@@ -239,6 +240,8 @@ public class Key{
 						      new IntCut("Customer ID", "NOT NULL"),
 						      new DateCut("Date Bought"),
 						      new IntCut("Title"),
+						      new FloatCut("srcreserve"),
+						      new FloatCut("lnkreserve"),						      
 						      new StringCut(31, "AR Num")
 						      //Date bought is assumed to be the start date, if not explicitly given
 						  });
@@ -293,9 +296,12 @@ public class Key{
 						  new DateCut("Full Report Date"),
 						  new DateCut("Partial Report Date")
 					      });
-    public static final Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
-								     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
-								     "Next Due", "Amount of Payment", "Number of Payments"});
+
+
+
+    // public static final Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
+    // 								     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
+    // 								     "Next Due", "Amount of Payment", "Number of Payments"});
     
     public static final Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
 								     "Payments Made", "Start Date",
@@ -318,13 +324,20 @@ public class Key{
 	});
 
     
-    public static final Key reserveKey = new Key("reserve", new Cut[]{
+    public static final Key srcResKey = new Key("src_reserve", new Cut[]{
 	    new IntCut("ID"),
 	    new StringCut(63, "Trans Description"),
 	    new DateCut("Date", "NOT NULL"),
 	    new FloatCut("Amount", "NOT NULL")
 	});
 
+    public static final Key LNKResKey = new Key("lnk_reserve", new Cut[]{
+	    new IntCut("ID"),
+	    new StringCut(63, "Trans Description"),
+	    new DateCut("Date", "NOT NULL"),
+	    new FloatCut("Amount", "NOT NULL")
+	});
+						
     public static final Key resKey  =  new Key(new Cut[]{
 	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Debit"),
 	    new StringCut("Credit"), new StringCut("Balance")});   

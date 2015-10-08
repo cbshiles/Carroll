@@ -43,7 +43,7 @@ public class ContractForm extends Form {
 	
 	setLayout(new java.awt.GridLayout(0, 1));
 
-	TextField tot, res; Field type = null;
+	TextField tot, res;
 
 
 	botDate = new TextField("Date Bought");
@@ -64,23 +64,19 @@ public class ContractForm extends Form {
 				      new String[]{"7", "14", "30"}, 0));
 	addF(new OptionField("Final Payment", "0", true));
 	addF(new TextField("Start Date"));
-	
-	//addF(new TextField("Reserve"));
-	addF(res = new ReserveField(tot, type));
 
-	//addF(new TextField("Net Amount"));
-	addF(new NetField(tot, res));
-	
-//	addF(new TextField("Vehicle"));
+	TextField r1, r2;
+	NetField net;
+	addF(net = new NetField(tot));
+	addF(r1 = new ReserveField(tot, "SourceOne Reserve", 5));
+	addF(r2 = new ReserveField(tot, "L&K Reserve", 5));			      
 
+	TextField newt = new NewtField("Net:", net, r1, r2);
+	add(newt.getJP());
+	
 	addF(new TextField("VIN"));
 
 	fields.add(botDate);
-
-	addF(type = new RadioField("Contract Type",
-				   new String[]{"Full", "Partial"},
-				   new String[]{"0", "1"}, -1));
-
 
 	fillFields();
 	JButton submit = new JButton("Submit");
@@ -95,12 +91,16 @@ public class ContractForm extends Form {
 	  Called Total Contract here, this is actually TEP, or total expected pay.
 	  Called total contract here due to compatibility issues
 	*/
-	Key contKey = Key.contractKey.just(new String[]{"Total Contract", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Start Date", "Reserve", "Net Amount", "VIN", "Date Bought"}).add(new Cut[]{new IntCut("Fullness")});
+	Key contKey = Key.contractKey.just(new String[]{"Total Contract", "Number of Payments", "Amount of Payment", "Payment Frequency", "Final Payment Amount", "Start Date", "Net Amount", "srcreserve", "lnkreserve", "VIN", "Date Bought"});
 
 	Ent ent = new Ent(contKey);
 	Grid contGrid = new Grid(contKey, new StringIn(this));
-	contGrid.addView(new String[]{"Total Contract", "Fullness"}, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID"), new FloatCut("Gross Amount"), new FloatCut("Total Contract")},
+	contGrid.addView(new String[]{"Total Contract"}, new Cut[]{new DateCut("Next Due"), new FloatCut("Other Payments"), new IntCut("Customer ID"), new FloatCut("Gross Amount"), new FloatCut("Total Contract")/*, new FloatCut("srcreserve"), new FloatCut("lnkreserve")*/},
 			 ent);
+
+	// for (Field f: fields)
+	//     System.out.println(f.name);
+		 
 	
 	contGrid.view.addOut(new SQLFormatter(new InsertDest(contGrid.view.key, "Contracts", true)));
 
@@ -117,6 +117,7 @@ public class ContractForm extends Form {
 			freshen();
 			ContractForm.this.refresh();
 		    } catch (InputXcpt ix) {
+			ix.printStackTrace();
 			new XcptDialog(getName(), ContractForm.this, ix);
 			ContractForm.this.refresh();
 			//ix.printStackTrace();
@@ -128,7 +129,7 @@ public class ContractForm extends Form {
 
     private void makeCSV(Grid custGrid, Grid contGrid){
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, fll, res, pf, nt, db;
+	int cust_id, vin, res, pf, nt, db, r1, r2;
 
 	Object [] co = contGrid.data.get(0);
 	sd = contGrid.key.dex("Start Date");
@@ -136,12 +137,12 @@ public class ContractForm extends Form {
 	nop = contGrid.key.dex("Number of Payments");
 	fpa = contGrid.key.dex("Final Payment Amount");
 	tc = contGrid.key.dex("Total Contract");
-	fll = contGrid.key.dex("Fullness");
 	vin = contGrid.key.dex("VIN");
-	res = contGrid.key.dex("Reserve");
 	pf = contGrid.key.dex("Payment Frequency");
 	nt = contGrid.key.dex("Net Amount");
 	db = contGrid.key.dex("Date Bought");
+	r1 = contGrid.key.dex("srcreserve");
+	r2 = contGrid.key.dex("lnkreserve");
 	
 	int add, add2, fn, ln, pn;
 
@@ -169,9 +170,13 @@ public class ContractForm extends Form {
 	csv += addLine(terms((int)co[nop], (float)co[aop], (int)co[pf], (float)co[fpa])+
 		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0);
 	csv += addLine();
-	float rez = gross*-.1f;
-	csv += addLine(new String[]{"Reserve 10%", "", frm(rez),"",""});
-	float mid = gross+rez; net = (float)co[nt];
+
+	float res1 = (float)co[r1];
+	csv += addLine(new String[]{"Sourceone Reserve", "", frm(res1),"",""});
+	float res2 = (float)co[r2];
+	csv += addLine(new String[]{"L&K Reserve", "", frm(res2),"",""});
+	
+	float mid = gross+res1+res2; net = (float)co[nt];
 	csv += addLine(new String[]{"", "", frm(mid), frm(net/mid*100), frm(net)});
 
 	csvFile = SQLBot.bot.path+"L&K T "+cu[fn]+'_'+cu[ln]+'_'+BasicFormatter.finvert(LocalDate.now())+".csv";
@@ -252,7 +257,7 @@ public class ContractForm extends Form {
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, fll, res, db;
+	int cust_id, vin, res, db, r1, r2;
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -260,10 +265,11 @@ public class ContractForm extends Form {
 	    nop = k.dex("Number of Payments");
 	    fpa = k.dex("Final Payment Amount");
 	    tc = k.dex("Total Contract");
-	    fll = k.dex("Fullness");
 	    vin = k.dex("VIN");
-	    res = k.dex("Reserve");
 	    db = k.dex("Date Bought");
+	    // r1 = k.dex("srcreserve");
+	    // r2 = k.dex("lnkreserve");
+	    
 	}
 
 	public void set_id(int i){cust_id=i;}
@@ -274,13 +280,8 @@ public class ContractForm extends Form {
 
 	    float tc, grs;
 
-	    if ((int)o[fll] == 0) {//full
-		tc = tep;
-		grs = tep - (float)o[res];
-	    } else { //# dont let these have a reserve(ehh not sure about that)
-		tc = 0f;
-		grs = tep;
-	    }
+	    tc = tep;
+	    grs = tep - (float)o[res];
 	    
 	    float  sum;
 	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
@@ -296,6 +297,8 @@ public class ContractForm extends Form {
 		    if (rs.next()) throw new InputXcpt("WARNING: Multiple cars match that VIN number");  
 		    fpd = new FloorPayDialog(id, (LocalDate)o[db]);
 		} else {floorAmount = 0f;}
+
+		
 	    } catch (SQLException e){throw new InputXcpt(e);}
 
 	    return new Object[]{
@@ -303,7 +306,10 @@ public class ContractForm extends Form {
 		0f, //Other payments
 		cust_id,
 		grs,
-		tc
+		tc// ,
+		// o[r1],
+		// o[r2]
+
 	    };
 	}
     }
@@ -414,15 +420,39 @@ public class ContractForm extends Form {
 	}
     }
 
+    private class NewtField extends TextField {
+	FieldListener fl;
+	public NewtField(String name, NetField t, TextField r1, TextField r2){
+	    super(name);
+	    tf.setEditable(false);
+	    fl = new FieldListener(){
+		    public void dew(){
+			try {
+			    tf.setText(""+View.rnd(StringIn.parseFloat(t.amt.getText()) - git(r1) - git(r2)));
+			} catch (InputXcpt ix) {;}
+		    }
+		};
+	    t.addListener(fl);
+	    r1.addListener(fl);
+	    r2.addListener(fl);
+	}
+
+	float git(TextField txfl) throws InputXcpt{
+	    return StringIn.parseFloat(txfl.text());
+	}
+    }
+
     private class ReserveField extends TextField {
-	public ReserveField(TextField tot, Field type){
-	    //# we don't know how type(of contract) will affect this, ignore for now
-	    super("Reserve at 10%");
+	float percent;
+	public ReserveField(TextField tot, String title, int p){
+	    super(title+" ("+p+"%)");
+
+	    percent = p/100f;
 	    
 	    tot.addListener(new FieldListener(){
 		    public void dew(){
 			try {
-			    float f = StringIn.parseFloat(tot.text())*.1f;
+			    float f = StringIn.parseFloat(tot.text())*percent;
 			    tf.setText(""+View.rnd(f));
 			} catch (InputXcpt ix) {;}
 		    }
