@@ -24,7 +24,7 @@ public class PayOff extends TablePage {
 
 	Key contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount", "Reserve"});
+		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount"});
 
 	try{
 	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID ORDER BY Customers.Last_Name, Customers.First_Name");
@@ -68,7 +68,7 @@ public class PayOff extends TablePage {
 	Container pane;
 	LocalDate sdO, payDate;
 	int nopO, pfO, pmO, idO;
-	float  aopO, fpaO, grsO, netO, tcO, resO, fees, payoff=0;
+	float  aopO, fpaO, grsO, netO, tcO, fees, payoff=0;
 	JTextArea jta;
 	boolean valid = true;
 /*	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
@@ -90,12 +90,12 @@ public class PayOff extends TablePage {
 	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
 	    long days = ChronoUnit.DAYS.between(sdO, endDate);
 	    float dailyInt =  (grsO-netO)/days;
-	    float discount = dailyInt * ChronoUnit.DAYS.between(payDate, endDate);
+	    float zz = ChronoUnit.DAYS.between(payDate, endDate);
+	    float discount = dailyInt * (zz>0?zz:0);
 
-	    ret += "Discount~ -"+discount+'\n';
+	    ret += "Discount~ "+(-discount)+'\n';
 	    ret += "Fees~ "+fees+'\n';
-	    ret += "Reserve~ -"+resO+'\n';
-	    ret += "Pay Off~ "+(payoff = balance-discount+fees-resO);
+	    ret += "Pay Off~ "+(payoff = balance-discount+fees);
 	    jta.setText(ret);
 	}
 
@@ -122,9 +122,6 @@ public class PayOff extends TablePage {
 	    netO = (float)o[k.dex("Net Amount")];
 	    tcO = (float)o[k.dex("Total Contract")];
 	    idO = (int) o[k.dex("ID")];
-
-	    resO = (float)o[k.dex("Reserve")];
-	       
 
 	    pane = getContentPane();
 	    GridBagLayout c = new GridBagLayout();
@@ -198,7 +195,7 @@ public class PayOff extends TablePage {
 	    else if (cmd.equals("pay")){
 		try {
 		    if (! valid) throw new InputXcpt("Invalid fields");
-		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL, Reserve=0 WHERE ID="+idO+';');
+		    SQLBot.bot.update("UPDATE Contracts SET Paid_Off='"+payDate+"', Other_Payments="+payoff+", Next_Due=NULL WHERE ID="+idO+';');
 
 		    SQLBot.bot.update("INSERT INTO Payments (Contract_ID, Day, Amount) VALUES ("+idO+", '"+payDate+"', "+payoff+");");
 

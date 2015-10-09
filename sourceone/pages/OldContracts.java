@@ -22,7 +22,7 @@ public class OldContracts extends TablePage{
 	contKey = Key.contractKey.just(new String[] {
 		"Number of Payments", "Amount of Payment", //"Final Payment Amount",
 		"Payment Frequency", "Total Contract", "Start Date", "VIN", "Payments Made", "Gross Amount",
-		"Reserve", "Net Amount", "Other Payments", "Paid Off", "Payments Made", "Customer ID"
+		"Net Amount", "Other Payments", "Paid Off", "Payments Made", "Customer ID"
 	    });
 
 	if (!full) contKey = contKey.accept(new String[]{"Total Contract"});

@@ -69,7 +69,7 @@ public class ContractForm extends Form {
 	NetField net;
 	addF(net = new NetField(tot));
 	addF(r1 = new ReserveField(tot, "SourceOne Reserve", 5));
-	addF(r2 = new ReserveField(tot, "L&K Reserve", 5));			      
+	addF(r2 = new ReserveField(tot, "L&K Reserve", 10));			      
 
 	TextField newt = new NewtField("Net:", net, r1, r2);
 	add(newt.getJP());
@@ -152,6 +152,8 @@ public class ContractForm extends Form {
 	fn = custGrid.key.dex("First Name");
 	ln = custGrid.key.dex("Last Name");
 	pn = custGrid.key.dex("Phone Number");
+
+	
 	
 	csv = "";
 	csv += addLine(3);
@@ -161,23 +163,24 @@ public class ContractForm extends Form {
 	csv += addLine();
 	csv += addLine("Name/Address/Phone #:", 0);
 	csv += addLine();
-	float gross = (float)co[tc];
-	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", frm(gross), "", ""});
+	float gross = (float)co[tc]; net = (float)co[nt]; //private instance varibal
+	float perc = net/gross;
+	csv += addLine(new String[] {""+cu[fn]+' '+cu[ln], "", frm(gross), frm(perc*100), frm(net)});
 	csv += addLine(""+cu[pn], 0); //# format phone number?
 	csv += addLine(""+cu[add], 0);
 	csv += addLine(""+cu[add2], 0);
-	csv += addLine("Terms:", 0);
 	csv += addLine(terms((int)co[nop], (float)co[aop], (int)co[pf], (float)co[fpa])+
 		       " b"+BasicFormatter.cinvert((LocalDate)co[sd]), 0);
 	csv += addLine();
 
 	float res1 = (float)co[r1];
-	csv += addLine(new String[]{"Sourceone Reserve", "", frm(res1),"",""});
+	csv += addLine(new String[]{"Sourceone Reserve", "","","", frm(-res1)});
 	float res2 = (float)co[r2];
-	csv += addLine(new String[]{"L&K Reserve", "", frm(res2),"",""});
-	
-	float mid = gross+res1+res2; net = (float)co[nt];
-	csv += addLine(new String[]{"", "", frm(mid), frm(net/mid*100), frm(net)});
+	csv += addLine(new String[]{"L&K Reserve", "","","", frm(-res2)});
+	csv += addLine();
+	net -= (res1+res2);
+	csv += addLine(new String[]{"", "", "", "", frm(net)});
+	csvTail += addLine();
 
 	csvFile = SQLBot.bot.path+"L&K T "+cu[fn]+'_'+cu[ln]+'_'+BasicFormatter.finvert(LocalDate.now())+".csv";
     }
@@ -188,8 +191,8 @@ public class ContractForm extends Form {
     private void sendReport(){
 	csv += csvTail;
 	csvTail = "";
-	csv += addLine();	csv += addLine(); 	csv += addLine();
-	csv += addLine(new String[]{"Net"," ","","",frm(net-floorAmount)});
+	csv += addLine();	csv += addLine(); //	csv += addLine();
+	csv += addLine(new String[]{"Total"," ","","",frm(net-floorAmount)});
 	try {
 	    new CSVOutput(csv, csvFile);
 	} catch (Exception e){System.err.println("Error csving"); System.err.println(e);}
@@ -387,10 +390,9 @@ public class ContractForm extends Form {
 			    Object[] o = g.data.get(0); // getting the onlt possible row (ideally)
 
 			    //{"ID", "Date Bought", "Vehicle", "Item Cost", "Title"});
-			    csvTail += addLine("Vehicle:", 0);
-			    csvTail += addLine(new String[] {""+o[veh],""+o[vin],"","",""});
+			    csvTail += addLine("Floorplan Payoff:", 0);
+			    csvTail += addLine(new String[] {""+o[veh],""+o[vin],"","",frm(st)});
 			    csvTail += addLine();
-			    csvTail += addLine(new String[] {"FP Pay Off","","","",frm(st)});
 			    floorAmount = st;
 			    sendReport();
 			    
@@ -425,7 +427,6 @@ public class ContractForm extends Form {
 	    fl = new FieldListener(){
 		    public void dew(){
 			try {
-			    System.out.println(""+StringIn.parseFloat(t.amt.getText())+" - "+git(r1)+" - "+git(r2));
 			    tf.setText(""+View.rnd(StringIn.parseFloat(t.amt.getText()) - git(r1) - git(r2)));
 			} catch (InputXcpt ix) {;}
 		    }
