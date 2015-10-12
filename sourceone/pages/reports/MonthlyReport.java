@@ -11,7 +11,8 @@ public class MonthlyReport extends Report{
 	super("Monthly", p, new Account[]{
 		new PurchaseAccount(),
 		new FPAccount(),
-		new ReserveReport.ResAccount()});
+		new ReserveReport.ResAccount(true),
+		new ReserveReport.ResAccount(false)});
 	rKey =  Key.resKey;
 	init();
     }
