@@ -30,7 +30,7 @@ public class ReserveReport extends Report{
 	Key tTable;
 	
 	public ResAccount(boolean ours){ // is this src1(ours) or l&k's
-	    super("Reserve Account", null, Key.resKey);
+	    super((ours?"Sourceone":"L&K")+" Reserve", null, Key.resKey);
 	    if (ours){
 		columnName = "srcreserve"; 
 		tTable = Key.srcResKey;
