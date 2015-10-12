@@ -71,7 +71,7 @@ public class ContractForm extends Form {
 	addF(r1 = new ReserveField(tot, "SourceOne Reserve", 5));
 	addF(r2 = new ReserveField(tot, "L&K Reserve", 10));			      
 
-	TextField newt = new NewtField("Net:", net, r1, r2);
+	TextField newt = new NewtField("Purchase Amount:", net, r1, r2);
 	add(newt.getJP());
 	
 	addF(new TextField("VIN"));

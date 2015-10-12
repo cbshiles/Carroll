@@ -18,7 +18,7 @@ public class PurCatchAccount extends Account{
 
     @Override
     public Object[] makeChunk(LocalDate z, View v ){
-	float deb = v.floatSum("Total Contract");
-	return new Object[]{z, "Ending Balance", v.floatSum("Purchase Amount"), v.floatSum("Reserve"), v.floatSum("Gross Profit"), deb, total = deb};
+	total = v.floatSum("Total Contract");
+	return new Object[]{z, "Ending Balance", v.floatSum("Purchase Amount"), v.floatSum("lnkreserve"), v.floatSum("srcreserve"), v.floatSum("Gross Profit"), total, total};
     }    
 }

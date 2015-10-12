@@ -16,7 +16,7 @@ public class ReserveReport extends Report{
     Grid go;
     View v;
 
-    //# could use a blob for re3serve transactions, right now its aclawys taken from the top
+    //# could use a blob for reserve transactions, right now its always taken from the top
 
     public ReserveReport(Page p) throws Exception{
 	super("Reserve", p, new Account[]{new ResAccount()});

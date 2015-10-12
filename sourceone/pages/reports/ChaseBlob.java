@@ -7,19 +7,20 @@ import java.time.*;
 
 public class ChaseBlob extends Blob implements Enterer{
     String dater;
-    int tc, ga, na, db, res, ln, fn;
-    Key cokey = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount", "Date Bought", "Reserve"});
+    int tc, ga, na, db, res1, res2, ln, fn;
+    Key cokey = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Net Amount", "Date Bought", "srcreserve", "lnkreserve"});
     Key cukey= Key.customerKey.just(new String[]{"First Name", "Last Name"});
     public ChaseBlob(){
 	
 	k = cukey.add(cokey.cuts);
 	dater = "contracts.Date_Bought";
-	System.out.println(k.sqlNames());
+//	System.out.println(k.sqlNames());
 	tc = k.dex("Total Contract");
 	ga = k.dex("Gross Amount");
 	na = k.dex("Net Amount");
 	db = k.dex("Date Bought");
-	res = k.dex("Reserve");
+	res1 = k.dex("lnkreserve");
+	res2 = k.dex("srcreserve");
 	ln = k.dex("Last Name");
 	fn = k.dex("First Name");
     }
@@ -34,14 +35,17 @@ public class ChaseBlob extends Blob implements Enterer{
     public Object[] editEntry(Object[] o){
 	float tot = (float)o[tc];
 	float tep = (tot > .01)?tot:(float)o[ga];
-	float Ores =  (float)o[res];
+	float lRes = (float)o[res1], sRes = (float)o[res2];
 	float Ona = (float)o[na];
+
+//!! not sure about these calculations
 	return new Object[]{
 	    o[db],
 	    ""+o[ln]+", "+o[fn],
-	    Ona,
-	    Ores,
-	    tep - (Ores+Ona),
+	    Ona - (lRes+sRes), //actual payment is net - reserves
+	    lRes,
+	    sRes,
+	    tep - Ona, //no reserve, it comes after profit is figured
 	    tep,
 	    0f
 	};
