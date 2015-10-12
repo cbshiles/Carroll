@@ -299,9 +299,9 @@ public class Key{
 
 
 
-    // public static final Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "Reserve",
-    // 								     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
-    // 								     "Next Due", "Amount of Payment", "Number of Payments"});
+    public static final Key fKey = Key.contractKey.just(new String[]{"Total Contract", "Payment Frequency", "srcreserve", "lnkreserve",
+    								     "Net Amount", "Gross Amount", "Payments Made", "Start Date",
+    								     "Next Due", "Amount of Payment", "Number of Payments"});
     
     public static final Key pKey = Key.contractKey.just(new String[]{"Payment Frequency", "Net Amount", "Gross Amount",
 								     "Payments Made", "Start Date",

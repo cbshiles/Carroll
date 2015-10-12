@@ -33,7 +33,8 @@ public class TableMaker{
 	recreate(Key.floorKey);
 	recreate(Key.paymentKey);
 	meta();
-	recreate(Key.reserveKey);
+	recreate(Key.srcResKey);
+	recreate(Key.LNKResKey);
     }
 
     public static void meta() throws Exception{
