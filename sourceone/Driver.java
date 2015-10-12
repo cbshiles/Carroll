@@ -20,5 +20,6 @@ public class Driver {
 
 	new HomePage(SQLBot.bot.title());
 	//EventDispatchThreadHangMonitor.initMonitoring();
+
     }
 }

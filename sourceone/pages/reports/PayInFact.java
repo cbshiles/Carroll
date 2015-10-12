@@ -118,7 +118,6 @@ public class PayInFact{ //returns different inputs, but using same data
 	Key dk = Key.contractKey.just(new String[]{"Total Contract", "Gross Amount", "Payments Made", "Amount of Payment"});
 	
 	private float getDiscount(){
-	    System.out.println( "dis mon");
 		try {
 		Grid gr = new Grid(dk, new QueryIn(dk, "WHERE ID="+contract_id));
 		gr.pull();
@@ -130,9 +129,7 @@ public class PayInFact{ //returns different inputs, but using same data
 		else
 		    tep = tcO;
 
-		System.out.println(""+tep+" - "+(float)o[aop]+"*"+(int)o[pm]);
 		return tep - (float)o[aop]*(int)o[pm];
-
 		
 		} catch (Exception e) {System.out.println("diss errorr "+contract_id+' '+e); return 0;}
 //			"FROM Contracts SELECT Total Contract, Gross Amount, Net Amount 

@@ -69,7 +69,7 @@ public class SQLBot {
     }
     
     public ResultSet query(String sql) throws SQLException{
-
+//	System.out.println(sql);
 	return stmt.executeQuery(sql);
     }
 

@@ -16,7 +16,7 @@ public class ReserveReport extends Report{
     Grid go;
     View v;
 
-    //# could use a blob for reserve transactions, right now its always taken from the top
+    //# could use a blob for re3serve transactions, right now its aclawys taken from the top
 
     public ReserveReport(Page p) throws Exception{
 	super("Reserve", p, new Account[]{new ResAccount(true), new ResAccount(false)});
@@ -104,24 +104,23 @@ public class ReserveReport extends Report{
 
     private static class ResOut extends Blob implements Enterer{
 
-	private Key tk; //tableKey
 	int id, td, dt, amt;
 	    
 	public ResOut(Key yek){
-	    tk = yek;
+	    k = yek;
 
-	    id = tk.dex("ID");
-	    td = tk.dex("Trans Description");
-	    dt = tk.dex("Date");
-	    amt = tk.dex("Amount");
+	    id = k.dex("ID");
+	    td = k.dex("Trans Description");
+	    dt = k.dex("Date");
+	    amt = k.dex("Amount");
 
 	}
 
 	public Input in(LocalDate a, LocalDate z)throws Exception{
 	    return new QueryIn
-		(tk,
+		(k,
 		 "WHERE Date >= '"+a+
-		 "' AND Date <= '"+z);
+		 "' AND Date <= '"+z+"'");
 	}
 
 	
