@@ -47,7 +47,7 @@ public class ReserveReport extends Report{
 	    g = new Grid(r, new QueryIn(r,
 					"WHERE Date_Bought < '"+ld+"'")); 
 	    g.pull();
-	    return resSum(ld)-g.floatSum(columnName);
+	    return resSum(ld)+g.floatSum(columnName);
 	}
 
 	private float resSum(LocalDate ld){
@@ -95,8 +95,8 @@ public class ReserveReport extends Report{
 	    return new Object[] {
 		o[dt],
 		""+o[ln]+", "+o[fn],
-		0f,
 		o[res],
+		0f,
 		0f
 	    };}
 	
@@ -133,11 +133,14 @@ public class ReserveReport extends Report{
 	    new DateCut("Date", "NOT NULL"),
 	    new FloatCut("Amount", "NOT NULL")
  */
+
+	    float a = (float)o[amt];
+
 	    return new Object[] {
 		o[dt],
 		o[td],
-		o[amt],
-		0f,
+		(a>0)?a:0,
+		(a>0)?0:-a,
 		0f
 	    };}
 

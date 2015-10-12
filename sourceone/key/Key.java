@@ -339,7 +339,7 @@ public class Key{
 	});
 						
     public static final Key resKey  =  new Key(new Cut[]{
-	    new StringCut("Date"), new StringCut("Customer"), new StringCut("Debit"),
+	    new StringCut("Date"), new StringCut("Description"), new StringCut("Debit"),
 	    new StringCut("Credit"), new StringCut("Balance")});   
 
     public static final Key purKey  =  new Key(new Cut[]{
@@ -360,7 +360,7 @@ public class Key{
 	    new FloatCut("Inventory Balance")
 	});
 
-    public static final Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"),  new StringCut("lnkreserve"), new StringCut("srcreserve"), new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
+    public static final Key protKey = new Key(new Cut[]{new StringCut("Date"), new StringCut("Name"), new StringCut("Purchase Amount"),  new StringCut("Reserve"), new StringCut("Gross Profit"), new StringCut("Total Contract"), new StringCut("Balance")});
 
     public static final Key invKey = new Key(new Cut[]{ 
 	    new DateCut("Date"),
