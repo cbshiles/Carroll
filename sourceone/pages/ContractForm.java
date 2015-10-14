@@ -260,7 +260,7 @@ public class ContractForm extends Form {
     private class Ent implements Enterer{
 
 	int sd, aop, nop, fpa, tc;
-	int cust_id, vin, db, r1, r2;
+	int cust_id, vin, db, r1, r2, neat;
 	
 	public Ent(Key k){
 	    sd = k.dex("Start Date");
@@ -272,7 +272,7 @@ public class ContractForm extends Form {
 	    db = k.dex("Date Bought");
 	    r1 = k.dex("srcreserve");
 	     r2 = k.dex("lnkreserve");
-	    
+	     neat = k.dex("Net Amount");
 	}
 
 	public void set_id(int i){cust_id=i;}
@@ -284,7 +284,7 @@ public class ContractForm extends Form {
 	    float tc, grs;
 
 	    tc = tep;
-	    grs = tep - (float)o[r1] - (float)o[r2];
+	    grs = (float)o[neat] - (float)o[r1] - (float)o[r2];
 	    
 	    float  sum;
 	    sum = (int)o[nop] * (float)o[aop] + (float)o[fpa];
