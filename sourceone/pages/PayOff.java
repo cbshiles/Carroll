@@ -24,8 +24,8 @@ public class PayOff extends TablePage {
 
 	Key contKey = Key.contractKey.just(new String[] {
 		"ID", "Number of Payments", "Amount of Payment", "Final Payment Amount",
-		"Payment Frequency", "Total Contract", "Start Date", "Payments Made", "Gross Amount", "Net Amount"});
-
+		"Payment Frequency", "Total Contract", "Start Date", "Payments Made",
+		"Gross Amount", "Net Amount", "srcreserve", "lnkreserve"});
 	try{
 	    Input in = new QueryIn(custKey, contKey, "WHERE Contracts.Next_Due IS NOT NULL AND Contracts.Customer_ID = Customers.ID ORDER BY Customers.Last_Name, Customers.First_Name");
 
@@ -68,7 +68,7 @@ public class PayOff extends TablePage {
 	Container pane;
 	LocalDate sdO, payDate;
 	int nopO, pfO, pmO, idO;
-	float  aopO, fpaO, grsO, netO, tcO, fees, payoff=0;
+	float  aopO, fpaO, grsO, netO, tcO, fees, payoff=0, srcO, lnkO;
 	JTextArea jta;
 	boolean valid = true;
 /*	Key custKey = Key.customerKey.just(new String[] {"Last Name", "First Name"});
@@ -89,7 +89,9 @@ public class PayOff extends TablePage {
 
 	    LocalDate endDate = nexti(sdO, pfO, nopO + ((fpaO > .001)?1:0));
 	    long days = ChronoUnit.DAYS.between(sdO, endDate);
-	    float dailyInt =  (grsO-netO)/days;
+	    float dailyInt =  (tep-netO-lnkO-srcO)/days;
+	    // to be neg, this must be a net larger than the gross
+	    System.out.println("Gross: "+grsO+" Net: "+netO+" Days: "+days);
 	    float zz = ChronoUnit.DAYS.between(payDate, endDate);
 	    float discount = dailyInt * (zz>0?zz:0);
 
@@ -123,6 +125,9 @@ public class PayOff extends TablePage {
 	    tcO = (float)o[k.dex("Total Contract")];
 	    idO = (int) o[k.dex("ID")];
 
+	    srcO = (float) o[k.dex("srcreserve")];
+	    lnkO = (float) o[k.dex("lnkreserve")];
+	    
 	    pane = getContentPane();
 	    GridBagLayout c = new GridBagLayout();
 	    pane.setLayout(c);

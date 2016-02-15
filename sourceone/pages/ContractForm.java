@@ -347,7 +347,6 @@ public class ContractForm extends Form {
 	
 	public FloorPayDialog(int id, LocalDate date){
 
-
 	    jp.add(jsp, BorderLayout.NORTH);
 	    setContentPane(jp);
 	    
@@ -357,7 +356,6 @@ public class ContractForm extends Form {
 		g.pull();
 		ent = new FloorCalc(key, date, true);
 		getTable(date);
-		
 	    } catch (Exception e){ new XcptDialog(ContractForm.this, e); return;}
 
 	    JPanel cPan = new JPanel();
